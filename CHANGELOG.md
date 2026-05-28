@@ -6,6 +6,9 @@
 
 把上一轮踩的生产坑沉淀进方法论本体。
 
+- 项目更名为 **HeiGe-UI**（仓库 `HeiGeAi/HeiGe-UI`）；README、样例 wordmark、安装命令、在线 Demo 链接同步更新。skill 内部调用 id 仍为小写 `heige-ui`（遵循 skill 命名规范）。
+- 按修复后的样例重新生成全部 10 张预览图（forge banner 不再是修复前的旧图）。
+
 - 新增 `references/production-checklist.md`（生产交付铁律）：字体可靠性（中文必须有系统兜底，别只靠 Google Fonts；中文别用日文字体）/ 零孤字（大标题折行不许把单字甩到独立行；别用 ch 给中文限宽）/ 性能流畅（不动画化阴影、不用 backdrop-filter、不动画模糊元素、无限动画只动 transform·opacity、不常驻 rAF）。
 - SKILL.md：第四步「写生产级代码」加入生产铁律；第五步出货自检从「反 AI 体检」扩展为「反 AI 体检 + 生产体检 + 气场复检」。
 
