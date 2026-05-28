@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>星轨协奏 STELLAR CHORD｜跨越星轨，为你献上这场协奏</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --pink:#ff8fb1;
+    --cyan:#6fe3ff;
+    --yellow:#ffe04d;
+    --ink:#1b1033;
+    --white:#fff;
+    --pink-deep:#ff5f93;
+    --cyan-deep:#2ec6ff;
+    --pop:'Mochiy Pop One', 'Noto Sans SC', sans-serif;
+    --body:'Zen Maru Gothic', 'Noto Sans SC', sans-serif;
+    --mono:'Space Mono', monospace;
+    --border:4px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:var(--body);
+    background:var(--ink);
+    color:var(--ink);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  ::selection{ background:var(--yellow); color:var(--ink); }
+
+  /* ---------- reusable visual primitives ---------- */
+  .halftone{
+    background-image:radial-gradient(var(--dot,rgba(27,16,51,.18)) 22%, transparent 23%);
+    background-size:14px 14px;
+  }
+  .speedlines{
+    background-image:repeating-conic-gradient(
+      from 0deg at var(--sx,50%) var(--sy,50%),
+      transparent 0deg 2.6deg,
+      var(--sl,rgba(255,255,255,.5)) 2.6deg 3.2deg
+    );
+  }
+  .burst{
+    /* 16-point spiky star via clip-path */
+    clip-path:polygon(
+      50% 0%, 58% 18%, 79% 9%, 73% 31%, 95% 28%, 79% 45%,
+      100% 55%, 79% 62%, 91% 84%, 68% 76%, 67% 100%, 52% 80%,
+      36% 99%, 36% 75%, 12% 82%, 25% 61%, 3% 56%, 24% 46%,
+      6% 27%, 28% 31%, 22% 8%, 43% 18%
+    );
+  }
+  .star4{
+    clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);
+  }
+
+  /* ---------- top ribbon ---------- */
+  .ribbon{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:var(--ink);
+    border-bottom:var(--border) solid var(--yellow);
+    color:var(--white);
+    font-family:var(--mono);
+    font-size:11px; letter-spacing:.28em;
+    text-transform:uppercase;
+    overflow:hidden; white-space:nowrap;
+  }
+  .ribbon-track{
+    display:inline-block;
+    padding:8px 0;
+    animation:slide 22s linear infinite;
+  }
+  .ribbon-track span{ padding:0 1.6em; }
+  .ribbon-track span b{ color:var(--cyan); }
+  .ribbon-track span i{ color:var(--pink); font-style:normal; }
+  @keyframes slide{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* ============================================================
+     SCENE 1 — COLD OPEN / HERO（冲击）
+  ============================================================ */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    padding:96px 6vw 60px;
+    background:
+      radial-gradient(120% 80% at 78% 18%, rgba(111,227,255,.42), transparent 60%),
+      radial-gradient(110% 90% at 12% 92%, rgba(255,143,177,.5), transparent 55%),
+      linear-gradient(160deg,#2a1a52 0%, var(--ink) 70%);
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    align-items:center;
+    gap:2vw;
+    overflow:hidden;
+  }
+  /* radiating speed lines behind everything, converging top-right */
+  .hero .rays{
+    position:absolute; inset:-30% -10% -10% -10%;
+    --sx:80%; --sy:14%;
+    --sl:rgba(255,224,77,.10);
+    background-image:repeating-conic-gradient(
+      from 0deg at var(--sx) var(--sy),
+      transparent 0deg 3deg,
+      var(--sl) 3deg 3.5deg
+    );
+    pointer-events:none;
+  }
+  .hero .dots{
+    position:absolute; inset:0;
+    --dot:rgba(255,255,255,.06);
+    background-image:radial-gradient(var(--dot) 20%, transparent 21%);
+    background-size:22px 22px;
+    pointer-events:none;
+  }
+
+  .hero-copy{ position:relative; z-index:3; color:var(--white); }
+  .kicker{
+    display:inline-flex; align-items:center; gap:.6em;
+    font-family:var(--mono);
+    font-size:12px; letter-spacing:.26em; text-transform:uppercase;
+    color:var(--ink);
+    background:var(--cyan);
+    padding:7px 14px;
+    border:3px solid var(--ink);
+    box-shadow:5px 5px 0 rgba(0,0,0,.55);
+    transform:rotate(-2deg);
+  }
+  .kicker .pip{ width:8px; height:8px; background:var(--pink-deep); border-radius:50%; }
+
+  .logo-stack{ margin:22px 0 6px; }
+  .logo-cn{
+    font-family:var(--pop);
+    font-size:clamp(56px, 12vw, 142px);
+    line-height:.86;
+    letter-spacing:.02em;
+    color:var(--white);
+    text-shadow:
+      0 0 0 var(--ink),
+      6px 6px 0 var(--ink),
+      10px 10px 0 var(--pink),
+      14px 14px 0 var(--ink);
+    -webkit-text-stroke:3px var(--ink);
+  }
+  .logo-cn .swap{ color:var(--yellow); -webkit-text-stroke:3px var(--ink); }
+  .logo-en{
+    font-family:var(--mono); font-weight:700;
+    font-size:clamp(13px,1.8vw,18px);
+    letter-spacing:.5em;
+    color:var(--cyan);
+    margin-top:24px; padding-left:.5em;
+  }
+
+  .tagline{
+    font-family:var(--pop);
+    font-size:clamp(20px,3vw,34px);
+    line-height:1.25;
+    margin:26px 0 8px;
+    color:var(--white);
+  }
+  .tagline em{ font-style:normal; color:var(--pink); }
+  .tagline .hl{
+    color:var(--ink); background:var(--yellow);
+    padding:0 .14em; box-decoration-break:clone; -webkit-box-decoration-break:clone;
+    transform:skewX(-6deg); display:inline-block;
+  }
+  .sub{
+    font-size:15px; color:rgba(255,255,255,.78);
+    max-width:30ch; margin-bottom:30px;
+  }
+
+  .cta-row{ display:flex; flex-wrap:wrap; gap:14px; align-items:center; }
+  .btn{
+    font-family:var(--pop);
+    font-size:17px;
+    border:3px solid var(--ink);
+    padding:14px 26px;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:.5em;
+    box-shadow:6px 6px 0 var(--ink);
+    transition:transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .12s;
+    color:var(--ink);
+  }
+  .btn:hover{ transform:translate(-3px,-3px); box-shadow:9px 9px 0 var(--ink); }
+  .btn:active{ transform:translate(3px,3px); box-shadow:2px 2px 0 var(--ink); }
+  .btn-primary{ background:var(--pink); }
+  .btn-ghost{ background:var(--cyan); }
+  .btn .tail{ font-family:var(--mono); font-size:12px; }
+
+  /* ---- CSS-shape character presence (NO image) ---- */
+  .hero-char{
+    position:relative; z-index:2;
+    align-self:stretch;
+    min-height:60vh;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .char{
+    position:relative;
+    width:min(440px,80%);
+    aspect-ratio:3/4;
+    filter:drop-shadow(12px 16px 0 rgba(0,0,0,.5));
+    animation:bob 5s ease-in-out infinite;
+  }
+  @keyframes bob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+
+  /* glowing aura disc behind the figure */
+  .char .aura{
+    position:absolute; inset:-8% -6% 4% -6%;
+    background:
+      radial-gradient(circle at 50% 42%, var(--yellow) 0 16%, transparent 17%),
+      conic-gradient(from 0deg, var(--cyan), var(--pink), var(--yellow), var(--cyan));
+    --sx:50%; --sy:42%;
+    border-radius:50%;
+    opacity:.92;
+    animation:spin 16s linear infinite;
+    -webkit-mask:radial-gradient(circle at 50% 42%, transparent 0 30%, #000 31% 50%, transparent 51%);
+            mask:radial-gradient(circle at 50% 42%, transparent 0 30%, #000 31% 50%, transparent 51%);
+  }
+  @keyframes spin{ to{ transform:rotate(360deg) } }
+
+  /* head */
+  .char .head{
+    position:absolute; left:50%; top:6%; transform:translateX(-50%);
+    width:34%; aspect-ratio:1;
+    background:linear-gradient(160deg,#fff3f7,#ffd9e6);
+    border:var(--border) solid var(--ink);
+    border-radius:46% 46% 44% 44%;
+    z-index:3;
+  }
+  /* hair sweep */
+  .char .hair{
+    position:absolute; left:50%; top:0; transform:translateX(-50%);
+    width:50%; aspect-ratio:1/1.1;
+    background:linear-gradient(150deg,var(--cyan) 0%, var(--cyan-deep) 60%, #1aa9e0 100%);
+    border:var(--border) solid var(--ink);
+    clip-path:polygon(50% 0,100% 14%,86% 64%,100% 88%,70% 74%,50% 92%,30% 74%,0 88%,14% 64%,0 14%);
+    z-index:2;
+  }
+  .char .ahoge{ /* the cute hair antenna */
+    position:absolute; left:54%; top:-3%;
+    width:10%; aspect-ratio:1/2.2;
+    background:var(--cyan);
+    border:3px solid var(--ink);
+    clip-path:polygon(40% 0,100% 30%,60% 60%,100% 100%,0 70%,30% 40%);
+    z-index:4;
+    transform-origin:bottom center;
+    animation:wiggle 3.2s ease-in-out infinite;
+  }
+  @keyframes wiggle{ 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(10deg)} }
+  /* eyes + blush on head */
+  .char .face{ position:absolute; left:50%; top:6%; transform:translateX(-50%); width:34%; aspect-ratio:1; z-index:4; }
+  .char .eye{ position:absolute; top:46%; width:18%; aspect-ratio:1/1.3; background:var(--ink); border-radius:50%; }
+  .char .eye::after{ content:""; position:absolute; top:14%; left:16%; width:40%; height:30%; background:var(--cyan); border-radius:50%; }
+  .char .eye.l{ left:24%; }
+  .char .eye.r{ right:24%; }
+  .char .blush{ position:absolute; top:60%; width:14%; aspect-ratio:1/.7; background:var(--pink-deep); opacity:.8; border-radius:50%; }
+  .char .blush.l{ left:14%; }
+  .char .blush.r{ right:14%; }
+  /* body / dress wedge */
+  .char .body{
+    position:absolute; left:50%; bottom:0; transform:translateX(-50%);
+    width:62%; height:60%;
+    background:linear-gradient(180deg,var(--pink) 0%, var(--pink-deep) 100%);
+    border:var(--border) solid var(--ink);
+    clip-path:polygon(28% 0,72% 0,100% 100%,0 100%);
+    z-index:1;
+  }
+  .char .sash{
+    position:absolute; left:50%; bottom:30%; transform:translateX(-50%);
+    width:64%; height:9%;
+    background:var(--yellow);
+    border:3px solid var(--ink);
+    z-index:2;
+  }
+  /* floating instrument note shapes */
+  .char .note{
+    position:absolute; z-index:5;
+    width:30px; height:30px;
+    background:var(--yellow);
+    border:3px solid var(--ink);
+    border-radius:50% 50% 50% 0;
+    transform:rotate(-12deg);
+    animation:float-note 4s ease-in-out infinite;
+  }
+  .char .note::before{ content:""; position:absolute; right:2px; top:-12px; width:3px; height:14px; background:var(--ink); }
+  .char .note.n1{ left:-6%; top:30%; }
+  .char .note.n2{ right:-8%; top:52%; background:var(--cyan); animation-delay:.8s; }
+  .char .note.n3{ right:4%; top:12%; width:22px; height:22px; background:var(--pink); animation-delay:1.6s; }
+  @keyframes float-note{ 0%,100%{transform:rotate(-12deg) translateY(0)} 50%{transform:rotate(8deg) translateY(-12px)} }
+
+  .spark{ position:absolute; background:var(--white); z-index:6; animation:twinkle 2.4s ease-in-out infinite; }
+  .spark.s1{ left:8%; top:14%; width:18px; height:18px; }
+  .spark.s2{ right:14%; bottom:18%; width:26px; height:26px; animation-delay:.7s; background:var(--yellow); }
+  .spark.s3{ left:18%; bottom:8%; width:14px; height:14px; animation-delay:1.3s; background:var(--cyan); }
+  .spark{ clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%); }
+  @keyframes twinkle{ 0%,100%{ transform:scale(.5); opacity:.4 } 50%{ transform:scale(1.1); opacity:1 } }
+
+  .scroll-hint{
+    position:absolute; left:6vw; bottom:24px; z-index:5;
+    font-family:var(--mono); font-size:11px; letter-spacing:.3em;
+    color:rgba(255,255,255,.6); text-transform:uppercase;
+    display:flex; align-items:center; gap:.7em;
+  }
+  .scroll-hint .arrow{ width:2px; height:30px; background:var(--cyan); position:relative; animation:drop 1.6s ease-in-out infinite; }
+  .scroll-hint .arrow::after{ content:""; position:absolute; bottom:0; left:-3px; width:8px; height:8px; border-right:2px solid var(--cyan); border-bottom:2px solid var(--cyan); transform:rotate(45deg); }
+  @keyframes drop{ 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(6px);opacity:1} }
+
+  /* ============================================================
+     SCENE 2 — BREATH（呼吸）
+  ============================================================ */
+  .breath{
+    background:var(--yellow);
+    border-top:var(--border) solid var(--ink);
+    border-bottom:var(--border) solid var(--ink);
+    padding:34px 6vw;
+    display:flex; align-items:center; justify-content:center; gap:clamp(16px,4vw,60px);
+    flex-wrap:wrap;
+    --dot:rgba(27,16,51,.12);
+  }
+  .breath .line{
+    font-family:var(--pop);
+    font-size:clamp(18px,2.6vw,30px);
+    color:var(--ink);
+    text-align:center;
+  }
+  .breath .line em{ font-style:normal; color:var(--pink-deep); }
+  .breath .star4{ width:34px; height:34px; background:var(--ink); flex:none; animation:spin 9s linear infinite; }
+
+  /* ============================================================
+     SCENE 3 — BUILD / 玩法亮点（推进，asymmetric manga panels）
+  ============================================================ */
+  .build{
+    position:relative;
+    background:
+      linear-gradient(180deg,#fff 0%, #fef4f8 100%);
+    padding:90px 6vw 100px;
+    overflow:hidden;
+  }
+  .build .bg-dots{ position:absolute; inset:0; --dot:rgba(255,143,177,.16); background-image:radial-gradient(var(--dot) 18%, transparent 19%); background-size:26px 26px; pointer-events:none; }
+  .sec-head{ position:relative; z-index:2; margin-bottom:48px; }
+  .sec-tag{
+    font-family:var(--mono); font-size:12px; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--pink-deep);
+  }
+  .sec-title{
+    font-family:var(--pop);
+    font-size:clamp(40px,8vw,84px);
+    line-height:.92;
+    color:var(--ink);
+    -webkit-text-stroke:0;
+  }
+  .sec-title .out{
+    color:transparent;
+    -webkit-text-stroke:3px var(--ink);
+  }
+  .sec-title .fill-c{ color:var(--cyan-deep); }
+
+  .panels{
+    position:relative; z-index:2;
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    gap:22px;
+  }
+  .panel{
+    background:var(--white);
+    border:var(--border) solid var(--ink);
+    box-shadow:9px 9px 0 var(--ink);
+    padding:26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .panel .num{
+    position:absolute; top:-14px; right:14px;
+    font-family:var(--pop); font-size:84px; line-height:1;
+    color:transparent; -webkit-text-stroke:2px rgba(27,16,51,.12);
+    pointer-events:none;
+  }
+  .panel h3{ font-family:var(--pop); font-size:clamp(22px,2.6vw,30px); color:var(--ink); margin-bottom:10px; position:relative; z-index:2; }
+  .panel p{ font-size:15px; color:#4a3f63; position:relative; z-index:2; max-width:34ch; }
+  .panel .chip{
+    display:inline-block; font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+    background:var(--ink); color:var(--cyan); padding:4px 10px; margin-bottom:14px;
+    transform:skewX(-8deg);
+  }
+  /* asymmetric spans + skew */
+  .panel.p1{ grid-column:1 / span 7; transform:rotate(-1.4deg); background:linear-gradient(150deg,#fff,#fff0f6); }
+  .panel.p2{ grid-column:8 / span 5; transform:rotate(1.6deg); margin-top:34px; }
+  .panel.p3{ grid-column:1 / span 5; transform:rotate(1.2deg); margin-top:8px; }
+  .panel.p4{ grid-column:6 / span 7; transform:rotate(-1deg); }
+  .panel.p1 .chip{ background:var(--pink-deep); color:#fff; }
+  .panel.p2{ background:linear-gradient(150deg,#fff,#eafaff); }
+  .panel.p4{ background:linear-gradient(150deg,#fff,#fffbe6); }
+  .panel.p1 .speedlines{ position:absolute; inset:0; --sx:90%; --sy:90%; --sl:rgba(255,143,177,.14); opacity:.9; }
+  /* a wedge decoration in p4 */
+  .panel.p4 .wedge{ position:absolute; bottom:-30px; left:-30px; width:120px; height:120px; background:var(--yellow); border:var(--border) solid var(--ink); clip-path:polygon(0 0,100% 100%,0 100%); }
+
+  /* ============================================================
+     SCENE 4 — CLIMAX / SIGNATURE（高潮 · 签名时刻）
+  ============================================================ */
+  .climax{
+    position:relative;
+    background:radial-gradient(120% 100% at 50% 40%, #3a2370 0%, var(--ink) 70%);
+    padding:80px 5vw 90px;
+    overflow:hidden;
+    color:var(--white);
+  }
+  /* converging speed lines from center */
+  .climax .conv{
+    position:absolute; inset:-20%;
+    --sx:50%; --sy:46%;
+    background-image:repeating-conic-gradient(
+      from 0deg at var(--sx) var(--sy),
+      transparent 0deg 2.2deg,
+      rgba(255,255,255,.14) 2.2deg 2.8deg
+    );
+    pointer-events:none;
+    animation:pulse-rays 6s ease-in-out infinite;
+  }
+  @keyframes pulse-rays{ 0%,100%{ transform:scale(1); opacity:.7 } 50%{ transform:scale(1.04); opacity:1 } }
+
+  .climax-head{ position:relative; z-index:3; text-align:center; margin-bottom:30px; }
+  .climax-head .sec-tag{ color:var(--cyan); }
+  .climax-head h2{
+    font-family:var(--pop);
+    font-size:clamp(34px,6vw,68px);
+    line-height:1;
+    color:var(--white);
+    text-shadow:5px 5px 0 var(--pink-deep);
+  }
+  .climax-head h2 em{ font-style:normal; color:var(--yellow); }
+
+  .collage{
+    position:relative; z-index:3;
+    max-width:1100px; margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    grid-auto-rows:minmax(80px,auto);
+    gap:16px;
+  }
+  .mp{
+    border:var(--border) solid var(--ink);
+    background:var(--white);
+    box-shadow:8px 8px 0 rgba(0,0,0,.6);
+    position:relative; overflow:hidden;
+    color:var(--ink);
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:18px;
+  }
+  .mp .mp-label{ font-family:var(--mono); font-size:11px; letter-spacing:.18em; color:var(--pink-deep); }
+  .mp .mp-big{ font-family:var(--pop); font-size:clamp(22px,3vw,40px); line-height:.95; }
+  /* tiles */
+  .mp.a{ grid-column:1 / span 2; grid-row:1 / span 2; background:linear-gradient(150deg,var(--cyan),#bff3ff); }
+  .mp.b{ grid-column:3 / span 2; grid-row:1 / span 1; background:linear-gradient(150deg,var(--pink),#ffd5e3); }
+  .mp.c{ grid-column:1 / span 2; grid-row:3 / span 1; background:var(--yellow); }
+  .mp.d{ grid-column:5 / span 2; grid-row:2 / span 2; background:linear-gradient(150deg,#fff,#f1e7ff); }
+  .mp.a .speedlines{ position:absolute; inset:0; --sx:20%; --sy:80%; --sl:rgba(27,16,51,.12); }
+  .mp.d .halftone{ position:absolute; inset:0; --dot:rgba(255,95,147,.2); }
+
+  /* THE burst star — signature */
+  .burst-wrap{
+    grid-column:3 / span 2; grid-row:2 / span 2;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    z-index:4;
+  }
+  .burst-star{
+    width:104%; aspect-ratio:1;
+    background:radial-gradient(circle at 50% 42%, var(--yellow) 0 38%, var(--pink-deep) 39% 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    filter:drop-shadow(0 0 22px rgba(255,224,77,.55));
+    animation:throb 2.6s ease-in-out infinite;
+    border:0;
+  }
+  .burst-star::before{
+    content:""; position:absolute; inset:-9%;
+    background:var(--ink);
+    z-index:-1;
+    animation:spin 22s linear infinite reverse;
+  }
+  .burst-star, .burst-star::before{
+    clip-path:polygon(
+      50% 0%, 58% 18%, 79% 9%, 73% 31%, 95% 28%, 79% 45%,
+      100% 55%, 79% 62%, 91% 84%, 68% 76%, 67% 100%, 52% 80%,
+      36% 99%, 36% 75%, 12% 82%, 25% 61%, 3% 56%, 24% 46%,
+      6% 27%, 28% 31%, 22% 8%, 43% 18%
+    );
+  }
+  @keyframes throb{ 0%,100%{transform:scale(1) rotate(-3deg)} 50%{transform:scale(1.06) rotate(3deg)} }
+  .burst-star .b-top{ font-family:var(--mono); font-size:11px; letter-spacing:.2em; color:var(--ink); }
+  .burst-star .b-main{ font-family:var(--pop); font-size:clamp(24px,4vw,46px); color:var(--ink); line-height:.9; -webkit-text-stroke:1px #fff; }
+  .burst-star .b-sub{ font-family:var(--pop); font-size:clamp(13px,1.6vw,18px); color:#fff; background:var(--ink); padding:2px 10px; margin-top:6px; transform:skewX(-8deg); }
+
+  .climax-foot{ position:relative; z-index:3; text-align:center; margin-top:32px; }
+  .climax-foot p{ font-family:var(--body); color:rgba(255,255,255,.78); font-size:14px; }
+  .climax-foot p b{ color:var(--yellow); }
+
+  /* ============================================================
+     SCENE 5 — CLOSE / CTA（收束）
+  ============================================================ */
+  .close{
+    position:relative;
+    background:var(--pink);
+    padding:84px 6vw;
+    overflow:hidden;
+    --dot:rgba(27,16,51,.14);
+    background-image:radial-gradient(var(--dot) 16%, transparent 17%);
+    background-size:24px 24px;
+    background-color:var(--pink);
+  }
+  .close-card{
+    position:relative; z-index:2;
+    max-width:920px; margin:0 auto;
+    background:var(--ink);
+    border:var(--border) solid var(--ink);
+    box-shadow:14px 14px 0 rgba(27,16,51,.35);
+    padding:clamp(34px,6vw,64px);
+    text-align:center;
+    color:var(--white);
+    overflow:hidden;
+  }
+  .close-card .rays{ position:absolute; inset:-30%; --sx:50%; --sy:0%; --sl:rgba(111,227,255,.08);
+    background-image:repeating-conic-gradient(from 0deg at 50% 0%, transparent 0deg 3deg, rgba(111,227,255,.1) 3deg 3.6deg);
+    pointer-events:none; }
+  .close-card .small{ font-family:var(--mono); font-size:12px; letter-spacing:.3em; color:var(--cyan); text-transform:uppercase; position:relative; z-index:2; }
+  .close-card h2{
+    font-family:var(--pop);
+    font-size:clamp(34px,6vw,66px);
+    line-height:1.02; margin:14px 0 8px;
+    position:relative; z-index:2;
+  }
+  .close-card h2 .y{ color:var(--yellow); }
+  .close-card .lead{ position:relative; z-index:2; color:rgba(255,255,255,.8); font-size:15px; margin-bottom:6px; }
+
+  .counter{
+    position:relative; z-index:2;
+    font-family:var(--pop);
+    font-size:clamp(40px,9vw,92px);
+    color:var(--cyan);
+    line-height:1; margin:18px 0 4px;
+    letter-spacing:.02em;
+  }
+  .counter small{ font-family:var(--body); font-size:16px; color:rgba(255,255,255,.7); display:block; letter-spacing:.1em; margin-top:6px; }
+
+  .badges{ position:relative; z-index:2; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin:28px 0 6px; }
+  .badge{
+    display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+    background:var(--white); color:var(--ink);
+    border:3px solid var(--ink); box-shadow:5px 5px 0 rgba(0,0,0,.5);
+    padding:10px 18px 10px 14px;
+    text-decoration:none;
+    min-width:158px; text-align:left;
+    transition:transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .12s;
+    position:relative;
+  }
+  .badge:hover{ transform:translate(-2px,-2px); box-shadow:8px 8px 0 rgba(0,0,0,.5); }
+  .badge .g{ display:flex; align-items:center; gap:10px; }
+  .badge .glyph{ width:26px; height:26px; flex:none; }
+  .badge .gt{ font-family:var(--mono); font-size:10px; letter-spacing:.15em; color:#7a6f93; }
+  .badge .gn{ font-family:var(--pop); font-size:16px; line-height:1; }
+  /* glyphs */
+  .g-ios{ background:var(--ink); clip-path:polygon(50% 0,62% 22%,50% 12%,38% 22%); position:relative; border-radius:6px; }
+  .g-and{ background:var(--cyan-deep); border-radius:8px 8px 4px 4px; }
+  .g-pc{ background:var(--pink-deep); border-radius:5px; }
+  .badge.ios .glyph{ background:var(--ink); border-radius:7px; }
+  .badge.and .glyph{ background:var(--cyan-deep); border-radius:50% 50% 36% 36%; }
+  .badge.pc .glyph{ background:var(--pink-deep); border-radius:5px; }
+
+  .pre-line{ position:relative; z-index:2; margin-top:22px; font-family:var(--mono); font-size:12px; letter-spacing:.18em; color:rgba(255,255,255,.55); }
+
+  .footer{
+    background:var(--ink); color:rgba(255,255,255,.5);
+    padding:30px 6vw; font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px;
+    border-top:var(--border) solid var(--yellow);
+  }
+  .footer b{ color:var(--cyan); }
+
+  /* ---------- scroll reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1); }
+  .reveal.in{ opacity:1; transform:none; }
+  .revealed-fallback .reveal{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; transition:none !important; }
+    .reveal{ opacity:1; transform:none; }
+  }
+
+  /* ============================================================
+     RESPONSIVE — mobile re-composition (verify @390px)
+  ============================================================ */
+  @media (max-width:820px){
+    .hero{ grid-template-columns:1fr; padding:92px 6vw 40px; gap:8px; min-height:auto; }
+    .hero-char{ min-height:46vh; order:-1; margin-top:6px; }
+    .char{ width:min(300px,72%); }
+    .logo-cn{ text-shadow:4px 4px 0 var(--ink),7px 7px 0 var(--pink),10px 10px 0 var(--ink); }
+    .scroll-hint{ display:none; }
+
+    .panels{ display:flex; flex-direction:column; gap:30px; }
+    .panel{ transform:none !important; margin-top:0 !important; box-shadow:7px 7px 0 var(--ink); }
+    .panel .num{ font-size:64px; }
+
+    .collage{ grid-template-columns:repeat(4,1fr); gap:12px; }
+    .mp.a{ grid-column:1 / span 4; grid-row:auto; min-height:120px; }
+    .mp.b{ grid-column:1 / span 2; grid-row:auto; }
+    .mp.c{ grid-column:3 / span 2; grid-row:auto; }
+    .burst-wrap{ grid-column:1 / span 4; grid-row:auto; min-height:240px; margin:6px 0; }
+    .burst-star{ width:74%; }
+    .mp.d{ grid-column:1 / span 4; grid-row:auto; min-height:120px; }
+
+    .badge{ min-width:0; flex:1 1 140px; }
+  }
+  @media (max-width:430px){
+    .ribbon{ font-size:10px; }
+    .logo-en{ letter-spacing:.34em; }
+    .cta-row{ gap:10px; }
+    .btn{ padding:13px 18px; font-size:15px; flex:1 1 auto; justify-content:center; }
+    .sec-title{ font-size:clamp(38px,13vw,56px); }
+    .close-card{ padding:30px 22px; }
+  }
+</style>
+</head>
+<body class="">
+
+  <!-- top scrolling ribbon -->
+  <div class="ribbon" aria-hidden="true">
+    <div class="ribbon-track">
+      <span>预约突破 <b>320万</b></span><span><i>★</i> 限定五星 桜·音律官 UP 中</span><span>全平台 <b>同步预约</b></span><span>跨越星轨 为你献上这场协奏</span>
+      <span>预约突破 <b>320万</b></span><span><i>★</i> 限定五星 桜·音律官 UP 中</span><span>全平台 <b>同步预约</b></span><span>跨越星轨 为你献上这场协奏</span>
+    </div>
+  </div>
+
+  <!-- ============ SCENE 1 · HERO ============ -->
+  <header class="hero">
+    <div class="rays" aria-hidden="true"></div>
+    <div class="dots" aria-hidden="true"></div>
+
+    <div class="hero-copy">
+      <span class="kicker"><span class="pip"></span>音律 RPG · 抽卡 · 节奏冒险</span>
+      <div class="logo-stack">
+        <h1 class="logo-cn">星轨<span class="swap">协奏</span></h1>
+        <div class="logo-en">S T E L L A R&nbsp;&nbsp;&nbsp;C H O R D</div>
+      </div>
+      <p class="tagline">跨越星轨，<br>为你献上这场<span class="hl">协奏</span>。</p>
+      <p class="sub">一群追着星光跑的少年，用一首歌点亮了整片夜空。现在，轮到你登台了。</p>
+      <div class="cta-row">
+        <a href="#cta" class="btn btn-primary">立即预约 <span class="tail">▶</span></a>
+        <a href="#play" class="btn btn-ghost">看看玩法 <span class="tail">↓</span></a>
+      </div>
+    </div>
+
+    <!-- CSS-only character presence -->
+    <div class="hero-char" aria-hidden="true">
+      <div class="char">
+        <div class="aura"></div>
+        <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>
+        <div class="hair"></div>
+        <div class="ahoge"></div>
+        <div class="head"></div>
+        <div class="face">
+          <span class="eye l"></span><span class="eye r"></span>
+          <span class="blush l"></span><span class="blush r"></span>
+        </div>
+        <div class="body"></div>
+        <div class="sash"></div>
+        <span class="note n1"></span><span class="note n2"></span><span class="note n3"></span>
+      </div>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true"><span class="arrow"></span>SCROLL TO PLAY</div>
+  </header>
+
+  <!-- ============ SCENE 2 · BREATH ============ -->
+  <section class="breath halftone" aria-label="世界观一句话">
+    <span class="star4 burst" style="clip-path:none;" aria-hidden="true"></span>
+    <p class="line">星轨断裂的那一夜，全世界只剩下<em>一段旋律</em>。</p>
+    <span class="star4" aria-hidden="true"></span>
+  </section>
+
+  <!-- ============ SCENE 3 · BUILD / 玩法亮点 ============ -->
+  <section class="build" id="play">
+    <div class="bg-dots" aria-hidden="true"></div>
+    <div class="sec-head reveal">
+      <div class="sec-tag">// GAMEPLAY · 玩法亮点</div>
+      <h2 class="sec-title">弹起来<br><span class="out">才算</span><span class="fill-c">真冒险</span></h2>
+    </div>
+
+    <div class="panels">
+      <article class="panel p1 reveal">
+        <div class="speedlines" aria-hidden="true"></div>
+        <span class="num" aria-hidden="true">01</span>
+        <span class="chip">RHYTHM BATTLE</span>
+        <h3>踩点战斗，越准越燃</h3>
+        <p>每一场战斗都是一首歌。卡准节拍打出连段，Full Combo 触发角色专属合奏，画面直接炸成烟花。手残也有自动辅助，开心最重要。</p>
+      </article>
+
+      <article class="panel p2 reveal">
+        <span class="num" aria-hidden="true">02</span>
+        <span class="chip">GACHA</span>
+        <h3>抽卡即开演</h3>
+        <p>每个五星都有专属登场动画和主题曲，抽到的不只是数值，是一场属于你的小型演唱会。</p>
+      </article>
+
+      <article class="panel p3 reveal">
+        <span class="num" aria-hidden="true">03</span>
+        <span class="chip">CO-OP</span>
+        <h3>四人同台联机</h3>
+        <p>约上好友组乐队，一人一轨实时合奏。配合好了，分数翻倍；翻车了，笑场也算赢。</p>
+      </article>
+
+      <article class="panel p4 reveal">
+        <div class="wedge" aria-hidden="true"></div>
+        <span class="num" aria-hidden="true">04</span>
+        <span class="chip">STORY</span>
+        <h3>全语音主线，像看一部番</h3>
+        <p>三十万字主线 + 全程日配语音，每个角色都有自己的执念和高光时刻。打到深夜舍不得睡，是常态。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ SCENE 4 · CLIMAX / SIGNATURE ============ -->
+  <section class="climax" id="signature">
+    <div class="conv" aria-hidden="true"></div>
+
+    <div class="climax-head reveal">
+      <div class="sec-tag">// LIMITED BANNER · 限定卡池开启</div>
+      <h2>这一抽，<em>命中注定</em></h2>
+    </div>
+
+    <div class="collage reveal">
+      <div class="mp a">
+        <div class="speedlines" aria-hidden="true"></div>
+        <span class="mp-label">SSR · 桜</span>
+        <span class="mp-big">音律官<br>樱</span>
+      </div>
+      <div class="mp b">
+        <span class="mp-label">PICK UP</span>
+        <span class="mp-big">概率 2 倍</span>
+      </div>
+
+      <!-- THE signature burst star -->
+      <div class="burst-wrap">
+        <div class="burst-star">
+          <span class="b-top">LIMITED ★ UP</span>
+          <span class="b-main">限定<br>UP!</span>
+          <span class="b-sub">十连必出五星</span>
+        </div>
+      </div>
+
+      <div class="mp c">
+        <span class="mp-label">FIRST PULL</span>
+        <span class="mp-big">首抽十连<br>免费</span>
+      </div>
+      <div class="mp d">
+        <div class="halftone" aria-hidden="true"></div>
+        <span class="mp-label">GUARANTEE · 保底</span>
+        <span class="mp-big">80 抽<br>不歪</span>
+      </div>
+    </div>
+
+    <div class="climax-foot reveal">
+      <p>开服首周累计登录，再领 <b>3000 星石</b>。算下来，又是十连。</p>
+    </div>
+  </section>
+
+  <!-- ============ SCENE 5 · CLOSE / CTA ============ -->
+  <section class="close" id="cta">
+    <div class="close-card reveal">
+      <div class="rays" aria-hidden="true"></div>
+      <div class="small">// PRE-REGISTER · 全平台预约开启</div>
+      <h2>舞台已经搭好，<br><span class="y">就差你登场</span>。</h2>
+      <p class="lead">现在预约，开服第一时间收到通知，限定头像框直接到账。</p>
+
+      <div class="counter">320<small>万人 已和你一起在等开服</small></div>
+
+      <div class="badges">
+        <a href="#" class="badge ios" aria-label="App Store 预约">
+          <div class="g"><span class="glyph" aria-hidden="true"></span><div><div class="gt">DOWNLOAD ON</div><div class="gn">App Store</div></div></div>
+        </a>
+        <a href="#" class="badge and" aria-label="Google Play 预约">
+          <div class="g"><span class="glyph" aria-hidden="true"></span><div><div class="gt">GET IT ON</div><div class="gn">Google Play</div></div></div>
+        </a>
+        <a href="#" class="badge pc" aria-label="PC 端预约">
+          <div class="g"><span class="glyph" aria-hidden="true"></span><div><div class="gt">ALSO ON</div><div class="gn">PC 客户端</div></div></div>
+        </a>
+      </div>
+
+      <div class="pre-line">PV 公开 · BGM 试听 · 角色 PV 陆续上线，关注不迷路</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>© 2026 STELLAR CHORD · <b>星轨协奏</b> 制作委员会</span>
+    <span>本作纯属虚构 · 概率公示 / 用户协议 / 隐私政策</span>
+  </footer>
+
+  <script>
+    (function(){
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+
+      function showAll(){ els.forEach(function(el){ el.classList.add('in'); }); }
+
+      if (reduce || !('IntersectionObserver' in window)) {
+        showAll();
+        return;
+      }
+
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
+
+      els.forEach(function(el){ io.observe(el); });
+
+      // graceful static-screenshot fallback: force-show everything after 1.5s
+      setTimeout(showAll, 1500);
+    })();
+  </script>
+</body>
+</html>

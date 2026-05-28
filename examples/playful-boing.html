@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蹦蹦 BOING — 别立大志，先蹦一下</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;700;800&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --coral:#ff6b6b;
+    --yellow:#ffd93d;
+    --mint:#4ecdc4;
+    --navy:#2d2a4a;
+    --cream:#fff8ef;
+    --ink-shadow:#2d2a4a;
+    --display:"Baloo 2","Noto Sans SC",system-ui,sans-serif;
+    --body:"Nunito","Noto Sans SC",system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:var(--body);
+    background:var(--cream);
+    color:var(--navy);
+    overflow-x:hidden;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* warm dotted texture, very subtle */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:radial-gradient(var(--navy) 1.1px, transparent 1.1px);
+    background-size:26px 26px;
+    opacity:.045;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:0 24px;}
+
+  /* ============ chunky shared bits ============ */
+  .chunk{
+    border:3px solid var(--navy);
+    border-radius:26px;
+    box-shadow:8px 8px 0 var(--ink-shadow);
+    background:#fff;
+  }
+
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--display);font-weight:700;
+    border:3px solid var(--navy);
+    border-radius:999px;
+    padding:8px 18px;
+    box-shadow:4px 4px 0 var(--ink-shadow);
+    background:var(--yellow);
+    font-size:15px;
+    letter-spacing:.3px;
+  }
+
+  .pill .dot{width:11px;height:11px;border-radius:50%;background:var(--coral);border:2px solid var(--navy);}
+
+  /* springy button */
+  .btn{
+    font-family:var(--display);font-weight:800;
+    font-size:20px;
+    color:var(--navy);
+    background:var(--coral);
+    border:3px solid var(--navy);
+    border-radius:18px;
+    padding:16px 34px;
+    box-shadow:6px 6px 0 var(--ink-shadow);
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+    transition:transform .14s cubic-bezier(.34,1.56,.64,1), box-shadow .14s;
+  }
+  .btn:hover{transform:translate(-3px,-3px) rotate(-1.5deg);box-shadow:9px 9px 0 var(--ink-shadow);}
+  .btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink-shadow);}
+  .btn.ghost{background:#fff;}
+  .btn.mint{background:var(--mint);}
+
+  /* ============ NAV ============ */
+  nav{
+    position:relative;z-index:3;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 0;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--display);font-weight:800;font-size:24px;
+  }
+  .logo .face{
+    width:34px;height:34px;border-radius:50%;
+    background:var(--mint);border:3px solid var(--navy);
+    position:relative;flex:none;
+  }
+  .logo .face::before,.logo .face::after{
+    content:"";position:absolute;top:11px;width:5px;height:7px;border-radius:50%;background:var(--navy);
+  }
+  .logo .face::before{left:9px;}
+  .logo .face::after{right:9px;}
+  .nav-links{display:flex;gap:8px;align-items:center;}
+  .nav-links a{
+    font-family:var(--display);font-weight:600;text-decoration:none;color:var(--navy);
+    padding:8px 14px;border-radius:12px;font-size:16px;
+  }
+  .nav-links a:hover{background:var(--yellow);}
+  .nav-links .top-cta{border:3px solid var(--navy);box-shadow:3px 3px 0 var(--ink-shadow);background:#fff;}
+
+  /* ============ HERO (impact) ============ */
+  .hero{
+    position:relative;z-index:1;
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:40px;
+    align-items:center;
+    padding:36px 0 70px;
+  }
+  .hero h1{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(56px,9vw,116px);
+    line-height:.92;
+    letter-spacing:-1px;
+  }
+  .hero h1 .boing{
+    display:inline-block;
+    color:var(--coral);
+    text-shadow:5px 5px 0 var(--navy);
+    transform:rotate(-3deg);
+  }
+  .hero .sub{
+    font-size:20px;font-weight:700;margin:24px 0 8px;max-width:420px;
+  }
+  .hero .micro{font-size:16px;color:#6b6786;font-weight:700;max-width:430px;margin-bottom:30px;}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .hero-cta .note{font-family:var(--display);font-weight:600;font-size:14px;color:#6b6786;}
+
+  /* floating sticker words near hero */
+  .sticker{
+    position:absolute;
+    font-family:var(--display);font-weight:700;font-size:15px;
+    background:#fff;border:3px solid var(--navy);border-radius:14px;
+    padding:6px 13px;box-shadow:4px 4px 0 var(--ink-shadow);
+    z-index:4;
+  }
+  .sticker.s1{top:6px;right:34%;transform:rotate(7deg);background:var(--yellow);animation:floaty 4.5s ease-in-out infinite;}
+  .sticker.s2{bottom:40px;left:-6px;transform:rotate(-8deg);background:var(--mint);animation:floaty 5.5s ease-in-out infinite .6s;}
+
+  /* ---- the mascot (hero) ---- */
+  .mascot-stage{position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:340px;}
+  .ground{
+    position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+    width:230px;height:30px;border-radius:50%;
+    background:rgba(45,42,74,.12);
+    animation:shadowPulse 1.7s ease-in-out infinite;
+  }
+  .blob{
+    position:relative;
+    width:210px;height:200px;
+    background:var(--coral);
+    border:4px solid var(--navy);
+    border-radius:54% 46% 58% 42% / 60% 58% 42% 40%;
+    box-shadow:9px 10px 0 rgba(45,42,74,.25);
+    animation:bounce 1.7s cubic-bezier(.5,0,.5,1) infinite;
+    transform-origin:center bottom;
+  }
+  /* cheeks */
+  .blob .cheek{position:absolute;top:108px;width:24px;height:14px;border-radius:50%;background:#ff3b3b;opacity:.55;}
+  .blob .cheek.l{left:30px;}
+  .blob .cheek.r{right:30px;}
+  /* eyes */
+  .blob .eye{
+    position:absolute;top:66px;width:34px;height:42px;border-radius:50%;
+    background:#fff;border:4px solid var(--navy);overflow:hidden;
+  }
+  .blob .eye.l{left:42px;}
+  .blob .eye.r{right:42px;}
+  .blob .eye .pupil{
+    position:absolute;top:14px;left:9px;width:13px;height:13px;border-radius:50%;background:var(--navy);
+    animation:look 4s ease-in-out infinite;
+  }
+  /* mouth */
+  .blob .mouth{
+    position:absolute;top:118px;left:50%;transform:translateX(-50%);
+    width:46px;height:24px;
+    border:4px solid var(--navy);border-top:none;
+    border-radius:0 0 40px 40px;
+    background:#ff3b3b;
+  }
+  /* little feet */
+  .blob .foot{position:absolute;bottom:-6px;width:34px;height:16px;background:var(--coral);border:4px solid var(--navy);border-radius:0 0 20px 20px;}
+  .blob .foot.l{left:38px;}
+  .blob .foot.r{right:38px;}
+  /* sparkle */
+  .blob .sparkle{position:absolute;top:-22px;right:14px;font-family:var(--display);font-weight:800;color:var(--yellow);font-size:30px;-webkit-text-stroke:3px var(--navy);animation:twinkle 2.2s ease-in-out infinite;}
+
+  /* ============ BREATH ============ */
+  .breath{
+    text-align:center;padding:54px 0 70px;
+  }
+  .breath p{
+    font-family:var(--display);font-weight:600;
+    font-size:clamp(24px,4vw,40px);
+    line-height:1.4;max-width:760px;margin:0 auto;
+  }
+  .breath .hl{
+    background:linear-gradient(transparent 62%, var(--yellow) 62%);
+    padding:0 4px;
+  }
+
+  /* ============ HOW IT WORKS (build, asymmetric) ============ */
+  .build{padding:30px 0 90px;}
+  .build .head{margin-bottom:46px;max-width:560px;}
+  .build .head h2{font-family:var(--display);font-weight:800;font-size:clamp(34px,5vw,56px);line-height:1.05;}
+  .build .head h2 em{font-style:normal;color:var(--coral);}
+  .build .head .lead{font-weight:700;font-size:18px;color:#6b6786;margin-top:14px;}
+
+  .steps{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    grid-template-rows:auto auto;
+    gap:24px;
+  }
+  .step{padding:30px;position:relative;overflow:hidden;}
+  .step .num{
+    font-family:var(--display);font-weight:800;font-size:54px;line-height:1;
+    color:var(--navy);opacity:.9;
+  }
+  .step h3{font-family:var(--display);font-weight:700;font-size:26px;margin:6px 0 10px;}
+  .step p{font-weight:700;font-size:16px;color:#4a4768;}
+  /* tall feature step spans 2 rows */
+  .step.big{grid-row:span 2;background:var(--mint);}
+  .step.big .num{font-size:74px;}
+  .step.big h3{font-size:32px;}
+  .step.s2{background:var(--yellow);}
+  .step.s3{background:#fff;}
+
+  /* mini bounce graphic inside big step */
+  .mini-blob{
+    width:64px;height:60px;background:var(--coral);border:3px solid var(--navy);
+    border-radius:54% 46% 58% 42% / 60% 58% 42% 40%;
+    margin-top:22px;position:relative;animation:bounce 1.5s cubic-bezier(.5,0,.5,1) infinite;
+  }
+  .mini-blob::before,.mini-blob::after{content:"";position:absolute;top:20px;width:8px;height:11px;border-radius:50%;background:var(--navy);}
+  .mini-blob::before{left:16px;}
+  .mini-blob::after{right:16px;}
+
+  /* ============ CLIMAX — streak counter + reacting mascot (signature) ============ */
+  .climax{
+    background:var(--navy);
+    border-radius:40px;
+    margin:0 0 80px;
+    padding:64px 40px;
+    color:var(--cream);
+    position:relative;
+    overflow:hidden;
+  }
+  .climax::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(var(--cream) 1.4px, transparent 1.4px);
+    background-size:30px 30px;opacity:.07;
+  }
+  .climax-inner{position:relative;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;}
+  .climax .tag{color:var(--yellow);font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:1px;}
+  .climax h2{font-family:var(--display);font-weight:800;font-size:clamp(30px,4.5vw,48px);line-height:1.05;margin:8px 0 18px;color:#fff;}
+  .climax .counter-line{font-family:var(--display);font-weight:600;font-size:18px;color:#c9c5e0;}
+
+  .bignum{
+    font-family:var(--display);font-weight:800;
+    font-size:clamp(120px,22vw,260px);
+    line-height:.8;
+    color:var(--yellow);
+    text-shadow:7px 7px 0 var(--coral);
+    cursor:pointer;
+    user-select:none;
+    display:inline-block;
+    transition:transform .12s;
+  }
+  .bignum:active{transform:scale(.94);}
+  .bignum.pop{animation:pop .45s cubic-bezier(.34,1.56,.64,1);}
+  .tap-hint{
+    margin-top:8px;font-family:var(--display);font-weight:700;font-size:15px;
+    color:var(--mint);
+  }
+
+  /* climax mascot, bigger & grinning */
+  .climax-mascot{position:relative;width:170px;height:170px;}
+  .climax-mascot .blob2{
+    width:170px;height:160px;background:var(--mint);
+    border:4px solid #fff;border-radius:54% 46% 58% 42% / 60% 58% 42% 40%;
+    position:relative;animation:wiggle 2.6s ease-in-out infinite;transform-origin:center bottom;
+  }
+  .climax-mascot.celebrate .blob2{animation:celebrate .5s cubic-bezier(.34,1.56,.64,1);}
+  .climax-mascot .blob2 .eye{position:absolute;top:54px;width:26px;height:34px;border-radius:50%;background:#fff;border:3px solid var(--navy);overflow:hidden;}
+  .climax-mascot .blob2 .eye.l{left:36px;}
+  .climax-mascot .blob2 .eye.r{right:36px;}
+  .climax-mascot .blob2 .eye .pupil{position:absolute;top:11px;left:7px;width:10px;height:10px;border-radius:50%;background:var(--navy);}
+  .climax-mascot .blob2 .grin{position:absolute;top:96px;left:50%;transform:translateX(-50%);width:50px;height:26px;border:4px solid var(--navy);border-top:none;border-radius:0 0 44px 44px;background:#fff;}
+  .climax-mascot .crown{position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-family:var(--display);font-weight:800;font-size:30px;color:var(--yellow);-webkit-text-stroke:3px var(--navy);}
+
+  /* ============ CTA (close) ============ */
+  .cta{padding:10px 0 90px;text-align:center;}
+  .cta .panel{
+    background:var(--coral);
+    padding:56px 40px;
+    position:relative;
+  }
+  .cta h2{font-family:var(--display);font-weight:800;font-size:clamp(36px,6vw,68px);line-height:1;color:#fff;text-shadow:4px 4px 0 var(--navy);}
+  .cta p{font-family:var(--display);font-weight:600;font-size:19px;margin:18px auto 30px;color:var(--navy);max-width:480px;}
+  .cta .stores{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .cta .ministicker{
+    position:absolute;font-family:var(--display);font-weight:700;font-size:14px;
+    background:var(--yellow);border:3px solid var(--navy);border-radius:12px;padding:5px 11px;box-shadow:3px 3px 0 var(--ink-shadow);
+  }
+  .cta .ms1{top:18px;left:24px;transform:rotate(-9deg);}
+  .cta .ms2{bottom:22px;right:26px;transform:rotate(8deg);background:var(--mint);}
+
+  footer{
+    text-align:center;padding:0 0 56px;
+    font-family:var(--display);font-weight:600;color:#6b6786;font-size:15px;
+  }
+  footer .heart{color:var(--coral);}
+
+  /* ============ reveal (degrades gracefully) ============ */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease, transform .6s cubic-bezier(.34,1.56,.64,1);}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* ============ keyframes ============ */
+  @keyframes bounce{
+    0%,100%{transform:translateY(0) scaleY(1) scaleX(1);}
+    20%{transform:translateY(-46px) scaleY(1.08) scaleX(.94);}
+    40%{transform:translateY(0) scaleY(.86) scaleX(1.12);}
+    52%{transform:translateY(0) scaleY(1.04) scaleX(.97);}
+    65%{transform:translateY(0) scaleY(1) scaleX(1);}
+  }
+  @keyframes shadowPulse{
+    0%,100%{transform:translateX(-50%) scale(1);opacity:.12;}
+    20%{transform:translateX(-50%) scale(.6);opacity:.06;}
+    40%{transform:translateX(-50%) scale(1.05);opacity:.16;}
+  }
+  @keyframes look{
+    0%,30%{transform:translate(0,0);}
+    45%,60%{transform:translate(9px,2px);}
+    75%,90%{transform:translate(-7px,1px);}
+    100%{transform:translate(0,0);}
+  }
+  @keyframes twinkle{0%,100%{transform:scale(1) rotate(0);opacity:1;}50%{transform:scale(1.3) rotate(20deg);opacity:.7;}}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-12px) rotate(var(--r,0deg));}}
+  .sticker.s1{--r:7deg;}
+  .sticker.s2{--r:-8deg;}
+  @keyframes wiggle{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+  @keyframes celebrate{0%{transform:scale(1) rotate(0);}40%{transform:scale(1.18) rotate(-8deg);}100%{transform:scale(1) rotate(0);}}
+  @keyframes pop{0%{transform:scale(1);}45%{transform:scale(1.22) rotate(-3deg);}100%{transform:scale(1);}}
+
+  /* ============ responsive ============ */
+  @media(max-width:860px){
+    .hero{grid-template-columns:1fr;gap:10px;padding-top:20px;text-align:left;}
+    .mascot-stage{order:-1;min-height:280px;margin-bottom:10px;}
+    .sticker.s1{right:14%;}
+    .steps{grid-template-columns:1fr;grid-template-rows:none;}
+    .step.big{grid-row:auto;}
+    .climax-inner{grid-template-columns:1fr;text-align:center;}
+    .climax-mascot{margin:0 auto;}
+    .bignum{text-shadow:5px 5px 0 var(--coral);}
+  }
+  @media(max-width:560px){
+    .nav-links a:not(.top-cta){display:none;}
+    .hero h1{font-size:clamp(48px,15vw,80px);}
+    .blob{width:172px;height:166px;}
+    .climax{padding:46px 24px;border-radius:28px;}
+    .cta .panel{padding:42px 22px;}
+    .cta .ministicker{display:none;}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+    .reveal{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo"><span class="face"></span>蹦蹦 <span style="font-weight:600;font-size:16px;color:#6b6786;margin-left:2px;">BOING</span></div>
+    <div class="nav-links">
+      <a href="#how">怎么玩</a>
+      <a href="#streak">连续天数</a>
+      <a href="#get" class="top-cta">下载</a>
+    </div>
+  </nav>
+</div>
+
+<!-- HERO : impact -->
+<div class="wrap">
+  <section class="hero">
+    <div class="sticker s1">今天蹦了吗</div>
+    <div class="hero-copy">
+      <span class="pill"><span class="dot"></span>一个不催你、只陪你的习惯 App</span>
+      <h1 style="margin-top:22px;">先<span class="boing">蹦</span><br>一下</h1>
+      <p class="sub">别立大志，先蹦一下。</p>
+      <p class="micro">喝杯水、做两个深蹲、读一页书。再小的事，坚持下来都会变成你的样子。蹦蹦陪你，从今天开始。</p>
+      <div class="hero-cta">
+        <a href="#get" class="btn">开始蹦 →</a>
+        <span class="note">免费 · 不卷你 · 没有红色焦虑提醒</span>
+      </div>
+    </div>
+    <div class="mascot-stage">
+      <div class="sticker s2">+1 天</div>
+      <div class="ground"></div>
+      <div class="blob" id="heroBlob">
+        <span class="sparkle">✦</span>
+        <span class="eye l"><span class="pupil"></span></span>
+        <span class="eye r"><span class="pupil"></span></span>
+        <span class="cheek l"></span>
+        <span class="cheek r"></span>
+        <span class="mouth"></span>
+        <span class="foot l"></span>
+        <span class="foot r"></span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- BREATH -->
+<div class="wrap">
+  <section class="breath reveal">
+    <p>我们不相信「自律改变人生」这种狠话。<br>我们只相信 <span class="hl">坚持比立志重要</span>，小事比大事好开始。</p>
+  </section>
+</div>
+
+<!-- BUILD : how it works, asymmetric -->
+<div class="wrap" id="how">
+  <section class="build">
+    <div class="head reveal">
+      <h2>怎么玩？<em>三步，</em><br>比泡面还快。</h2>
+      <p class="lead">不用规划人生，不用填一堆表。下载完，三步就能开始蹦。</p>
+    </div>
+    <div class="steps">
+      <div class="step big chunk reveal">
+        <div class="num">01</div>
+        <h3>挑一件<br>小到不会失败的事</h3>
+        <p>「喝一口水」也算。我们故意让目标小到你不好意思不做。小习惯不是偷懒，是让你能蹦得起来的起跳点。</p>
+        <div class="mini-blob"></div>
+      </div>
+      <div class="step s2 chunk reveal">
+        <div class="num">02</div>
+        <h3>做完，点一下蹦蹦</h3>
+        <p>它会「咚」地弹一下回应你。就这一下，今天的连续天数 +1。</p>
+      </div>
+      <div class="step s3 chunk reveal">
+        <div class="num">03</div>
+        <h3>看它跟你一起长大</h3>
+        <p>你越坚持，蹦蹦越胖、越神气。它不是数据，是你养出来的那个自己。</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CLIMAX : streak counter + reacting mascot (signature moment) -->
+<div class="wrap" id="streak">
+  <section class="climax reveal">
+    <div class="climax-inner">
+      <div>
+        <div class="tag">YOUR STREAK · 你的连续天数</div>
+        <h2>蹦到第 <span class="bignum" id="streakNum" role="button" tabindex="0" aria-label="点我蹦一下，连续天数加一">37</span> 天</h2>
+        <div class="counter-line">点一下那个大数字，替今天的自己蹦一下。</div>
+        <div class="tap-hint" id="tapHint">↑ 真的能点，试试看</div>
+      </div>
+      <div class="climax-mascot" id="climaxMascot">
+        <span class="crown">♛</span>
+        <div class="blob2">
+          <span class="eye l"><span class="pupil"></span></span>
+          <span class="eye r"><span class="pupil"></span></span>
+          <span class="grin"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CTA : close -->
+<div class="wrap" id="get">
+  <section class="cta">
+    <div class="panel chunk reveal">
+      <span class="ministicker ms1">不卷你</span>
+      <span class="ministicker ms2">就陪你</span>
+      <h2>今天，<br>先蹦一下吧。</h2>
+      <p>把那个想成为的自己，拆成一个一个能完成的小动作。蹦蹦在这儿等你。</p>
+      <div class="stores">
+        <a href="#" class="btn ghost">App Store 下载</a>
+        <a href="#" class="btn mint">Google Play 下载</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer class="wrap">
+  蹦蹦 BOING · 别立大志，先蹦一下 · 用 <span class="heart">♥</span> 做给所有想坚持的人
+</footer>
+
+<script>
+  // ---- scroll reveal with graceful fallback ----
+  (function(){
+    var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    function showAll(){items.forEach(function(el){el.classList.add('in');});}
+
+    if(!('IntersectionObserver' in window)){ showAll(); return; }
+
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12});
+    items.forEach(function(el){ io.observe(el); });
+
+    // safety net: never leave content hidden
+    setTimeout(showAll, 1400);
+  })();
+
+  // ---- springy streak counter (signature interaction) ----
+  (function(){
+    var num = document.getElementById('streakNum');
+    var mascot = document.getElementById('climaxMascot');
+    var hint = document.getElementById('tapHint');
+    if(!num) return;
+    var count = 37;
+    function boing(){
+      count++;
+      num.textContent = count;
+      num.classList.remove('pop'); void num.offsetWidth; num.classList.add('pop');
+      if(mascot){ mascot.classList.remove('celebrate'); void mascot.offsetWidth; mascot.classList.add('celebrate'); }
+      if(hint){ hint.textContent = '蹦！' + count + ' 天，继续 →'; }
+    }
+    num.addEventListener('click', boing);
+    num.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); boing(); }
+    });
+  })();
+
+  // ---- hero blob: a little squish when poked ----
+  (function(){
+    var blob = document.getElementById('heroBlob');
+    if(!blob) return;
+    blob.style.cursor='pointer';
+    blob.addEventListener('click', function(){
+      blob.style.animation='none'; void blob.offsetWidth;
+      blob.style.animation='bounce 1.7s cubic-bezier(.5,0,.5,1) infinite';
+    });
+  })();
+</script>
+</body>
+</html>

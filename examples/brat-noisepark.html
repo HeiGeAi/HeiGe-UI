@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>噪音公园 noise park 2026 / 不修音，不装，来炸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --slime:#8ace00;
+    --slime-dim:#7bb800;
+    --ink:#000000;
+    --paper:#ffffff;
+    --clash:#ff2a6d; /* 唯一撞色，全篇只用一次 */
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;}
+  body{
+    font-family:"Archivo","Noto Sans SC",Arial,Helvetica,sans-serif;
+    background:var(--slime);
+    color:var(--ink);
+    text-transform:lowercase;
+    overflow-x:hidden;
+    line-height:1;
+  }
+  /* 中文不强制小写（无意义），单独留正常字重 */
+  .cn{font-family:"Noto Sans SC","Archivo",sans-serif;text-transform:none;}
+
+  section{position:relative;width:100%;}
+  .pad{padding:clamp(28px,6vw,90px);}
+
+  /* ===== reveal：默认隐藏，1.5s 兜底，reduced-motion 直接显示 ===== */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1!important;transform:none!important;transition:none;}
+  }
+
+  /* ============ 1. COLD OPEN / 冲击 / 史莱姆绿 + 模糊小写大字 ============ */
+  .hero{
+    min-height:100svh;
+    background:var(--slime);
+    display:flex;flex-direction:column;justify-content:space-between;
+    border-bottom:none;
+  }
+  .hero-top{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    font-weight:600;font-size:clamp(11px,1.4vw,15px);letter-spacing:.04em;
+  }
+  .hero-top span{display:block;}
+  .hero-top .r{text-align:right;}
+  .blink{display:inline-block;width:.5em;height:.5em;background:var(--ink);border-radius:50%;margin-right:.4em;animation:blink 1.2s steps(1) infinite;vertical-align:middle;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .wordmark{
+    flex:1;display:flex;flex-direction:column;justify-content:center;
+    padding-block:clamp(20px,5vw,40px);
+  }
+  .wordmark h1{
+    font-family:"Archivo",sans-serif;
+    font-weight:800;
+    font-size:clamp(64px,17vw,260px);
+    line-height:.82;
+    letter-spacing:-.04em;
+    color:var(--ink);
+    filter:blur(3.5px);        /* 签名 lo-fi 模糊，仍可读 */
+    margin-left:-.02em;
+  }
+  .wordmark h1 .yr{
+    display:block;
+    font-size:clamp(40px,11vw,170px);
+    filter:blur(2.5px);
+  }
+  .wordmark .sub{
+    filter:none;font-weight:600;
+    font-size:clamp(15px,2.6vw,30px);
+    margin-top:clamp(18px,3vw,34px);
+    letter-spacing:.01em;
+  }
+  .hero-bottom{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    font-weight:600;font-size:clamp(11px,1.4vw,15px);gap:18px;
+  }
+  .scrolldot{font-weight:700;animation:nudge 1.6s ease-in-out infinite;}
+  @keyframes nudge{50%{transform:translateY(6px);}}
+
+  /* ============ 2. 呼吸 / 黑底极简信息行 ============ */
+  .breath{
+    background:var(--ink);color:var(--slime);
+    min-height:62svh;display:flex;flex-direction:column;justify-content:center;gap:clamp(20px,4vw,50px);
+  }
+  .breath .row{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:2px solid var(--slime);padding-bottom:clamp(12px,2vw,22px);gap:16px;flex-wrap:wrap;
+  }
+  .breath .k{font-weight:600;font-size:clamp(12px,1.5vw,16px);opacity:.6;}
+  .breath .v{font-weight:800;font-size:clamp(26px,6vw,72px);letter-spacing:-.02em;}
+  .breath .v.cn{font-weight:900;}
+
+  /* ============ 3. BUILD / 推进 / 不对称阵容 + 跑马灯 ============ */
+  .lineup{background:var(--slime);padding-top:clamp(40px,7vw,100px);padding-bottom:0;}
+  .lineup .label{font-weight:700;font-size:clamp(13px,1.6vw,17px);margin-bottom:clamp(18px,3vw,40px);letter-spacing:.05em;}
+  .lineup ol{list-style:none;}
+  .lineup li{
+    display:flex;align-items:baseline;gap:clamp(10px,2vw,28px);
+    border-top:2.5px solid var(--ink);
+    padding:clamp(14px,2.4vw,26px) 0;
+    font-weight:800;letter-spacing:-.02em;
+    transition:padding-left .3s ease,color .3s ease;
+    cursor:default;
+  }
+  .lineup li:last-child{border-bottom:2.5px solid var(--ink);}
+  .lineup li .no{font-weight:600;font-size:clamp(11px,1.3vw,14px);opacity:.5;min-width:2.4em;}
+  .lineup li .nm{font-size:clamp(28px,7vw,94px);line-height:.9;}
+  .lineup li .tag{margin-left:auto;font-weight:600;font-size:clamp(11px,1.4vw,16px);opacity:.55;text-align:right;}
+  /* 不对称缩进，破掉整齐网格 */
+  .lineup li:nth-child(2){padding-left:clamp(20px,8vw,140px);}
+  .lineup li:nth-child(3){padding-left:clamp(10px,4vw,70px);}
+  .lineup li:nth-child(5){padding-left:clamp(30px,10vw,180px);}
+  .lineup li:nth-child(6){padding-left:clamp(14px,5vw,90px);}
+  .lineup li.head .nm{filter:blur(2px);}        /* 头牌带一点模糊，呼应签名 */
+  .lineup li.head .tag{color:var(--clash);opacity:1;font-weight:700;} /* 唯一撞色，只此一处 */
+  .lineup li:hover{padding-left:clamp(34px,11vw,200px);}
+  @media (hover:hover){.lineup li:hover .nm{color:var(--clash);}}
+
+  /* 跑马灯 */
+  .marquee{
+    background:var(--ink);color:var(--slime);
+    overflow:hidden;white-space:nowrap;
+    padding:clamp(16px,2.6vw,30px) 0;margin-top:clamp(40px,7vw,90px);
+    border-top:none;
+  }
+  .marquee .track{display:inline-block;will-change:transform;animation:scroll 22s linear infinite;}
+  .marquee span{font-weight:800;font-size:clamp(28px,5vw,64px);letter-spacing:-.02em;padding:0 .4em;}
+  .marquee span i{font-style:normal;color:var(--slime);opacity:.35;padding:0 .2em;}
+  @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @media (prefers-reduced-motion:reduce){
+    .marquee .track{animation:none;white-space:normal;}
+    .marquee{white-space:normal;}
+  }
+
+  /* ============ 4. 高潮 / 签名时刻 / 史莱姆绿满屏模糊宣言 ============ */
+  .signature{
+    background:var(--slime);
+    min-height:100svh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;cursor:pointer;user-select:none;
+    transition:background .25s ease,color .25s ease;
+  }
+  .signature h2{
+    font-family:"Archivo",sans-serif;font-weight:800;
+    font-size:clamp(54px,15vw,230px);line-height:.84;letter-spacing:-.045em;
+    color:var(--ink);filter:blur(4px);
+  }
+  .signature .hint{margin-top:clamp(28px,5vw,56px);font-weight:600;font-size:clamp(12px,1.5vw,16px);opacity:.55;filter:none;}
+  /* 点击/键盘触发 黑↔绿 硬翻转 // brat 招牌动作 */
+  .signature.flip{background:var(--ink);}
+  .signature.flip h2{color:var(--slime);}
+  .signature.flip .hint{color:var(--slime);}
+
+  /* ============ 5. 收束 / 票务 CTA ============ */
+  .cta{
+    background:var(--ink);color:var(--slime);
+    min-height:88svh;display:flex;flex-direction:column;justify-content:center;gap:clamp(26px,4vw,46px);
+  }
+  .cta .big{font-weight:800;font-size:clamp(40px,10vw,150px);line-height:.86;letter-spacing:-.03em;}
+  .cta .tiers{display:flex;flex-direction:column;gap:0;border-top:2px solid var(--slime);}
+  .cta .tier{
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;
+    border-bottom:2px solid var(--slime);padding:clamp(14px,2.4vw,24px) 0;
+  }
+  .cta .tier .t{font-weight:700;font-size:clamp(18px,3vw,40px);}
+  .cta .tier .p{font-weight:800;font-size:clamp(22px,4vw,56px);letter-spacing:-.02em;}
+  .cta .tier.gone .t,.cta .tier.gone .p{opacity:.35;text-decoration:line-through;text-decoration-thickness:3px;}
+  .buy{
+    align-self:flex-start;
+    background:var(--slime);color:var(--ink);
+    border:none;font-family:inherit;text-transform:lowercase;
+    font-weight:800;font-size:clamp(20px,3.4vw,40px);letter-spacing:-.01em;
+    padding:clamp(16px,2.4vw,26px) clamp(34px,5vw,64px);
+    cursor:pointer;border-radius:0;
+    transition:transform .12s ease,background .2s ease;
+    text-decoration:none;display:inline-block;
+  }
+  .buy:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--slime-dim);}
+  .buy:active{transform:translate(0,0);box-shadow:none;}
+  .foot{
+    background:var(--slime);color:var(--ink);
+    display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;
+    font-weight:600;font-size:clamp(11px,1.4vw,14px);padding-block:clamp(26px,4vw,46px);
+  }
+  .foot .mk{font-weight:800;font-size:clamp(20px,3vw,40px);filter:blur(2px);letter-spacing:-.02em;}
+
+  /* ===== 390px 移动重排 ===== */
+  @media (max-width:520px){
+    .hero-top{flex-direction:column;gap:6px;}
+    .hero-top .r{text-align:left;}
+    .hero-bottom{flex-direction:column;align-items:flex-start;gap:8px;}
+    .breath .row{flex-direction:column;align-items:flex-start;gap:4px;}
+    .breath .k{order:-1;}
+    .lineup li{flex-wrap:wrap;}
+    .lineup li .tag{margin-left:0;width:100%;text-align:left;margin-top:6px;}
+    .lineup li:nth-child(2),.lineup li:nth-child(3),
+    .lineup li:nth-child(5),.lineup li:nth-child(6){padding-left:0;}
+    .lineup li:hover{padding-left:0;}
+    .cta .tier{flex-direction:column;align-items:flex-start;gap:2px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ 1. HERO / COLD OPEN ============ -->
+<section class="hero pad">
+  <div class="hero-top">
+    <span><span class="blink"></span>noise park 2026</span>
+    <span class="r cn">独立 / 电子 / 实验现场</span>
+  </div>
+
+  <div class="wordmark">
+    <h1>噪音公园<span class="yr">noise park</span></h1>
+    <p class="sub cn">不修音。不装。来炸。</p>
+  </div>
+
+  <div class="hero-bottom">
+    <span class="cn">两天 / 三台 / 二十六组现场</span>
+    <span class="scrolldot">↓ 往下</span>
+  </div>
+</section>
+
+<!-- ============ 2. BREATH ============ -->
+<section class="breath pad">
+  <div class="row reveal">
+    <span class="k cn">时间</span>
+    <span class="v">07.18 / 07.19</span>
+  </div>
+  <div class="row reveal">
+    <span class="k cn">地点</span>
+    <span class="v cn">东郊废弃水泥厂</span>
+  </div>
+  <div class="row reveal">
+    <span class="k cn">天气</span>
+    <span class="v">大概率下雨，照炸</span>
+  </div>
+</section>
+
+<!-- ============ 3. BUILD / LINEUP ============ -->
+<section class="lineup pad">
+  <p class="label cn reveal">阵容 // lineup</p>
+  <ol>
+    <li class="head reveal"><span class="no">01</span><span class="nm">回声故障</span><span class="tag cn">压轴 · 周六</span></li>
+    <li class="reveal"><span class="no">02</span><span class="nm">塑料海岸</span><span class="tag cn">合成器流行</span></li>
+    <li class="reveal"><span class="no">03</span><span class="nm">钝刀乐队</span><span class="tag cn">后朋克</span></li>
+    <li class="reveal"><span class="no">04</span><span class="nm">湿水泥</span><span class="tag cn">工业噪音</span></li>
+    <li class="reveal"><span class="no">05</span><span class="nm">午夜便利店</span><span class="tag cn">城市民谣</span></li>
+    <li class="reveal"><span class="no">06</span><span class="nm">坏脾气</span><span class="tag cn">车库摇滚</span></li>
+    <li class="reveal"><span class="no">07</span><span class="nm">无名乐队</span><span class="tag cn">+ 二十组等你挖</span></li>
+  </ol>
+
+  <div class="marquee" aria-hidden="false">
+    <div class="track">
+      <span>回声故障<i>×</i>塑料海岸<i>×</i>钝刀乐队<i>×</i>湿水泥<i>×</i>午夜便利店<i>×</i>坏脾气<i>×</i></span>
+      <span>回声故障<i>×</i>塑料海岸<i>×</i>钝刀乐队<i>×</i>湿水泥<i>×</i>午夜便利店<i>×</i>坏脾气<i>×</i></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. SIGNATURE MOMENT ============ -->
+<section class="signature" id="sig" tabindex="0" role="button" aria-label="点击翻转颜色">
+  <h2>来炸</h2>
+  <p class="hint cn">点一下 / 按空格 → 翻面</p>
+</section>
+
+<!-- ============ 5. CTA / CLOSE ============ -->
+<section class="cta pad">
+  <h2 class="big reveal">买票<br>别等了</h2>
+  <div class="tiers reveal">
+    <div class="tier gone">
+      <span class="t cn">早鸟两日通票</span>
+      <span class="p">¥ 288 · 售罄</span>
+    </div>
+    <div class="tier">
+      <span class="t cn">两日通票</span>
+      <span class="p">¥ 388</span>
+    </div>
+    <div class="tier">
+      <span class="t cn">单日票</span>
+      <span class="p">¥ 228</span>
+    </div>
+  </div>
+  <a class="buy reveal" href="#" onclick="return false;">抢一张 →</a>
+</section>
+
+<footer class="foot pad">
+  <div>
+    <div class="mk">噪音公园 2026</div>
+    <div class="cn" style="margin-top:8px;opacity:.6;">主办 // 杂音厂牌 · 现场不退不换 · 18+</div>
+  </div>
+  <div class="r" style="text-align:right;">
+    <div>ig @noisepark</div>
+    <div class="cn" style="opacity:.6;margin-top:4px;">扫码进群 · 拼车 · 蹭吃蹭喝</div>
+  </div>
+</footer>
+
+<script>
+  // scroll-reveal，IntersectionObserver + 1.5s 兜底，截图友好
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(reduce || !('IntersectionObserver' in window)){
+      els.forEach(function(e){e.classList.add('in');});
+    } else {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}
+        });
+      },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+      els.forEach(function(e){io.observe(e);});
+      // 兜底：1.5s 后无论如何全部显示，静态截图能看到全部内容
+      setTimeout(function(){els.forEach(function(e){e.classList.add('in');});},1500);
+    }
+
+    // 签名翻面：点击 / 空格 / 回车
+    var sig = document.getElementById('sig');
+    function flip(){sig.classList.toggle('flip');}
+    sig.addEventListener('click', flip);
+    sig.addEventListener('keydown', function(e){
+      if(e.key===' '||e.key==='Enter'){e.preventDefault();flip();}
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>账面 LEDGER — 把现金流看得一清二楚</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fafafa;
+    --white:#ffffff;
+    --ink:#111111;
+    --grey:#767676;
+    --hair:#e2e2e2;
+    --red:#e8482b;
+    --gut:24px;
+    --sans:"Inter","Noto Sans SC",sans-serif;
+    --mono:"Space Mono","Inter",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  body{
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.5;
+    font-weight:400;
+    letter-spacing:-0.01em;
+  }
+  ::selection{background:var(--red);color:#fff}
+
+  /* ---------- grid scaffold ---------- */
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:var(--gut);
+  }
+
+  .mono{font-family:var(--mono);letter-spacing:0;}
+  .label{
+    font-family:var(--mono);
+    font-size:11px;
+    line-height:1;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    color:var(--grey);
+  }
+  .label--ink{color:var(--ink)}
+  .label--red{color:var(--red)}
+  .rule{border:0;border-top:1px solid var(--hair);width:100%}
+
+  /* ---------- top bar ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(250,250,250,0.92);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--hair)}
+  .nav{display:flex;align-items:baseline;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:baseline;gap:10px}
+  .brand b{font-weight:900;font-size:18px;letter-spacing:-0.02em}
+  .brand .en{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--grey);text-transform:uppercase}
+  .nav-right{display:flex;align-items:baseline;gap:28px}
+  .nav-right a{font-size:13px;color:var(--grey);text-decoration:none;font-weight:500;transition:color .2s}
+  .nav-right a:hover{color:var(--ink)}
+  .nav-cta{color:var(--ink)!important;border-bottom:2px solid var(--red);padding-bottom:2px}
+  @media(max-width:680px){.nav-right a:not(.nav-cta){display:none}}
+
+  /* ---------- HERO / impact ---------- */
+  .hero{padding:96px 0 0}
+  .hero .label{margin-bottom:28px}
+  .hero h1{
+    font-weight:900;
+    font-size:clamp(40px,8.2vw,104px);
+    line-height:0.96;
+    letter-spacing:-0.04em;
+    grid-column:1 / 9;
+  }
+  .hero h1 .dim{color:var(--grey);font-weight:500}
+  .hero .lede{
+    grid-column:9 / 13;
+    align-self:end;
+    font-size:15px;
+    line-height:1.6;
+    color:var(--grey);
+    max-width:280px;
+  }
+  .hero .lede b{color:var(--ink);font-weight:600}
+
+  /* metric protagonist */
+  .metric{padding:72px 0 88px}
+  .metric .grid{align-items:end}
+  .metric-num{
+    grid-column:1 / 8;
+    font-weight:900;
+    font-size:clamp(80px,17vw,228px);
+    line-height:0.82;
+    letter-spacing:-0.055em;
+    color:var(--ink);
+    font-feature-settings:"tnum" 1;
+    position:relative;
+  }
+  .metric-num .cur{font-size:0.42em;font-weight:700;color:var(--grey);vertical-align:top;margin-right:0.08em}
+  .metric-num .dot{color:var(--red)}
+  .metric-side{grid-column:9 / 13;padding-bottom:18px}
+  .metric-side .big{font-weight:700;font-size:17px;line-height:1.45;margin-bottom:18px}
+  .metric-side .row{display:flex;justify-content:space-between;border-top:1px solid var(--hair);padding:12px 0;font-size:13px}
+  .metric-side .row span:last-child{font-family:var(--mono);color:var(--ink)}
+  .metric-side .row .up{color:var(--red)}
+
+  /* ---------- breath ---------- */
+  .breath{padding:72px 0;background:var(--ink);color:var(--paper)}
+  .breath .rule{border-color:#2a2a2a}
+  .breath p{
+    grid-column:1 / 11;
+    font-weight:500;
+    font-size:clamp(20px,3.2vw,34px);
+    line-height:1.3;
+    letter-spacing:-0.02em;
+    margin:36px 0;
+  }
+  .breath p .em{color:var(--red)}
+  .breath .who{grid-column:11 / 13;align-self:center;text-align:right}
+  .breath .label{color:#8a8a8a}
+  @media(max-width:680px){.breath p{grid-column:1/13}.breath .who{grid-column:1/13;text-align:left;margin-top:8px}}
+
+  /* ---------- BUILD / capabilities, varied spans ---------- */
+  .build{padding:96px 0 24px}
+  .sec-head{margin-bottom:56px}
+  .sec-head .num{font-family:var(--mono);font-size:13px;color:var(--red);margin-bottom:14px}
+  .sec-head h2{font-weight:900;font-size:clamp(28px,4.5vw,52px);line-height:1.02;letter-spacing:-0.03em;max-width:14ch}
+
+  .caps{row-gap:1px;background:var(--hair);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .cap{background:var(--paper);padding:38px 0 44px}
+  .cap .idx{font-family:var(--mono);font-size:12px;color:var(--grey);margin-bottom:auto}
+  .cap h3{font-weight:700;font-size:21px;letter-spacing:-0.02em;margin:30px 0 12px}
+  .cap p{font-size:14px;line-height:1.6;color:var(--grey);max-width:34ch}
+  .cap .tag{font-family:var(--mono);font-size:11px;color:var(--red);margin-top:18px;letter-spacing:0.04em}
+  /* deliberately UNEQUAL spans */
+  .cap.lg{grid-column:1 / 8;padding-right:48px}
+  .cap.sm{grid-column:8 / 13;padding-left:32px;border-left:1px solid var(--hair)}
+  .cap.md1{grid-column:1 / 5}
+  .cap.md2{grid-column:5 / 9;padding-left:32px;border-left:1px solid var(--hair)}
+  .cap.md3{grid-column:9 / 13;padding-left:32px;border-left:1px solid var(--hair)}
+  .cap.lg h3{font-size:27px}
+  .cap.lg p{font-size:15px;max-width:42ch}
+
+  /* ---------- CLIMAX / signature chart ---------- */
+  .climax{padding:104px 0 96px}
+  .climax .top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:24px}
+  .climax .top h2{font-weight:900;font-size:clamp(26px,4vw,46px);letter-spacing:-0.03em;line-height:1}
+  .climax .top .meta{text-align:right}
+  .climax .top .meta .v{font-family:var(--mono);font-size:30px;font-weight:700;letter-spacing:-0.02em}
+  .climax .top .meta .v .red{color:var(--red)}
+  .chartcard{margin-top:40px;border:1px solid var(--hair);background:var(--white);padding:40px 40px 28px}
+  .chart-svg{width:100%;height:auto;display:block;overflow:visible}
+  .axis line{stroke:var(--hair);stroke-width:1}
+  .axis .base{stroke:var(--ink);stroke-width:1.5}
+  .axis text{font-family:var(--mono);font-size:10px;fill:var(--grey);letter-spacing:0.04em}
+  .bar{fill:var(--ink)}
+  .bar.neg{fill:#c9c9c9}
+  .bar.hot{fill:var(--red)}
+  .flowline{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.6s .2s cubic-bezier(.2,.7,.2,1) forwards}
+  .dot-end{r:5;fill:var(--red);opacity:0;animation:pop .4s 1.5s forwards}
+  .callout{font-family:var(--mono);font-size:11px;fill:var(--red);font-weight:700}
+  .calloutbox{fill:none;stroke:var(--red);stroke-width:1;stroke-dasharray:3 3}
+  .chart-legend{display:flex;gap:28px;margin-top:24px;border-top:1px solid var(--hair);padding-top:18px;flex-wrap:wrap}
+  .chart-legend .lg-it{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--grey)}
+  .chart-legend .sw{width:14px;height:14px;display:inline-block}
+
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes pop{to{opacity:1}}
+
+  /* ---------- CTA / close ---------- */
+  .cta{padding:112px 0 120px;border-top:1px solid var(--hair)}
+  .cta .grid{align-items:end}
+  .cta .big{grid-column:1 / 9}
+  .cta .big h2{font-weight:900;font-size:clamp(40px,7.5vw,92px);line-height:0.94;letter-spacing:-0.04em}
+  .cta .big h2 .red{color:var(--red)}
+  .cta .act{grid-column:9 / 13;padding-bottom:14px}
+  .cta .act p{font-size:14px;color:var(--grey);line-height:1.6;margin-bottom:24px}
+  .btn{
+    display:inline-flex;align-items:center;gap:14px;
+    background:var(--ink);color:var(--paper);
+    font-weight:600;font-size:15px;
+    padding:16px 24px;text-decoration:none;
+    transition:background .2s,transform .2s;
+  }
+  .btn .arr{font-family:var(--mono);transition:transform .2s}
+  .btn:hover{background:var(--red)}
+  .btn:hover .arr{transform:translateX(4px)}
+  .ghost{display:block;margin-top:16px;font-size:13px;color:var(--grey);text-decoration:none}
+  .ghost:hover{color:var(--ink)}
+
+  footer{border-top:1px solid var(--hair);padding:40px 0 56px}
+  .foot{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px}
+  .foot .brand b{font-size:15px}
+  .foot .cols{display:flex;gap:56px}
+  .foot .col p{font-size:13px;color:var(--grey);line-height:1.9}
+  .foot .col .h{color:var(--ink);font-weight:600;margin-bottom:8px;font-size:13px}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
+  .rv.in{opacity:1;transform:none}
+
+  /* ---------- responsive recompose ---------- */
+  @media(max-width:880px){
+    .wrap{padding:0 24px}
+    .hero h1{grid-column:1/13}
+    .hero .lede{grid-column:1/13;max-width:none;margin-top:28px;align-self:auto}
+    .metric-num{grid-column:1/13}
+    .metric-side{grid-column:1/13;margin-top:36px}
+    .cap.lg,.cap.sm,.cap.md1,.cap.md2,.cap.md3{grid-column:1/13;border-left:0;padding-left:0;padding-right:0}
+    .cap.sm,.cap.md2,.cap.md3{border-top:1px solid var(--hair)}
+    .cta .big,.cta .act{grid-column:1/13}
+    .cta .act{margin-top:40px}
+  }
+  @media(max-width:480px){
+    .wrap{padding:0 18px}
+    .chartcard{padding:24px 16px 20px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .rv{opacity:1;transform:none;transition:none}
+    .flowline{animation:none;stroke-dashoffset:0}
+    .dot-end{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand"><b>账面</b><span class="en">Ledger</span></div>
+    <nav class="nav-right">
+      <a href="#cap">能力</a>
+      <a href="#viz">数据</a>
+      <a href="#book" class="nav-cta">预约演示</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== IMPACT: hero ===== -->
+<section class="hero wrap">
+  <div class="label rv">现金流分析 · 面向财务团队</div>
+  <div class="grid">
+    <h1 class="rv">把现金流<br>看得<span class="dim">一清二楚。</span></h1>
+    <p class="lede rv">账面把分散在十几个银行账户、应收应付和合同里的钱，收进同一张视图。<b>该进的、该出的、还差多少，一眼可见。</b></p>
+  </div>
+</section>
+
+<!-- ===== protagonist metric ===== -->
+<section class="metric wrap">
+  <div class="grid">
+    <div class="metric-num rv">
+      <span class="cur">¥</span>2,847<span class="dot">.</span>6<span style="font-size:.46em;color:var(--grey);font-weight:700">万</span>
+    </div>
+    <div class="metric-side rv">
+      <p class="big">截至今日的可动用资金，由 9 个账户实时汇总。</p>
+      <div class="row"><span>30 天净流入</span><span class="up">+412.8 万</span></div>
+      <div class="row"><span>未来 14 天缺口预警</span><span>0 笔</span></div>
+      <div class="row"><span>对账延迟</span><span>＜ 2 秒</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BREATH ===== -->
+<section class="breath">
+  <div class="wrap">
+    <hr class="rule">
+    <div class="grid">
+      <p class="rv">现金流出问题，往往不是没钱，<br>是<span class="em">没人提前看见</span>那个缺口。</p>
+      <div class="who rv"><div class="label">账面 01</div></div>
+    </div>
+    <hr class="rule">
+  </div>
+</section>
+
+<!-- ===== BUILD: capabilities, varied spans ===== -->
+<section class="build wrap" id="cap">
+  <div class="sec-head rv">
+    <div class="num">02 — 能做什么</div>
+    <h2>四件事，<br>把对账这件苦差事做完。</h2>
+  </div>
+
+  <div class="grid caps">
+    <div class="cap lg rv">
+      <div class="idx">/ 01</div>
+      <h3>多账户实时归集</h3>
+      <p>接入银行、支付、ERP 与合同系统，所有资金口径统一到一张总账上。不再手动导 Excel，不再凌晨两点拼数据。一个数字，全公司只有一个版本。</p>
+      <div class="tag">银行直连 · ERP · 合同</div>
+    </div>
+    <div class="cap sm rv">
+      <div class="idx">/ 02</div>
+      <h3>13 周滚动预测</h3>
+      <p>基于应收应付与历史规律，自动滚动预测未来 13 周的现金位置，缺口提前到周维度。</p>
+      <div class="tag">周级预测</div>
+    </div>
+
+    <div class="cap md1 rv">
+      <div class="idx">/ 03</div>
+      <h3>缺口预警</h3>
+      <p>资金低于安全线，先给你一条消息，而不是等月底报表。</p>
+      <div class="tag">阈值告警</div>
+    </div>
+    <div class="cap md2 rv">
+      <div class="idx">/ 04</div>
+      <h3>一键穿透</h3>
+      <p>任何一个汇总数字，都能点开看到底是哪几笔交易凑出来的。可审计、可追溯。</p>
+      <div class="tag">逐笔可溯</div>
+    </div>
+    <div class="cap md3 rv">
+      <div class="idx">/ 05</div>
+      <h3>团队共用一张账</h3>
+      <p>CFO、出纳、业务负责人看同一份口径，权限分级，留痕清楚。</p>
+      <div class="tag">权限 · 留痕</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CLIMAX: signature SVG chart ===== -->
+<section class="climax wrap" id="viz">
+  <div class="top rv">
+    <h2>这一周，钱<br>从哪来，往哪去。</h2>
+    <div class="meta">
+      <div class="label" style="margin-bottom:8px">本周净现金流</div>
+      <div class="v"><span class="red">+186.4</span> 万</div>
+    </div>
+  </div>
+
+  <div class="chartcard rv">
+    <!-- pure SVG cash-flow waterfall + flow line, one red highlight -->
+    <svg class="chart-svg" viewBox="0 0 1080 380" role="img" aria-label="本周现金流瀑布图，周三出现资金低点已被标红，周末净流入回正">
+      <!-- gridlines -->
+      <g class="axis">
+        <line x1="60" y1="40"  x2="1060" y2="40"/>
+        <line x1="60" y1="110" x2="1060" y2="110"/>
+        <line x1="60" y1="180" x2="1060" y2="180"/>
+        <line x1="60" y1="250" x2="1060" y2="250"/>
+        <line class="base" x1="60" y1="320" x2="1060" y2="320"/>
+        <!-- y labels (万元) -->
+        <text x="52" y="44"  text-anchor="end">600</text>
+        <text x="52" y="114" text-anchor="end">450</text>
+        <text x="52" y="184" text-anchor="end">300</text>
+        <text x="52" y="254" text-anchor="end">150</text>
+        <text x="52" y="324" text-anchor="end">0</text>
+      </g>
+
+      <!-- bars: 7 days. heights are net position each day; Wed = low point in red -->
+      <!-- x slots every ~138px starting 100 -->
+      <g>
+        <rect class="bar"     x="100" y="150" width="64" height="170"/>
+        <rect class="bar"     x="238" y="118" width="64" height="202"/>
+        <rect class="bar hot" x="376" y="236" width="64" height="84"/>
+        <rect class="bar"     x="514" y="172" width="64" height="148"/>
+        <rect class="bar"     x="652" y="120" width="64" height="200"/>
+        <rect class="bar"     x="790" y="86"  width="64" height="234"/>
+        <rect class="bar"     x="928" y="62"  width="64" height="258"/>
+      </g>
+
+      <!-- flow line tracing the running balance, drawn through bar tops -->
+      <polyline class="flowline" style="--len:980"
+        points="132,150 270,118 408,236 546,172 684,120 822,86 960,62"/>
+
+      <!-- red highlight on the low point -->
+      <circle cx="408" cy="236" r="5" fill="var(--red)"/>
+      <rect class="calloutbox" x="352" y="200" width="112" height="26" rx="2"/>
+      <text class="callout" x="408" y="217" text-anchor="middle">周三 · 低点 132 万</text>
+
+      <!-- end dot -->
+      <circle class="dot-end" cx="960" cy="62"/>
+
+      <!-- x labels -->
+      <g class="axis">
+        <text x="132" y="342" text-anchor="middle">MON</text>
+        <text x="270" y="342" text-anchor="middle">TUE</text>
+        <text x="408" y="342" text-anchor="middle" fill="var(--red)">WED</text>
+        <text x="546" y="342" text-anchor="middle">THU</text>
+        <text x="684" y="342" text-anchor="middle">FRI</text>
+        <text x="822" y="342" text-anchor="middle">SAT</text>
+        <text x="960" y="342" text-anchor="middle">SUN</text>
+      </g>
+    </svg>
+
+    <div class="chart-legend">
+      <span class="lg-it"><span class="sw" style="background:var(--ink)"></span>每日资金余额</span>
+      <span class="lg-it"><span class="sw" style="background:var(--red)"></span>资金低点（已预警）</span>
+      <span class="lg-it"><span class="sw" style="background:var(--ink);height:2px;align-self:center"></span>余额走势</span>
+      <span class="lg-it mono" style="margin-left:auto;color:var(--grey)">单位：万元 · 实时</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CLOSE: CTA ===== -->
+<section class="cta wrap" id="book">
+  <div class="grid">
+    <div class="big rv">
+      <h2>下个缺口，<br>让账面<span class="red">先看见</span>。</h2>
+    </div>
+    <div class="act rv">
+      <p>30 分钟演示，用你们真实的账户口径跑一遍。看不清的地方，当场拉穿透。</p>
+      <a href="#" class="btn">预约一场演示 <span class="arr">→</span></a>
+      <a href="#" class="ghost">先看一份样例报告 ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="foot">
+    <div>
+      <div class="brand" style="margin-bottom:10px"><b>账面</b><span class="en">Ledger</span></div>
+      <p style="font-size:13px;color:var(--grey);max-width:30ch;line-height:1.7">面向财务团队的现金流分析。把分散的钱收进一张视图。</p>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <p class="h">产品</p>
+        <p>资金归集<br>滚动预测<br>缺口预警<br>逐笔穿透</p>
+      </div>
+      <div class="col">
+        <p class="h">公司</p>
+        <p>关于我们<br>安全与合规<br>联系销售</p>
+      </div>
+    </div>
+  </div>
+  <hr class="rule" style="margin:36px 0 20px">
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <span class="label">© 2026 LEDGER — 现金流，看得清</span>
+    <span class="label label--red">数据每 2 秒刷新一次</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var els=[].slice.call(document.querySelectorAll('.rv'));
+    function show(){els.forEach(function(e){e.classList.add('in')});}
+    if(!('IntersectionObserver' in window)){show();return;}
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});
+    },{rootMargin:'0px 0px -8% 0px',threshold:0.06});
+    els.forEach(function(e){io.observe(e);});
+    // static-screenshot safety net: everything visible by 1.5s no matter what
+    setTimeout(show,1500);
+  })();
+</script>
+</body>
+</html>

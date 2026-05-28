@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>声波 SOUNDWAVE · 2026 年度听歌报告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#00302b; --lime:#c6ff00;
+    --coral:#ff4d3d; --cream:#fff4e0;
+    --cobalt:#1736ff; --lemon:#ffe14d;
+    --acid:#d8ff3e; --ink:#0a0a0a;
+    --magenta:#ff2d8e; --white:#ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Noto Sans SC',sans-serif;
+    background:var(--teal);
+    color:var(--white);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  .deck{scroll-snap-type:y mandatory;}
+  .card{
+    min-height:100svh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:clamp(28px,6vw,90px);
+    position:relative;
+    overflow:hidden;
+    scroll-snap-align:start;
+  }
+  .mono{font-family:'Space Mono',monospace;letter-spacing:.04em;}
+  .display{font-family:'Anton','Archivo',sans-serif;line-height:.84;letter-spacing:-.01em;}
+  .archivo{font-family:'Archivo',sans-serif;}
+
+  /* ---------- kicker label ---------- */
+  .kicker{
+    font-family:'Space Mono',monospace;
+    font-size:clamp(11px,1.4vw,15px);
+    text-transform:uppercase;
+    letter-spacing:.28em;
+    display:flex;align-items:center;gap:12px;
+    opacity:.9;
+  }
+  .kicker::before{
+    content:"";width:clamp(28px,5vw,64px);height:2px;background:currentColor;display:inline-block;
+  }
+  .pageno{
+    position:absolute;top:clamp(22px,5vw,48px);right:clamp(22px,5vw,48px);
+    font-family:'Space Mono',monospace;font-size:13px;letter-spacing:.2em;opacity:.7;
+  }
+  .tag{
+    position:absolute;top:clamp(22px,5vw,48px);left:clamp(28px,6vw,90px);
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;opacity:.7;
+  }
+
+  /* giant stat */
+  .stat{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(82px,21vw,200px);
+    line-height:.8;letter-spacing:-.02em;
+    display:block;
+  }
+  .unit{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(20px,5vw,46px);letter-spacing:-.01em;}
+
+  /* ===== reveal ===== */
+  .reveal{opacity:0;transform:translateY(34px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+  .d1{transition-delay:.05s}.d2{transition-delay:.15s}.d3{transition-delay:.25s}.d4{transition-delay:.35s}
+
+  /* ============ 00 COVER ============ */
+  #cover{background:var(--teal);color:var(--lime);}
+  .cover-orbs{position:absolute;inset:0;pointer-events:none;}
+  .orb{position:absolute;border-radius:50%;}
+  .orb.a{width:46vw;height:46vw;background:var(--lime);right:-12vw;top:-14vw;opacity:.16;}
+  .orb.b{width:30vw;height:30vw;border:3px solid var(--lime);left:-8vw;bottom:-10vw;opacity:.5;}
+  .cover-top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .cover-mid{margin-top:auto;margin-bottom:auto;}
+  .cover-title{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(64px,17vw,250px);
+    line-height:.82;letter-spacing:-.02em;
+    text-transform:uppercase;
+  }
+  .cover-title em{font-style:normal;display:inline-block;transform:rotate(-4deg);}
+  .cover-sub{
+    margin-top:clamp(22px,4vw,42px);
+    font-weight:900;font-family:'Archivo',sans-serif;
+    font-size:clamp(18px,3.4vw,34px);max-width:18ch;color:var(--white);
+  }
+  .cover-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;}
+  .scroll-hint{
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;color:var(--lime);
+  }
+  .arrowdot{width:9px;height:9px;border-radius:50%;background:var(--lime);animation:bob 1.4s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+
+  /* ============ 01 MINUTES (SHOWPIECE) ============ */
+  #minutes{background:var(--coral);color:var(--cream);}
+  .big-wrap{margin-top:auto;}
+  #minutes .stat{font-size:clamp(74px,26vw,260px);color:var(--cream);}
+  #minutes .lede{font-weight:900;font-family:'Archivo',sans-serif;font-size:clamp(22px,5vw,52px);line-height:1.04;max-width:14ch;}
+  .marquee{
+    margin-top:auto;
+    margin-left:calc(-1*clamp(28px,6vw,90px));
+    margin-right:calc(-1*clamp(28px,6vw,90px));
+    border-top:3px solid var(--cream);border-bottom:3px solid var(--cream);
+    overflow:hidden;white-space:nowrap;padding:14px 0;
+  }
+  .marquee .track{display:inline-block;animation:scrollx 22s linear infinite;}
+  .marquee .track span{
+    font-family:'Anton',sans-serif;font-size:clamp(26px,5vw,52px);
+    text-transform:uppercase;padding:0 .35em;color:var(--cream);
+  }
+  .marquee .track span b{color:var(--coral);-webkit-text-stroke:2px var(--cream);}
+  @keyframes scrollx{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ============ 02 ARTIST (breath) ============ */
+  #artist{background:var(--cobalt);color:var(--lemon);}
+  #artist .name{
+    font-family:'Anton',sans-serif;font-size:clamp(56px,15vw,190px);line-height:.82;
+    text-transform:uppercase;color:var(--lemon);letter-spacing:-.01em;
+  }
+  .plays-row{display:flex;gap:clamp(26px,6vw,80px);flex-wrap:wrap;margin-top:clamp(26px,5vw,52px);}
+  .pill{
+    border:2px solid var(--lemon);border-radius:999px;padding:7px 18px;
+    font-family:'Space Mono',monospace;font-size:clamp(12px,1.6vw,16px);letter-spacing:.1em;
+  }
+  .ministat .n{font-family:'Anton',sans-serif;font-size:clamp(40px,8vw,90px);color:var(--white);line-height:.8;}
+  .ministat .l{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.18em;opacity:.85;margin-top:8px;text-transform:uppercase;}
+
+  /* ============ 03 NIGHT LOOP (build) ============ */
+  #night{background:var(--ink);color:var(--acid);}
+  #night .stat{color:var(--acid);}
+  .night-song{
+    display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;
+    font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(28px,7vw,70px);
+    color:var(--white);line-height:1;
+  }
+  .night-song .by{color:var(--acid);font-size:clamp(15px,2.6vw,26px);font-weight:700;}
+  .clock{
+    display:inline-flex;align-items:center;gap:10px;
+    border:2px solid var(--acid);border-radius:999px;padding:8px 20px;margin-top:6px;
+    font-family:'Space Mono',monospace;font-size:clamp(13px,1.8vw,17px);letter-spacing:.08em;
+  }
+  .clock .pulse{width:10px;height:10px;border-radius:50%;background:var(--acid);animation:pulse 1.3s ease-in-out infinite;}
+  .loop-n{font-family:'Anton',sans-serif;color:var(--acid);font-size:clamp(40px,9vw,80px);line-height:.8;}
+  .loop-u{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(16px,3vw,28px);}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+
+  /* ============ 04 KEYWORDS (build) ============ */
+  #keywords{background:var(--lemon);color:var(--ink);}
+  .kw-cloud{display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(8px,2vw,26px);margin-top:auto;}
+  .kw{font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.86;letter-spacing:-.01em;}
+  .kw.xl{font-size:clamp(64px,18vw,210px);}
+  .kw.lg{font-size:clamp(40px,11vw,130px);}
+  .kw.md{font-size:clamp(28px,7vw,84px);color:var(--cobalt);}
+  .kw.sk{display:inline-block;transform:rotate(-6deg);color:var(--coral);}
+  .kw.out{color:transparent;-webkit-text-stroke:2.5px var(--ink);}
+
+  /* ============ 05 PERSONA (climax) ============ */
+  #persona{background:var(--magenta);color:var(--white);}
+  #persona .lead-in{font-weight:900;font-family:'Archivo',sans-serif;font-size:clamp(16px,3vw,28px);opacity:.92;}
+  .persona-name{
+    font-family:'Anton',sans-serif;font-size:clamp(58px,18vw,230px);line-height:.8;
+    text-transform:uppercase;letter-spacing:-.02em;
+    margin:clamp(14px,3vw,30px) 0;
+  }
+  .persona-name span{display:block;}
+  .persona-name .hl{color:var(--lemon);}
+  .persona-desc{font-weight:700;font-family:'Archivo',sans-serif;font-size:clamp(16px,3vw,30px);max-width:24ch;line-height:1.25;}
+  .top1{display:flex;align-items:center;gap:14px;margin-top:clamp(24px,4vw,48px);flex-wrap:wrap;}
+  .badge{
+    background:var(--white);color:var(--magenta);font-family:'Anton',sans-serif;
+    font-size:clamp(20px,4vw,40px);padding:4px 20px;border-radius:6px;transform:rotate(-2deg);text-transform:uppercase;
+  }
+
+  /* ============ 06 SHARE (close) ============ */
+  #share{background:var(--acid);color:var(--ink);text-align:left;}
+  .share-head{font-family:'Anton',sans-serif;font-size:clamp(46px,12vw,150px);line-height:.84;text-transform:uppercase;}
+  .recap-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:clamp(28px,5vw,52px) 0;
+    background:var(--ink);border:3px solid var(--ink);
+  }
+  .recap-strip .cell{background:var(--acid);padding:clamp(16px,3vw,26px);}
+  .recap-strip .cell .n{font-family:'Anton',sans-serif;font-size:clamp(30px,7vw,64px);line-height:.82;}
+  .recap-strip .cell .l{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:8px;opacity:.75;}
+  .share-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+  .btn{
+    font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(16px,2.6vw,22px);
+    background:var(--ink);color:var(--acid);border:none;border-radius:999px;
+    padding:18px 38px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:12px;
+    transition:transform .18s ease, background .18s ease;
+  }
+  .btn:hover{transform:translateY(-3px) rotate(-1deg);}
+  .btn.ghost{background:transparent;color:var(--ink);border:3px solid var(--ink);}
+  .btn.ghost:hover{background:var(--ink);color:var(--acid);}
+  .share-foot{margin-top:auto;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;opacity:.8;}
+
+  /* progress dots */
+  .progress{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:12px;}
+  .progress a{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .25s;}
+  .progress a.active{background:#fff;transform:scale(1.5);}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:640px){
+    .card{padding:26px 22px 30px;justify-content:flex-start;padding-top:84px;}
+    #cover,#minutes,#persona{justify-content:space-between;}
+    .progress{display:none;}
+    .recap-strip{grid-template-columns:1fr;}
+    .marquee{margin-left:-22px;margin-right:-22px;}
+    .cover-mid{margin:auto 0;}
+    .plays-row{gap:24px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;}
+    .reveal{opacity:1!important;transform:none!important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- ===== 00 · 报告封面 (cold open) ===== -->
+  <section class="card" id="cover">
+    <div class="cover-orbs"><span class="orb a"></span><span class="orb b"></span></div>
+    <div class="cover-top reveal in">
+      <div class="kicker">SOUNDWAVE · WRAPPED</div>
+      <div class="mono" style="font-size:13px;letter-spacing:.2em;opacity:.8;">2026</div>
+    </div>
+    <div class="cover-mid">
+      <h1 class="cover-title reveal in d1">声波<br>年度<em>听歌</em><br>报告</h1>
+      <p class="cover-sub reveal in d2">这一年，你的耳朵都经历了啥。往下滑，我们一帧一帧放给你看。</p>
+    </div>
+    <div class="cover-foot reveal in d3">
+      <div class="scroll-hint"><span class="arrowdot"></span>向下滑动 解锁你的一年</div>
+      <div class="mono" style="font-size:12px;letter-spacing:.2em;opacity:.7;">@ 黑哥Ai · 仅供你一人</div>
+    </div>
+  </section>
+
+  <!-- ===== 01 · 你听了 X 分钟 (SHOWPIECE / signature) ===== -->
+  <section class="card" id="minutes">
+    <span class="tag">第 01 帧 / 时长</span>
+    <span class="pageno">01 — 07</span>
+    <div class="big-wrap">
+      <p class="lede reveal d1">这一年你戴上耳机，<br>整整泡了</p>
+      <span class="stat reveal d2" data-count="47802" data-format="comma">47,802</span>
+      <p class="unit reveal d3">分钟 · 约等于 <b>33 个</b>完整的白天</p>
+    </div>
+    <div class="marquee reveal d4" aria-hidden="true">
+      <div class="track">
+        <span>循环最狠的歌 ✦</span><span><b>晚风心里吹</b></span><span>✦</span><span><b>夜空中最亮的星</b></span><span>✦</span><span><b>BREATHE</b></span><span>✦</span><span><b>勇气大爆发</b></span><span>✦</span>
+        <span>循环最狠的歌 ✦</span><span><b>晚风心里吹</b></span><span>✦</span><span><b>夜空中最亮的星</b></span><span>✦</span><span><b>BREATHE</b></span><span>✦</span><span><b>勇气大爆发</b></span><span>✦</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02 · 你最爱的歌手 (breath) ===== -->
+  <section class="card" id="artist">
+    <span class="tag">第 02 帧 / 常驻嘉宾</span>
+    <span class="pageno">02 — 07</span>
+    <div class="kicker reveal d1" style="margin-bottom:18px;">陪你最久的那个人</div>
+    <h2 class="name reveal d2">告五人</h2>
+    <div class="plays-row">
+      <div class="ministat reveal d3">
+        <div class="n" data-count="918">918</div>
+        <div class="l">次单曲播放</div>
+      </div>
+      <div class="ministat reveal d3" style="transition-delay:.32s">
+        <div class="n" data-count="14">14</div>
+        <div class="l">首单曲被你翻烂</div>
+      </div>
+      <div class="ministat reveal d4">
+        <div class="n">TOP 0.5%</div>
+        <div class="l">你比 99.5% 的人更懂他</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 · 深夜单曲循环 (build) ===== -->
+  <section class="card" id="night">
+    <span class="tag">第 03 帧 / 凌晨档</span>
+    <span class="pageno">03 — 07</span>
+    <div class="kicker reveal d1" style="margin-bottom:auto;">当全世界睡着，你在听</div>
+    <div style="margin-top:auto;">
+      <div class="clock reveal d1"><span class="pulse"></span>凌晨 1:00 — 3:00 出没</div>
+      <div class="night-song reveal d2" style="margin-top:18px;">达拉崩吧<span class="by">/ 周深</span></div>
+      <p class="reveal d3" style="margin-top:24px;font-family:'Archivo';font-weight:900;font-size:clamp(15px,2.6vw,26px);max-width:22ch;line-height:1.2;color:#fff;">
+        你把它在深夜单曲循环了 <span class="loop-n">203</span> <span class="loop-u">遍。</span>
+      </p>
+      <p class="reveal d4 mono" style="margin-top:22px;font-size:13px;letter-spacing:.1em;opacity:.7;">没人知道你为什么循环它，但声波记得每一次。</p>
+    </div>
+  </section>
+
+  <!-- ===== 04 · 年度关键词 (build) ===== -->
+  <section class="card" id="keywords">
+    <span class="tag">第 04 帧 / 情绪光谱</span>
+    <span class="pageno">04 — 07</span>
+    <div class="kicker reveal d1" style="margin-bottom:18px;">把你这一年的歌单熬成几个词</div>
+    <div class="kw-cloud">
+      <span class="kw xl reveal d1">深夜</span>
+      <span class="kw md sk reveal d2">emo</span>
+      <span class="kw lg reveal d2">通勤</span>
+      <span class="kw out lg reveal d3">上头</span>
+      <span class="kw md reveal d3">复古</span>
+      <span class="kw lg reveal d4">治愈</span>
+    </div>
+  </section>
+
+  <!-- ===== 05 · 年度音乐人格 (climax reveal) ===== -->
+  <section class="card" id="persona">
+    <span class="tag">第 05 帧 / 终极揭晓</span>
+    <span class="pageno">05 — 07</span>
+    <p class="lead-in reveal d1">声波把你的一年算了个明白，你的年度音乐人格是</p>
+    <h2 class="persona-name reveal d2"><span>深夜</span><span class="hl">情绪</span><span>炼金师</span></h2>
+    <p class="persona-desc reveal d3">你不是在听歌，是在用旋律给自己重新调一次情绪。白天克制，凌晨原形毕露。全网只有 3.2% 的人和你同类。</p>
+    <div class="top1 reveal d4">
+      <span class="mono" style="font-size:13px;letter-spacing:.18em;opacity:.85;">同类人都在听</span>
+      <span class="badge">告五人 · 周深 · 陈粒</span>
+    </div>
+  </section>
+
+  <!-- ===== 06 · 分享 CTA (close) ===== -->
+  <section class="card" id="share">
+    <span class="tag">第 06 帧 / 收束</span>
+    <span class="pageno">07 — 07</span>
+    <h2 class="share-head reveal d1">这是<br>你的<br>2026。</h2>
+    <div class="recap-strip reveal d2">
+      <div class="cell"><div class="n">47,802</div><div class="l">分钟 在线</div></div>
+      <div class="cell"><div class="n">告五人</div><div class="l">年度歌手</div></div>
+      <div class="cell"><div class="n">深夜炼金师</div><div class="l">音乐人格</div></div>
+    </div>
+    <div class="share-actions reveal d3">
+      <a class="btn" href="#cover">生成我的报告卡 →</a>
+      <a class="btn ghost" href="#cover">从头再看一遍</a>
+    </div>
+    <div class="share-foot reveal d4">
+      <span>声波 SOUNDWAVE · 2026 WRAPPED</span>
+      <span>截图 · 发出去 · 让朋友猜你的人格</span>
+    </div>
+  </section>
+
+</div>
+
+<nav class="progress" aria-hidden="true">
+  <a href="#cover"></a><a href="#minutes"></a><a href="#artist"></a>
+  <a href="#night"></a><a href="#keywords"></a><a href="#persona"></a><a href="#share"></a>
+</nav>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ---- count-up (with safe fallback) ---- */
+  function fmt(n, comma){
+    n = Math.round(n);
+    return comma ? n.toLocaleString('en-US') : String(n);
+  }
+  function countUp(el){
+    if(el.dataset.done) return;
+    el.dataset.done = "1";
+    var target = parseFloat(el.dataset.count);
+    var comma = el.dataset.format === 'comma';
+    var dur = 1300, start = null;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts-start)/dur, 1);
+      var eased = 1 - Math.pow(1-p, 3);
+      el.textContent = fmt(target*eased, comma);
+      if(p<1) requestAnimationFrame(step);
+      else el.textContent = fmt(target, comma);
+    }
+    requestAnimationFrame(step);
+  }
+  var counters = Array.prototype.slice.call(document.querySelectorAll('[data-count]'));
+
+  if(reduce){
+    // show final values immediately, reveal everything
+    counters.forEach(function(el){ el.dataset.done="1"; el.textContent = fmt(parseFloat(el.dataset.count), el.dataset.format==='comma'); });
+    document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in');});
+  } else {
+    /* reveal + trigger counts on enter */
+    if('IntersectionObserver' in window){
+      var ro = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){
+            en.target.classList.add('in');
+            if(en.target.dataset && en.target.dataset.count) countUp(en.target);
+            en.target.querySelectorAll && en.target.querySelectorAll('[data-count]').forEach(countUp);
+          }
+        });
+      }, {threshold:.18});
+      document.querySelectorAll('.reveal, [data-count]').forEach(function(e){ ro.observe(e); });
+    } else {
+      document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in');});
+      counters.forEach(countUp);
+    }
+
+    /* hard fallback: if anything still at 0 / hidden after 1.5s, force final state */
+    setTimeout(function(){
+      counters.forEach(function(el){ if(!el.dataset.done){ el.dataset.done="1"; el.textContent = fmt(parseFloat(el.dataset.count), el.dataset.format==='comma'); } });
+      document.querySelectorAll('.reveal:not(.in)').forEach(function(e){e.classList.add('in');});
+    }, 1500);
+  }
+
+  /* ---- progress dots ---- */
+  var dots = Array.prototype.slice.call(document.querySelectorAll('.progress a'));
+  var secs = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  if('IntersectionObserver' in window){
+    var po = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var i = secs.indexOf(en.target);
+          dots.forEach(function(d,di){ d.classList.toggle('active', di===i); });
+        }
+      });
+    }, {threshold:.55});
+    secs.forEach(function(s){ po.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>

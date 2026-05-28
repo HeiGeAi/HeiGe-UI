@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAGA 嘎嘎 · 拍最不装的那一秒</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Outfit:wght@300;400;600;800&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff4fd8;
+    --lime:#ccff00;
+    --blue:#7fd5ff;
+    --lilac:#f4ecff;
+    --ink:#241430;
+    --chrome1:#f5f5fa;
+    --chrome2:#c2c7d6;
+    --chrome3:#8f95ab;
+    --chrome4:#e3e6ef;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  html{scroll-behavior:smooth}
+
+  body{
+    font-family:"Outfit","Noto Sans SC",sans-serif;
+    background:var(--lilac);
+    color:var(--ink);
+    overflow-x:hidden;
+    line-height:1.5;
+  }
+
+  /* soft lilac base with faint dotted texture */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background:
+      radial-gradient(120% 90% at 80% -10%, rgba(127,213,255,.35), transparent 55%),
+      radial-gradient(110% 80% at 0% 110%, rgba(255,79,216,.28), transparent 55%),
+      var(--lilac);
+  }
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background-image:radial-gradient(rgba(36,20,48,.06) 1px, transparent 1px);
+    background-size:22px 22px;
+    pointer-events:none;
+  }
+
+  .mono{font-family:"Space Mono",monospace;letter-spacing:.18em;text-transform:uppercase}
+
+  /* ---------- CHROME METALLIC TEXT ---------- */
+  .chrome{
+    background:linear-gradient(178deg,
+      #ffffff 0%, var(--chrome1) 14%, var(--chrome4) 30%,
+      var(--chrome2) 50%, var(--chrome3) 62%,
+      #ffffff 74%, var(--chrome2) 88%, #6c7186 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 2px 0 rgba(255,255,255,.5);
+    filter:drop-shadow(0 4px 6px rgba(36,20,48,.25));
+  }
+
+  /* ---------- HOLOGRAPHIC ANIMATED TEXT/FILL ---------- */
+  @keyframes holoShift{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+  .holo{
+    background:linear-gradient(110deg,
+      var(--pink), var(--lime), var(--blue), #e6c2ff, var(--pink));
+    background-size:280% 280%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    -webkit-text-fill-color:transparent;
+    animation:holoShift 6s ease-in-out infinite;
+  }
+
+  /* ---------- LAYOUT SHELL ---------- */
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+  section{position:relative}
+
+  /* =========================================================
+     NAV
+  ========================================================= */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(244,236,255,.55);
+    border-bottom:1px solid rgba(36,20,48,.08);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{
+    font-family:"Bagel Fat One",cursive;
+    font-size:1.5rem;letter-spacing:.02em;
+  }
+  .nav-pill{
+    font-family:"Space Mono",monospace;
+    font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+    display:inline-flex;gap:18px;align-items:center;
+  }
+  .nav-pill a{color:var(--ink);text-decoration:none;opacity:.7;transition:opacity .2s}
+  .nav-pill a:hover{opacity:1}
+  .nav-get{
+    background:var(--ink);color:#fff;padding:8px 16px;border-radius:999px;
+    opacity:1;
+  }
+
+  /* =========================================================
+     01 HERO — Cold Open (IMPACT)
+  ========================================================= */
+  .hero{
+    padding:72px 0 90px;
+    min-height:88vh;
+    display:flex;align-items:center;
+    overflow:hidden;
+  }
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;width:100%}
+
+  .hero-kicker{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:"Space Mono",monospace;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+    background:#fff;border:2px solid var(--ink);
+    padding:7px 14px;border-radius:999px;
+    box-shadow:3px 3px 0 var(--ink);
+    transform:rotate(-2deg);
+  }
+  .hero-kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime);animation:blink 1.4s steps(1) infinite}
+  @keyframes blink{50%{opacity:.25}}
+
+  .hero h1{
+    font-family:"Bagel Fat One",cursive;
+    font-size:clamp(4.8rem, 15vw, 12rem);
+    line-height:.84;
+    margin:22px 0 6px;
+    letter-spacing:-.01em;
+  }
+  .hero h1 .row2{display:block;margin-left:.04em}
+
+  .tagline{
+    font-family:"Noto Sans SC",sans-serif;font-weight:900;
+    font-size:clamp(1.4rem,3.6vw,2.4rem);
+    line-height:1.15;margin-top:18px;
+    max-width:14ch;
+  }
+  .tagline em{font-style:normal;color:var(--pink)}
+
+  .hero-sub{
+    font-size:1.02rem;color:#5a4868;max-width:34ch;margin-top:18px;font-weight:300;
+  }
+
+  .hero-cta{display:flex;gap:14px;align-items:center;margin-top:30px;flex-wrap:wrap}
+
+  /* glossy 3D bubble button */
+  .bubble-btn{
+    position:relative;
+    font-family:"Noto Sans SC",sans-serif;font-weight:700;font-size:1.05rem;
+    color:#fff;border:none;cursor:pointer;text-decoration:none;
+    padding:17px 34px;border-radius:999px;
+    background:
+      radial-gradient(120% 120% at 30% 18%, rgba(255,255,255,.95), rgba(255,255,255,0) 42%),
+      linear-gradient(180deg, #ff86e6, var(--pink) 45%, #d018ad);
+    box-shadow:
+      inset 0 2px 3px rgba(255,255,255,.85),
+      inset 0 -6px 10px rgba(150,0,120,.45),
+      0 12px 22px rgba(255,79,216,.45),
+      0 2px 0 rgba(150,0,120,.5);
+    transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s;
+  }
+  .bubble-btn:hover{transform:translateY(-3px) scale(1.03)}
+  .bubble-btn:active{transform:translateY(1px) scale(.99)}
+  .bubble-btn.lime{
+    color:var(--ink);
+    background:
+      radial-gradient(120% 120% at 30% 18%, rgba(255,255,255,.95), rgba(255,255,255,0) 42%),
+      linear-gradient(180deg, #e6ff7a, var(--lime) 45%, #9bc400);
+    box-shadow:
+      inset 0 2px 3px rgba(255,255,255,.85),
+      inset 0 -6px 10px rgba(110,140,0,.4),
+      0 12px 22px rgba(204,255,0,.4),
+      0 2px 0 rgba(110,140,0,.4);
+  }
+  .ghost-btn{
+    font-family:"Space Mono",monospace;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink);text-decoration:none;border-bottom:2px solid var(--ink);padding-bottom:2px;
+  }
+
+  /* ---- holographic sticker showpiece in hero ---- */
+  .hero-art{position:relative;height:480px;display:flex;align-items:center;justify-content:center}
+
+  .holo-disc{
+    position:relative;width:300px;height:300px;border-radius:50%;
+    background:conic-gradient(from 0deg,
+      var(--pink), var(--lime), var(--blue), #e6c2ff, #fff, var(--pink));
+    box-shadow:0 24px 60px rgba(127,80,180,.4), inset 0 0 50px rgba(255,255,255,.6);
+    animation:spinSlow 14s linear infinite, hueRoll 8s ease-in-out infinite;
+    display:flex;align-items:center;justify-content:center;
+  }
+  @keyframes spinSlow{to{transform:rotate(360deg)}}
+  @keyframes hueRoll{50%{filter:hue-rotate(40deg) saturate(1.25)}}
+  .holo-disc::before{
+    content:"";position:absolute;inset:34px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,.1) 55%, rgba(255,255,255,0) 75%),
+      conic-gradient(from 140deg, rgba(255,255,255,.15), rgba(36,20,48,.18), rgba(255,255,255,.15));
+    mix-blend-mode:screen;
+  }
+  .holo-disc .disc-core{
+    position:relative;z-index:2;width:150px;height:150px;border-radius:50%;
+    background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:inset 0 6px 14px rgba(36,20,48,.12), 0 6px 14px rgba(36,20,48,.18);
+    transform:rotate(0deg);
+    animation:spinReverse 14s linear infinite;
+  }
+  @keyframes spinReverse{to{transform:rotate(-360deg)}}
+  .disc-core .smile{font-family:"Bagel Fat One";font-size:2.6rem;line-height:1;color:var(--pink)}
+  .disc-core small{font-family:"Space Mono";font-size:.5rem;letter-spacing:.2em;margin-top:4px;color:#8f95ab}
+
+  /* floating tilted photo stickers */
+  .pic{
+    position:absolute;border-radius:18px;
+    border:5px solid #fff;
+    box-shadow:0 12px 26px rgba(36,20,48,.22);
+    display:flex;align-items:flex-end;
+    padding:8px;
+    font-family:"Space Mono";font-size:.52rem;letter-spacing:.1em;color:#fff;
+    text-shadow:0 1px 3px rgba(0,0,0,.5);
+  }
+  .pic.p1{width:128px;height:158px;top:8px;left:-14px;transform:rotate(-9deg);
+    background:linear-gradient(150deg,var(--blue),#5aa9e0);animation:bob1 5s ease-in-out infinite}
+  .pic.p2{width:120px;height:120px;bottom:-6px;right:-18px;transform:rotate(8deg);
+    background:linear-gradient(150deg,var(--lime),#a6d600);color:var(--ink);text-shadow:none;animation:bob2 6s ease-in-out infinite}
+  .pic.p3{width:104px;height:138px;bottom:30px;left:6px;transform:rotate(6deg);
+    background:linear-gradient(150deg,#ff9be9,var(--pink));animation:bob1 5.5s ease-in-out infinite}
+  @keyframes bob1{50%{transform:translateY(-12px) rotate(-9deg)}}
+  @keyframes bob2{50%{transform:translateY(-14px) rotate(8deg)}}
+
+  /* sparkles */
+  .spark{position:absolute;color:#fff;pointer-events:none;filter:drop-shadow(0 0 6px var(--pink))}
+  @keyframes twinkle{0%,100%{opacity:.2;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1) rotate(20deg)}}
+  .spark svg{display:block;animation:twinkle 2.6s ease-in-out infinite}
+
+  /* =========================================================
+     02 BREATH — quiet ticker line
+  ========================================================= */
+  .breath{
+    background:var(--ink);color:var(--lilac);
+    padding:18px 0;overflow:hidden;
+    border-top:3px solid var(--lime);border-bottom:3px solid var(--pink);
+  }
+  .ticker{display:flex;gap:42px;white-space:nowrap;width:max-content;animation:slide 22s linear infinite}
+  @keyframes slide{to{transform:translateX(-50%)}}
+  .ticker span{font-family:"Space Mono";font-size:.92rem;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:42px}
+  .ticker b{color:var(--lime)}
+  .ticker .pin{color:var(--blue)}
+
+  /* =========================================================
+     03 怎么玩 — BUILD (asymmetric steps)
+  ========================================================= */
+  .play{padding:96px 0 60px}
+  .sec-head{margin-bottom:46px}
+  .sec-head .label{font-family:"Space Mono";font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--pink)}
+  .sec-head h2{
+    font-family:"Bagel Fat One",cursive;
+    font-size:clamp(2.6rem,7vw,5rem);line-height:.9;margin-top:10px;
+  }
+
+  .steps{display:grid;grid-template-columns:1.4fr 1fr;gap:22px}
+  .step{
+    border:3px solid var(--ink);border-radius:26px;background:#fff;
+    padding:30px;position:relative;overflow:hidden;
+    box-shadow:6px 6px 0 var(--ink);
+  }
+  .step .num{
+    font-family:"Bagel Fat One";font-size:3.4rem;line-height:1;
+    -webkit-text-stroke:2px var(--ink);
+  }
+  .step h3{font-family:"Noto Sans SC";font-weight:900;font-size:1.55rem;margin:6px 0 8px}
+  .step p{color:#5a4868;font-weight:300;font-size:1rem;max-width:40ch}
+
+  /* step 1 = the big hero card of this section */
+  .step.big{
+    grid-row:span 2;
+    background:linear-gradient(160deg,#fff,#f9f0ff);
+    display:flex;flex-direction:column;justify-content:space-between;min-height:340px;
+  }
+  .step.big .num{color:var(--pink);-webkit-text-stroke:2px var(--pink)}
+  .step.big .big-art{
+    margin-top:26px;align-self:stretch;height:150px;border-radius:18px;
+    background:
+      radial-gradient(circle at 70% 30%, rgba(255,255,255,.7), transparent 40%),
+      conic-gradient(from 30deg, var(--pink), var(--lime), var(--blue), #e6c2ff, var(--pink));
+    background-size:200% 200%;
+    animation:holoShift 7s ease-in-out infinite;
+    border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step.big .big-art .countdown{
+    font-family:"Bagel Fat One";font-size:4.4rem;color:#fff;text-shadow:0 3px 0 rgba(36,20,48,.35)}
+
+  .step.lime{background:linear-gradient(160deg,#fff,#f7ffd6)}
+  .step.lime .num{color:#8fb300;-webkit-text-stroke:2px #8fb300}
+  .step.blue{background:linear-gradient(160deg,#fff,#e7f6ff)}
+  .step.blue .num{color:#3aa0e0;-webkit-text-stroke:2px #3aa0e0}
+
+  .step .tag{
+    position:absolute;top:18px;right:-2px;
+    font-family:"Space Mono";font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;
+    background:var(--ink);color:#fff;padding:5px 12px;border-radius:999px 0 0 999px;
+  }
+
+  /* =========================================================
+     04 CLIMAX — Signature chrome wordmark screen
+  ========================================================= */
+  .climax{
+    padding:110px 0 120px;margin-top:50px;
+    background:
+      radial-gradient(80% 60% at 50% 0%, rgba(127,213,255,.5), transparent 60%),
+      radial-gradient(70% 80% at 90% 100%, rgba(255,79,216,.45), transparent 60%),
+      linear-gradient(180deg,#1a0f24, #2a173a 60%, #1a0f24);
+    overflow:hidden;text-align:center;color:#fff;
+  }
+  .climax .label{font-family:"Space Mono";font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:var(--lime)}
+  .wordmark-wrap{position:relative;display:inline-block;margin:18px auto 0}
+  .wordmark{
+    font-family:"Bagel Fat One",cursive;
+    font-size:clamp(6rem,26vw,22rem);line-height:.8;
+    letter-spacing:-.02em;
+    position:relative;z-index:2;
+  }
+  /* iridescent sticker beside wordmark */
+  .holo-sticker{
+    position:absolute;z-index:3;
+    top:-26px;right:-46px;
+    width:140px;height:140px;border-radius:50%;
+    background:conic-gradient(from 60deg, var(--lime), var(--blue), #e6c2ff, var(--pink), var(--lime));
+    background-size:200% 200%;
+    animation:hueRoll 5s ease-in-out infinite, floatSticker 4s ease-in-out infinite;
+    box-shadow:0 14px 34px rgba(0,0,0,.45), inset 0 0 26px rgba(255,255,255,.6);
+    display:flex;align-items:center;justify-content:center;
+    transform:rotate(-12deg);
+    border:5px solid #fff;
+  }
+  @keyframes floatSticker{50%{transform:translateY(-14px) rotate(-12deg)}}
+  .holo-sticker span{
+    font-family:"Noto Sans SC";font-weight:900;font-size:1.5rem;color:#fff;
+    text-shadow:0 2px 4px rgba(0,0,0,.4);line-height:1;text-align:center;transform:rotate(12deg)
+  }
+  .climax-line{
+    font-family:"Noto Sans SC";font-weight:700;font-size:clamp(1.3rem,4vw,2.2rem);
+    margin-top:34px;
+  }
+  .climax-line .holo{font-weight:900}
+  .climax-sub{font-family:"Space Mono";font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:#bfa9d6;margin-top:16px}
+
+  /* big sparkles around climax */
+  .climax .spark.big svg{width:46px;height:46px}
+
+  /* =========================================================
+     05 CTA close
+  ========================================================= */
+  .cta{padding:96px 0 70px;text-align:center}
+  .cta h2{
+    font-family:"Bagel Fat One",cursive;
+    font-size:clamp(3rem,9vw,7rem);line-height:.86;
+  }
+  .cta p{color:#5a4868;font-weight:300;margin:20px auto 34px;max-width:32ch;font-size:1.1rem}
+  .store-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .store-btn{
+    display:inline-flex;align-items:center;gap:12px;text-decoration:none;
+    background:var(--ink);color:#fff;border-radius:18px;padding:14px 24px;
+    font-family:"Noto Sans SC";font-weight:700;
+    border:3px solid var(--ink);
+    transition:transform .18s cubic-bezier(.34,1.56,.64,1);
+  }
+  .store-btn:hover{transform:translateY(-3px)}
+  .store-btn small{display:block;font-family:"Space Mono";font-size:.55rem;letter-spacing:.12em;opacity:.7;font-weight:400}
+  .store-btn .ic{width:26px;height:26px}
+
+  footer{
+    border-top:2px solid rgba(36,20,48,.12);
+    margin-top:64px;padding:30px 0;
+  }
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+  footer .mono{font-size:.66rem;color:#7a6890}
+  footer .logo{font-size:1.2rem}
+
+  /* =========================================================
+     REVEAL
+  ========================================================= */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* =========================================================
+     RESPONSIVE — recompose for mobile (390px verified)
+  ========================================================= */
+  @media (max-width:860px){
+    .hero{padding:48px 0 60px;min-height:auto}
+    .hero .wrap{grid-template-columns:1fr;gap:48px}
+    .hero h1{font-size:clamp(5rem,26vw,9rem)}
+    .hero-art{height:360px;order:-1}
+    .holo-disc{width:230px;height:230px}
+    .holo-disc .disc-core{width:118px;height:118px}
+    .steps{grid-template-columns:1fr}
+    .step.big{grid-row:auto;min-height:auto}
+    .step.big .big-art{height:120px}
+    .holo-sticker{width:96px;height:96px;top:-12px;right:-8px}
+    .holo-sticker span{font-size:1.05rem}
+    nav .nav-pill a:not(.nav-get){display:none}
+  }
+  @media (max-width:430px){
+    .wrap{padding:0 18px}
+    .hero h1{font-size:22vw}
+    .hero-art{height:320px}
+    .pic.p1{left:-2px;width:104px;height:130px}
+    .pic.p2{right:-4px;width:98px;height:98px}
+    .pic.p3{left:8px;width:84px;height:112px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap">
+    <div class="logo holo">GAGA</div>
+    <div class="nav-pill">
+      <a href="#play">怎么玩</a>
+      <a href="#vibe">气质</a>
+      <a href="#get" class="nav-get">下载</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 01 HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="hero-kicker"><span class="dot"></span>实时抓拍 · 没有美颜</span>
+      <h1 class="chrome">GA<span class="row2">GA</span></h1>
+      <p class="tagline">拍最<em>不装</em>的那一秒。</p>
+      <p class="hero-sub">朋友按下快门，你只有 3 秒反应。来不及摆姿势，来不及调表情，留下的就是真的你。</p>
+      <div class="hero-cta">
+        <a href="#get" class="bubble-btn">马上嘎一张</a>
+        <a href="#play" class="ghost-btn">看看怎么玩 ↓</a>
+      </div>
+    </div>
+
+    <div class="hero-art" aria-hidden="true">
+      <span class="spark" style="top:6%;left:18%"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c1 6 5 10 12 12-7 2-11 6-12 12-1-6-5-10-12-12 7-2 11-6 12-12z"/></svg></span>
+      <span class="spark" style="bottom:10%;right:6%;filter:drop-shadow(0 0 6px #7fd5ff)"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c1 6 5 10 12 12-7 2-11 6-12 12-1-6-5-10-12-12 7-2 11-6 12-12z"/></svg></span>
+      <span class="spark" style="top:42%;right:30%;filter:drop-shadow(0 0 6px #ccff00)"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c1 6 5 10 12 12-7 2-11 6-12 12-1-6-5-10-12-12 7-2 11-6 12-12z"/></svg></span>
+
+      <div class="holo-disc">
+        <div class="disc-core">
+          <span class="smile">:D</span>
+          <small>NO FILTER</small>
+        </div>
+      </div>
+      <div class="pic p1">@小满 03:21</div>
+      <div class="pic p2">真实出片</div>
+      <div class="pic p3">@阿狗 笑场</div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 BREATH -->
+<section class="breath" aria-hidden="true">
+  <div class="ticker">
+    <span>不修图 <b>★</b> 不摆拍 <span class="pin">★</span> 3秒抓拍 <b>★</b> 朋友才看得到 <span class="pin">★</span> 每天一次机会 <b>★</b> 嘎到就是赚到 <span class="pin">★</span></span>
+    <span>不修图 <b>★</b> 不摆拍 <span class="pin">★</span> 3秒抓拍 <b>★</b> 朋友才看得到 <span class="pin">★</span> 每天一次机会 <b>★</b> 嘎到就是赚到 <span class="pin">★</span></span>
+  </div>
+</section>
+
+<!-- 03 怎么玩 -->
+<section class="play" id="play">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="label">/ 三步上手 /</span>
+      <h2>怎么玩</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step big reveal">
+        <div>
+          <div class="num">01</div>
+          <h3>朋友给你按下快门</h3>
+          <p>不是自拍。是身边的人帮你拍。所以你管不住自己的表情，那一下基本都是没设防的样子。</p>
+        </div>
+        <div class="big-art"><span class="countdown">3·2·1</span></div>
+      </div>
+
+      <div class="step lime reveal">
+        <span class="tag">来不及摆姿势</span>
+        <div class="num">02</div>
+        <h3>3 秒倒计时</h3>
+        <p>快门一响，倒数 3 秒直接出片。没有重拍，没有滤镜面板，就这一张。</p>
+      </div>
+
+      <div class="step blue reveal">
+        <span class="tag">只给朋友看</span>
+        <div class="num">03</div>
+        <h3>丢进你们的小群</h3>
+        <p>照片不进公域、不上热搜。只在你和朋友的圈子里转，越糗越好笑。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 CLIMAX / Signature -->
+<section class="climax" id="vibe">
+  <div class="wrap" style="position:relative">
+    <span class="spark big" style="top:8%;left:12%;filter:drop-shadow(0 0 10px #ccff00)"><svg viewBox="0 0 24 24" fill="#ccff00"><path d="M12 0c1 6 5 10 12 12-7 2-11 6-12 12-1-6-5-10-12-12 7-2 11-6 12-12z"/></svg></span>
+    <span class="spark big" style="bottom:14%;right:14%;filter:drop-shadow(0 0 10px #7fd5ff)"><svg viewBox="0 0 24 24" fill="#7fd5ff"><path d="M12 0c1 6 5 10 12 12-7 2-11 6-12 12-1-6-5-10-12-12 7-2 11-6 12-12z"/></svg></span>
+    <span class="spark big" style="top:30%;right:8%;filter:drop-shadow(0 0 10px #ff4fd8)"><svg viewBox="0 0 24 24" fill="#ff4fd8" width="30" height="30"><path d="M12 0c1 6 5 10 12 12-7 2-11 6-12 12-1-6-5-10-12-12 7-2 11-6 12-12z"/></svg></span>
+
+    <span class="label reveal">这一秒 · 谁都装不了</span>
+
+    <div class="wordmark-wrap reveal">
+      <div class="wordmark chrome">嘎嘎</div>
+      <div class="holo-sticker" aria-hidden="true"><span>真<br>实</span></div>
+    </div>
+
+    <p class="climax-line reveal">朋友圈太累了。<br>来个 <span class="holo">不用演的地方</span>。</p>
+    <p class="climax-sub reveal">REAL FACE · REAL FRIENDS · REAL FUN</p>
+  </div>
+</section>
+
+<!-- 05 CTA -->
+<section class="cta" id="get">
+  <div class="wrap">
+    <h2 class="reveal">别想了，<br>直接嘎一张。</h2>
+    <p class="reveal">每天一次抓拍机会。今天的那一张，现在就去拍。</p>
+    <div class="store-row reveal">
+      <a href="#" class="store-btn">
+        <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M16.5 1.6c0 1.2-.5 2.4-1.3 3.2-.9.9-2.3 1.6-3.4 1.5-.1-1.2.5-2.4 1.2-3.2.9-.9 2.4-1.5 3.5-1.5zM20.6 17.2c-.6 1.4-.9 2-1.7 3.2-1.1 1.7-2.6 3.8-4.5 3.8-1.7 0-2.1-1.1-4.4-1.1s-2.8 1.1-4.4 1.1c-1.9 0-3.4-1.9-4.5-3.6C-1 16.8-.3 9.7 4 9.5c1.5 0 2.6 1 3.4 1 .9 0 2.5-1.2 4.3-1 1 .1 3 .4 4.2 2.2-3.7 2-3.1 7.4.7 8.5z"/></svg>
+        <span>App Store<small>iPhone 抢先嘎</small></span>
+      </a>
+      <a href="#" class="store-btn" style="background:var(--pink);border-color:var(--pink)">
+        <svg class="ic" viewBox="0 0 24 24" fill="#fff"><path d="M3.6 2.3 13 11.7l-2.6 2.6L3.6 2.3zm0 19.4 6.8-12 2.6 2.6-9.4 9.4zM20.4 12l-3.6 2.1-2.7-2.1 2.7-2.1L20.4 12zM4.8 1.6l9.1 5.3-2.4 2.4L4.8 1.6z"/></svg>
+        <span>Google Play<small>Android 也能嘎</small></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo holo">GAGA 嘎嘎</div>
+    <div class="mono">© 2026 GAGA · 拍最不装的那一秒</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    function showAll(){ els.forEach(function(e){ e.classList.add('in'); }); }
+
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+        });
+      }, {threshold:.12, rootMargin:'0px 0px -8% 0px'});
+      els.forEach(function(e){ io.observe(e); });
+      // static-screenshot safety net: force reveal everything after 1.5s
+      setTimeout(showAll, 1500);
+    } else {
+      showAll();
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>heige-ui · 界面不是生成的，是锻造的</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0b0b0d; --ink-2:#141418; --ink-3:#1c1c22;
+    --paper:#f4efe6; --paper-dim:#9a948a; --steel:#52525c;
+    --ember:#ff4d12; --ember-2:#ff8a00; --spark:#ffd23f;
+    --line:#26262c;
+    --display:"Archivo","Noto Sans SC",sans-serif;
+    --body:"Space Grotesk","Noto Sans SC",sans-serif;
+    --mono:"Space Mono",ui-monospace,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);color:var(--paper);
+    font-family:var(--body);font-weight:400;line-height:1.5;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  /* film grain */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,72px)}
+  .mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.18em;font-size:12px}
+  .molten{
+    background:linear-gradient(92deg,var(--ember) 0%,var(--ember-2) 42%,var(--spark) 70%,var(--ember-2) 100%);
+    background-size:280% 100%;-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;color:transparent;
+    animation:heat 5s ease-in-out infinite;
+  }
+  @keyframes heat{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+  /* ---------- top bar ---------- */
+  header{position:fixed;top:0;left:0;right:0;z-index:50;
+    backdrop-filter:blur(8px);background:rgba(11,11,13,.55);border-bottom:1px solid transparent;transition:border-color .3s}
+  header.scrolled{border-color:var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-family:var(--mono);font-weight:700;letter-spacing:.05em;font-size:15px;display:flex;align-items:center;gap:9px}
+  .logo i{width:13px;height:13px;background:var(--ember);display:inline-block;box-shadow:0 0 14px var(--ember)}
+  .meta{font-family:var(--mono);font-size:11px;color:var(--paper-dim);letter-spacing:.12em}
+
+  /* ---------- hero (cold open) ---------- */
+  .hero{position:relative;padding:168px 0 96px;overflow:hidden}
+  .hero .glow{position:absolute;top:6%;right:-12%;width:62vw;height:62vw;max-width:780px;max-height:780px;
+    background:radial-gradient(circle,rgba(255,77,18,.30),rgba(255,138,0,.07) 42%,transparent 66%);
+    filter:blur(8px);z-index:0;animation:breathe 7s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.12);opacity:1}}
+  .hero .inner{position:relative;z-index:1}
+  .kicker{display:flex;align-items:center;gap:14px;color:var(--ember);margin-bottom:30px}
+  .kicker span:last-child{color:var(--paper-dim)}
+  .kicker .rule{flex:0 0 56px;height:1px;background:var(--ember)}
+  h1{font-family:var(--display);font-weight:900;line-height:.92;letter-spacing:-.02em;
+    font-size:clamp(48px,11.5vw,168px);text-transform:none}
+  h1 .en{display:block;font-family:var(--mono);font-weight:700;letter-spacing:.04em;
+    font-size:clamp(11px,1.4vw,16px);color:var(--paper-dim);margin-top:34px;line-height:1.6;text-transform:uppercase}
+  .lede{max-width:540px;margin-top:38px;font-size:clamp(16px,1.5vw,19px);color:#cfc9bd;line-height:1.65}
+  .lede b{color:var(--paper);font-weight:700}
+  .scroll-cue{margin-top:64px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--steel);
+    display:flex;align-items:center;gap:12px;text-transform:uppercase}
+  .scroll-cue .dash{width:40px;height:1px;background:var(--steel);transform-origin:left;animation:slide 2.2s ease-in-out infinite}
+  @keyframes slide{0%,100%{transform:scaleX(.4);opacity:.4}50%{transform:scaleX(1);opacity:1}}
+
+  /* ---------- breath / manifesto ---------- */
+  .breath{padding:120px 0;border-top:1px solid var(--line)}
+  .breath p{font-family:var(--display);font-weight:800;letter-spacing:-.01em;
+    font-size:clamp(26px,4.6vw,62px);line-height:1.12;max-width:16ch}
+  .breath .sub{font-family:var(--body);font-weight:400;font-size:15px;color:var(--paper-dim);
+    max-width:none;letter-spacing:0;margin-top:28px}
+
+  /* ---------- problem: slop vs forged ---------- */
+  .versus{padding:96px 0;border-top:1px solid var(--line)}
+  .versus .head{display:flex;align-items:baseline;gap:18px;margin-bottom:52px;flex-wrap:wrap}
+  .versus .head h2{font-family:var(--display);font-weight:900;font-size:clamp(28px,4vw,48px);letter-spacing:-.01em}
+  .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .panel{border:1px solid var(--line);padding:30px;position:relative;min-height:300px;display:flex;flex-direction:column}
+  .panel .tag{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}
+  /* the mocked AI-slop sample (intentionally the cliché) */
+  .slop .tag{color:#8b8b95}
+  .slopdemo{flex:1;border-radius:14px;padding:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;
+    background:linear-gradient(135deg,#667eea,#764ba2);position:relative;overflow:hidden}
+  .slopdemo .ttl{font-weight:700;font-size:20px;color:#fff}
+  .slopdemo .desc{font-size:13px;color:rgba(255,255,255,.82);max-width:30ch}
+  .slopcards{display:flex;gap:10px;margin-top:8px}
+  .slopcards i{width:52px;height:62px;background:rgba(255,255,255,.9);border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,.12)}
+  .stamp{position:absolute;top:14px;right:-2px;font-family:var(--mono);font-weight:700;font-size:12px;
+    letter-spacing:.1em;color:#fff;border:2px solid #fff;padding:5px 10px;transform:rotate(7deg);opacity:.95}
+  .slop .verdict{margin-top:20px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#8b8b95;text-transform:uppercase}
+  .slop .verdict s{color:#5c5c66}
+  /* the forged side */
+  .forged{background:var(--ink-2);border-color:var(--ember)}
+  .forged .tag{color:var(--ember)}
+  .forged .big{font-family:var(--display);font-weight:900;font-size:clamp(34px,5vw,68px);line-height:1.02;letter-spacing:-.02em;margin-top:auto}
+  .forged ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:13px}
+  .forged li{display:flex;gap:13px;font-size:15px;color:#d8d2c6;line-height:1.4}
+  .forged li b{color:var(--spark);font-family:var(--mono);font-weight:700;font-size:13px}
+
+  /* ---------- forges (climax / signature) ---------- */
+  .forges{padding:110px 0;border-top:1px solid var(--line);position:relative}
+  .forges .head{margin-bottom:18px}
+  .forges .head .mono{color:var(--ember)}
+  .forges h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,7vw,104px);line-height:.94;letter-spacing:-.025em;margin-top:14px}
+  .forges h2 em{font-style:normal;color:var(--steel)}
+  .forge-list{margin-top:24px}
+  .forge{display:grid;grid-template-columns:minmax(0,200px) 1fr;gap:clamp(16px,4vw,64px);
+    padding:40px 0;border-top:1px solid var(--line);align-items:start;position:relative}
+  .js .forge{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .js .forge.in{opacity:1;transform:none}
+  .forge:last-child{border-bottom:1px solid var(--line)}
+  .forge .num{font-family:var(--display);font-weight:900;font-size:clamp(64px,11vw,150px);line-height:.8;letter-spacing:-.04em;
+    color:transparent;-webkit-text-stroke:1.5px var(--steel);transition:all .5s}
+  .forge:hover .num{-webkit-text-stroke:1.5px var(--ember);color:transparent;text-shadow:0 0 34px rgba(255,77,18,.45)}
+  .forge .body .en{font-family:var(--mono);font-weight:700;text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:var(--ember)}
+  .forge .body h3{font-family:var(--display);font-weight:900;font-size:clamp(24px,3.4vw,40px);margin:8px 0 16px;letter-spacing:-.01em}
+  .forge .body p{font-size:clamp(15px,1.5vw,17px);color:#c2bcb0;line-height:1.6;max-width:60ch}
+  .forge .body p .hot{color:var(--spark)}
+
+  /* ---------- close / cta ---------- */
+  .close{padding:120px 0 90px;border-top:1px solid var(--line);position:relative;overflow:hidden}
+  .close .glow{position:absolute;bottom:-30%;left:50%;transform:translateX(-50%);width:90vw;max-width:900px;height:420px;
+    background:radial-gradient(ellipse,rgba(255,77,18,.22),transparent 64%);filter:blur(10px);z-index:0}
+  .close .inner{position:relative;z-index:1}
+  .close h2{font-family:var(--display);font-weight:900;font-size:clamp(40px,9vw,128px);line-height:.92;letter-spacing:-.03em}
+  .close .row{display:flex;gap:40px;align-items:flex-end;flex-wrap:wrap;margin-top:46px}
+  .install{font-family:var(--mono);font-size:13px;background:var(--ink-2);border:1px solid var(--line);
+    border-left:3px solid var(--ember);padding:18px 22px;color:#cfc9bd;line-height:1.9}
+  .install .c{color:var(--ember)}.install .g{color:var(--steel)}
+  .cta{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-weight:700;text-transform:uppercase;
+    letter-spacing:.1em;font-size:13px;background:var(--ember);color:#120800;padding:17px 26px;text-decoration:none;
+    transition:transform .2s,box-shadow .2s}
+  .cta:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--spark)}
+
+  footer{border-top:1px solid var(--line);padding:34px 0}
+  .fbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--steel);text-transform:uppercase}
+  .fbar b{color:var(--paper)}
+
+  /* spark cursor */
+  .spark{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--spark);
+    box-shadow:0 0 10px var(--ember-2);pointer-events:none;z-index:9998;opacity:0;transition:opacity .4s}
+
+  @media(max-width:760px){
+    .vgrid{grid-template-columns:1fr}
+    .forge{grid-template-columns:1fr;gap:6px;padding:30px 0}
+    .forge .num{font-size:88px}
+    .hero{padding:128px 0 64px}
+    .versus .panel{min-height:auto}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.forge{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap bar">
+    <div class="logo"><i></i>heige-ui</div>
+    <div class="meta">v1.0.0 · MIT · BY 黑哥</div>
+  </div>
+</header>
+
+<!-- ⚡ COLD OPEN -->
+<section class="hero">
+  <div class="glow"></div>
+  <div class="wrap inner">
+    <div class="kicker mono"><span class="rule"></span><span>01 / 界面锻造系统</span><span>FORGE, DON'T GENERATE</span></div>
+    <h1>界面不是生成的，<br>是<span class="molten">锻造</span>的。
+      <span class="en">Interfaces aren't generated. They're forged.</span>
+    </h1>
+    <p class="lede">AI 把组件从货架上扯下来平铺在画布上：居中卡片、紫蓝渐变、圆角阴影。能用，但<b>没人记得住</b>。heige-ui 换一种做法，把界面当成一段<b>有节奏的叙事</b>来导演。</p>
+    <div class="scroll-cue"><span class="dash"></span>SCROLL / 往下看锻造工序</div>
+  </div>
+</section>
+
+<!-- 🫁 BREATH -->
+<section class="breath">
+  <div class="wrap">
+    <p>一眼能认出，<br>这是<span class="molten">人锻造</span>的，<br>不是机器生成的。</p>
+    <p class="sub">这套方法论从真实商业项目里反复打磨。目标只有一个：让你做出的界面有气场、有记忆点、能直接上生产。</p>
+  </div>
+</section>
+
+<!-- 📈 SLOP vs FORGED -->
+<section class="versus">
+  <div class="wrap">
+    <div class="head"><span class="mono" style="color:var(--ember)">02 / 分水岭</span><h2>别人交付网页，你交付作品。</h2></div>
+    <div class="vgrid">
+      <div class="panel slop">
+        <div class="tag">// 机器生成 · AI SLOP</div>
+        <div class="slopdemo">
+          <div class="stamp">REJECTED</div>
+          <div class="ttl">Empower Your Workflow</div>
+          <div class="desc">A one-stop intelligent solution that makes everything simpler.</div>
+          <div class="slopcards"><i></i><i></i><i></i></div>
+        </div>
+        <div class="verdict">紫蓝渐变 + 居中卡片 + 正确的废话 = <s>一眼 AI</s></div>
+      </div>
+      <div class="panel forged">
+        <div class="tag">// 人锻造 · FORGED</div>
+        <div class="big">有气场<br>有记忆点</div>
+        <ul>
+          <li><b>气场</b>首屏 3 秒立住调性，不是堆功能</li>
+          <li><b>节奏</b>有张弛、有高潮，不是平铺一个调</li>
+          <li><b>签名</b>一个别人不会做的记忆点</li>
+          <li><b>生产</b>真能跑的代码，不是占位凑数</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 🔥 CLIMAX / SIGNATURE — FIVE FORGES -->
+<section class="forges">
+  <div class="wrap">
+    <div class="head"><span class="mono">03 / 锻造工序</span>
+      <h2>五道<em>·</em>工序<em>，</em>每件作品都要过一遍。</h2>
+    </div>
+    <div class="forge-list">
+      <article class="forge">
+        <div class="num">01</div>
+        <div class="body"><div class="en">Cold Open</div><h3>开场定调</h3>
+          <p>首屏 3 秒决定一切。它不是用来摆标题和按钮的，是用来<span class="hot">立人设、定气质</span>的。把首屏截图给没看过的人，3 秒答得上"这是什么调性"，开场就成了。</p></div>
+      </article>
+      <article class="forge">
+        <div class="num">02</div>
+        <div class="body"><div class="en">Pacing Curve</div><h3>节奏曲线</h3>
+          <p>页面像电影一样有张弛：<span class="hot">冲击 → 呼吸 → 推进 → 高潮 → 收束</span>。不要均匀平铺、一个调子到底，那是 PPT，不是叙事。</p></div>
+      </article>
+      <article class="forge">
+        <div class="num">03</div>
+        <div class="body"><div class="en">One Protagonist</div><h3>一屏一主角</h3>
+          <p>每一屏只能有一个视觉主角，其余全是配角。<span class="hot">什么都想突出 = 什么都不突出</span>，这是 AI 界面最大的通病。主角靠对比放大，配角靠克制后退。</p></div>
+      </article>
+      <article class="forge">
+        <div class="num">04</div>
+        <div class="body"><div class="en">Signature Moment</div><h3>签名时刻</h3>
+          <p>每个作品至少要有一个<span class="hot">别人不会做、也不太敢做</span>的记忆点。这是作者签名，是这页区别于其他一万个落地页的地方。一个就够，但必须有。</p></div>
+      </article>
+      <article class="forge">
+        <div class="num">05</div>
+        <div class="body"><div class="en">Anti-Slop Check</div><h3>反 AI 体检</h3>
+          <p>出货前强制过一遍体检：紫蓝渐变？居中卡片三件套？默认字体裸奔？<span class="hot">命中任何一条都要回去重做</span>。这一步不是可选的，是交付门槛。</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 🎬 CLOSE -->
+<section class="close">
+  <div class="glow"></div>
+  <div class="wrap inner">
+    <h2>锻造你的<br><span class="molten">下一个界面</span>。</h2>
+    <div class="row">
+      <div class="install">
+        <span class="g"># 放进你的 skills 目录即可</span><br>
+        <span class="c">cp</span> -r heige-ui <span class="c">~</span>/.claude/skills/<br>
+        <span class="g"># 然后直接说：</span> <span style="color:var(--paper)">"用 heige-ui 做个落地页"</span>
+      </div>
+      <a class="cta" href="https://github.com/HeiGeAi" target="_blank" rel="noopener">在 GitHub 上获取 →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fbar">
+    <span>heige-ui · 界面锻造系统</span>
+    <span>作者 <b>Blake 黑哥</b> · 黑哥Ai实验室</span>
+    <span>MIT LICENSE · v1.0.0</span>
+  </div>
+</footer>
+
+<div class="spark" id="spark"></div>
+
+<script>
+  // header border on scroll
+  const hdr=document.getElementById('hdr');
+  addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>40),{passive:true});
+
+  // reveal forges (progressive enhancement: visible by default, animate as a bonus)
+  const forges=document.querySelectorAll('.forge');
+  if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+    document.documentElement.classList.add('js');
+    const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15,rootMargin:'0px 0px -8% 0px'});
+    forges.forEach(f=>io.observe(f));
+    // safety net: never leave a forge stuck hidden (e.g. no scroll / static capture)
+    setTimeout(()=>forges.forEach(f=>f.classList.add('in')),1600);
+  }
+
+  // signature: ember spark trailing cursor (desktop, motion-ok only)
+  const spark=document.getElementById('spark');
+  const okMotion=!matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(okMotion && matchMedia('(pointer:fine)').matches){
+    let x=0,y=0,tx=0,ty=0;
+    addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;spark.style.opacity=.9},{passive:true});
+    (function loop(){x+=(tx-x)*.18;y+=(ty-y)*.18;spark.style.transform=`translate(${x-3}px,${y-3}px)`;requestAnimationFrame(loop)})();
+  }
+</script>
+</body>
+</html>

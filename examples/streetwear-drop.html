@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>越界 OUT OF BOUNDS // DROP 03 — 限量 300 双</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@900&family=Noto+Sans+SC:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0a0a;
+    --orange:#ff5b00;
+    --off:#f2f0eb;
+    --yellow:#ffe600;
+    --grey:#5a5a5a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--black);
+    color:var(--off);
+    font-family:"Noto Sans SC",sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  /* grain texture */
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9999;
+    opacity:.07;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  ::selection{background:var(--orange);color:var(--black)}
+
+  .mono{font-family:"Space Mono",monospace}
+  .anton{font-family:"Anton",sans-serif}
+  .archivo{font-family:"Archivo",sans-serif;font-weight:900}
+
+  /* caution tape */
+  .tape{
+    background:repeating-linear-gradient(45deg,var(--yellow) 0 28px,var(--black) 28px 56px);
+  }
+  .tape-row{
+    background:repeating-linear-gradient(135deg,var(--yellow) 0 30px,var(--black) 30px 60px);
+    height:34px;
+    width:120%;
+    margin-left:-10%;
+    display:flex;align-items:center;
+    overflow:hidden;
+  }
+  .tape-text{
+    white-space:nowrap;
+    font-family:"Space Mono",monospace;
+    font-weight:700;
+    letter-spacing:.4em;
+    font-size:13px;
+    color:var(--black);
+    background:var(--yellow);
+    padding:0 14px;
+    animation:march 18s linear infinite;
+  }
+
+  /* sticker badge */
+  .sticker{
+    display:inline-flex;align-items:center;justify-content:center;
+    text-align:center;
+    font-family:"Space Mono",monospace;
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    border:2.5px solid var(--black);
+    line-height:1.1;
+  }
+
+  /* barcode */
+  .barcode{
+    display:inline-block;
+    height:46px;width:150px;
+    background:repeating-linear-gradient(90deg,
+      var(--off) 0 2px, transparent 2px 4px,
+      var(--off) 4px 5px, transparent 5px 9px,
+      var(--off) 9px 12px, transparent 12px 13px,
+      var(--off) 13px 14px, transparent 14px 18px);
+  }
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ===== HERO ===== */
+  .hero{
+    min-height:100vh;
+    position:relative;
+    display:flex;flex-direction:column;
+    justify-content:space-between;
+    padding:22px clamp(16px,4vw,52px) 0;
+    overflow:hidden;
+  }
+  .topbar{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--off);
+    border-bottom:1px solid #222;padding-bottom:14px;
+    position:relative;z-index:5;
+  }
+  .topbar .dot{color:var(--orange)}
+  .live-pill{display:inline-flex;align-items:center;gap:7px;color:var(--yellow)}
+  .live-pill i{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 0 var(--orange);animation:pulse 1.6s infinite}
+
+  .hero-stage{flex:1;position:relative;display:flex;align-items:center}
+  /* giant bleeding wordmark */
+  .wordmark{
+    position:relative;z-index:3;
+    width:100%;
+  }
+  .wm-kicker{
+    font-family:"Space Mono",monospace;font-weight:700;
+    color:var(--orange);letter-spacing:.32em;font-size:clamp(12px,1.6vw,16px);
+    text-transform:uppercase;margin-bottom:6px;display:block;
+  }
+  .wm-line{
+    font-family:"Anton",sans-serif;
+    text-transform:uppercase;
+    line-height:.82;
+    color:var(--off);
+    letter-spacing:-.01em;
+  }
+  .wm-line.huge{font-size:clamp(74px,18.5vw,300px);margin-left:-.04em}
+  .wm-line.bounds{
+    font-size:clamp(58px,14.5vw,232px);
+    color:transparent;
+    -webkit-text-stroke:2px var(--off);
+    margin-left:-.02em;
+    position:relative;
+  }
+  .wm-line.bounds em{font-style:normal;color:var(--orange);-webkit-text-stroke:0}
+  .wm-sub{
+    display:flex;flex-wrap:wrap;align-items:flex-end;gap:18px;margin-top:18px;
+  }
+  .drop03{
+    font-family:"Archivo",sans-serif;font-weight:900;
+    background:var(--orange);color:var(--black);
+    font-size:clamp(22px,3.4vw,46px);
+    padding:4px 16px 6px;
+    transform:rotate(-2deg);
+    box-shadow:8px 8px 0 var(--black),8px 8px 0 2px var(--yellow);
+    line-height:1;
+  }
+  .wm-meta{font-family:"Space Mono",monospace;font-size:clamp(11px,1.2vw,14px);color:var(--grey);max-width:340px;line-height:1.7}
+  .wm-meta b{color:var(--off)}
+
+  /* hero sticker collage */
+  .hero-sticker{position:absolute;z-index:4}
+  .hs-1{top:6%;right:3%;width:128px;height:128px;border-radius:50%;background:var(--yellow);color:var(--black);font-size:14px;transform:rotate(13deg);flex-direction:column;gap:2px}
+  .hs-2{bottom:16%;right:6%;background:var(--orange);color:var(--black);font-size:13px;padding:9px 14px;transform:rotate(-7deg)}
+
+  /* hero silhouette block (product) */
+  .hero-shoe{
+    position:absolute;z-index:2;right:-2%;top:18%;
+    width:min(46vw,560px);opacity:.92;
+    transform:rotate(-8deg);
+    filter:drop-shadow(14px 14px 0 rgba(255,91,0,.35));
+  }
+
+  .hero-bottom{position:relative;z-index:5;padding-bottom:0}
+
+  /* ===== COUNTDOWN MINI (hero) ===== */
+  .cd-mini{
+    display:flex;align-items:center;gap:14px;
+    font-family:"Space Mono",monospace;flex-wrap:wrap;
+    border:1px solid #2a2a2a;padding:10px 16px;background:#0d0d0d;
+    width:fit-content;
+  }
+  .cd-mini .lbl{color:var(--grey);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+  .cd-mini .val{color:var(--off);font-size:clamp(20px,2.6vw,30px);font-weight:700}
+  .cd-mini .val .u{color:var(--orange);font-size:.5em;margin-left:2px}
+
+  /* ===== BREATH ===== */
+  .breath{
+    padding:clamp(70px,12vh,150px) clamp(16px,5vw,52px);
+    border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;
+  }
+  .breath p{
+    font-family:"Noto Sans SC",sans-serif;font-weight:700;
+    font-size:clamp(22px,3.6vw,46px);line-height:1.35;
+    max-width:900px;
+  }
+  .breath p span{color:var(--orange)}
+  .breath .meta{
+    font-family:"Space Mono",monospace;color:var(--grey);
+    font-size:13px;letter-spacing:.14em;margin-top:22px;text-transform:uppercase;
+  }
+
+  /* ===== BUILD / 本期单品 ===== */
+  .build{padding:clamp(50px,9vh,110px) clamp(16px,4vw,52px) clamp(70px,11vh,150px);position:relative}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:46px}
+  .sec-title{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(40px,8vw,108px);line-height:.85;color:var(--off)}
+  .sec-title em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px var(--orange)}
+  .sec-no{font-family:"Space Mono",monospace;color:var(--grey);font-size:13px;letter-spacing:.2em;text-transform:uppercase;text-align:right}
+
+  /* asymmetric editorial grid */
+  .drops{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    grid-auto-rows:minmax(60px,auto);
+    gap:18px;
+  }
+  .item{
+    position:relative;
+    background:#101010;
+    border:1px solid #1f1f1f;
+    padding:24px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    overflow:hidden;
+    min-height:280px;
+  }
+  .item .pcode{font-family:"Space Mono",monospace;font-size:12px;color:var(--grey);letter-spacing:.16em}
+  .item .pname{font-family:"Anton",sans-serif;text-transform:uppercase;line-height:.9;margin-top:auto}
+  .item .pdesc{font-family:"Space Mono",monospace;font-size:11px;color:var(--grey);margin-top:10px;line-height:1.6;max-width:90%}
+  .price-tag{
+    position:absolute;
+    font-family:"Space Mono",monospace;font-weight:700;
+    background:var(--off);color:var(--black);
+    padding:5px 11px;font-size:14px;
+    box-shadow:4px 4px 0 var(--black);
+  }
+  .blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.9}
+
+  /* item A — hero of section, big, orange */
+  .item.a{grid-column:span 7;grid-row:span 2;background:var(--orange);color:var(--black);border-color:var(--orange);min-height:420px}
+  .item.a .pcode{color:#1c0c00}
+  .item.a .pname{font-size:clamp(46px,7vw,104px);color:var(--black)}
+  .item.a .pdesc{color:#2a1300}
+  .item.a .price-tag{top:24px;right:24px;background:var(--black);color:var(--yellow);box-shadow:4px 4px 0 #1c0c00;transform:rotate(4deg)}
+  .item.a .shoe-block{position:absolute;left:-30px;bottom:-40px;width:62%;opacity:.18;transform:rotate(-12deg)}
+  .item.a .sticker.flag{position:absolute;top:26px;left:24px;background:var(--yellow);color:var(--black);padding:6px 12px;font-size:12px;transform:rotate(-5deg)}
+
+  .item.b{grid-column:span 5;min-height:200px}
+  .item.b .pname{font-size:clamp(30px,4vw,56px);color:var(--off)}
+  .item.b .price-tag{top:20px;right:20px;transform:rotate(3deg)}
+
+  .item.c{grid-column:span 5;min-height:200px;background:var(--off);color:var(--black);border-color:var(--off)}
+  .item.c .pcode{color:var(--grey)}
+  .item.c .pname{font-size:clamp(30px,4vw,56px);color:var(--black)}
+  .item.c .pdesc{color:var(--grey)}
+  .item.c .price-tag{top:20px;right:20px;background:var(--orange);color:var(--black);box-shadow:4px 4px 0 var(--black);transform:rotate(-4deg)}
+
+  .item.d{grid-column:span 4}
+  .item.d .pname{font-size:clamp(26px,3.4vw,44px)}
+  .item.d .price-tag{bottom:24px;right:24px;transform:rotate(-3deg)}
+  .item.d .barcode{margin-top:14px;opacity:.5}
+
+  .item.e{grid-column:span 8;min-height:160px;background:transparent;border:2px dashed #333;display:flex;flex-direction:row;align-items:center;justify-content:space-between}
+  .item.e .et{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(22px,3vw,40px);line-height:.95;color:var(--off)}
+  .item.e .et span{color:var(--orange)}
+  .item.e .barcode{flex-shrink:0}
+
+  /* product silhouette svg sizing */
+  .sho{display:block;width:100%;height:auto}
+
+  /* ===== CLIMAX / countdown ===== */
+  .climax{
+    position:relative;
+    padding:0 0 clamp(60px,9vh,120px);
+    background:var(--black);
+    overflow:hidden;
+    border-top:2px solid var(--yellow);
+  }
+  .climax-inner{padding:clamp(50px,9vh,110px) clamp(16px,4vw,52px) 0;position:relative;z-index:3}
+  .climax-kicker{
+    font-family:"Space Mono",monospace;font-weight:700;color:var(--orange);
+    letter-spacing:.3em;text-transform:uppercase;font-size:clamp(12px,1.6vw,16px);
+    margin-bottom:6px;
+  }
+  .climax-title{
+    font-family:"Anton",sans-serif;text-transform:uppercase;
+    font-size:clamp(40px,9vw,128px);line-height:.84;color:var(--off);
+    margin-bottom:clamp(30px,5vh,60px);
+  }
+  .climax-title em{font-style:normal;color:var(--orange)}
+
+  .timer{
+    display:flex;gap:clamp(10px,3vw,40px);align-items:flex-start;flex-wrap:wrap;
+    position:relative;
+  }
+  .seg{display:flex;flex-direction:column;align-items:center}
+  .seg .num{
+    font-family:"Space Mono",monospace;font-weight:700;
+    font-size:clamp(58px,14vw,200px);line-height:.85;
+    color:var(--off);
+    font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em;
+  }
+  .seg.alive .num{color:var(--yellow)}
+  .seg .cap{
+    font-family:"Space Mono",monospace;font-size:clamp(11px,1.3vw,15px);
+    letter-spacing:.3em;text-transform:uppercase;color:var(--grey);margin-top:6px;
+  }
+  .seg .colon{display:none}
+  .sep{
+    font-family:"Space Mono",monospace;font-weight:700;
+    font-size:clamp(40px,9vw,150px);color:var(--orange);line-height:.85;
+    align-self:flex-start;
+  }
+
+  /* stamps over climax */
+  .stamp{
+    position:absolute;z-index:6;
+    font-family:"Archivo",sans-serif;font-weight:900;
+    text-transform:uppercase;text-align:center;
+    border:4px solid;line-height:.95;
+    padding:10px 16px;letter-spacing:.04em;
+    mix-blend-mode:normal;
+  }
+  .stamp.s300{
+    top:-18px;right:4%;
+    color:var(--yellow);border-color:var(--yellow);
+    background:var(--black);
+    font-size:clamp(16px,2.4vw,30px);
+    transform:rotate(8deg);
+  }
+  .stamp.sold{
+    bottom:8%;left:6%;
+    color:var(--orange);border-color:var(--orange);
+    background:var(--black);
+    font-size:clamp(18px,3vw,42px);
+    transform:rotate(-11deg);
+    opacity:.92;
+  }
+  .climax-foot{
+    margin-top:clamp(34px,6vh,64px);
+    display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+    font-family:"Space Mono",monospace;font-size:13px;color:var(--grey);
+    letter-spacing:.1em;
+  }
+  .climax-foot b{color:var(--off)}
+  .tape-strip{position:absolute;z-index:1}
+  .ts-1{top:14%;left:-6%;width:130%;transform:rotate(-4deg)}
+  .ts-2{bottom:18%;left:-6%;width:130%;transform:rotate(3deg);opacity:.85}
+
+  /* ===== CTA / 登记抢购 ===== */
+  .cta{
+    background:var(--orange);color:var(--black);
+    padding:clamp(56px,10vh,130px) clamp(16px,4vw,52px);
+    position:relative;overflow:hidden;
+  }
+  .cta-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,72px);align-items:center;position:relative;z-index:3}
+  .cta h2{font-family:"Anton",sans-serif;text-transform:uppercase;font-size:clamp(46px,9vw,140px);line-height:.82;color:var(--black)}
+  .cta h2 em{font-style:normal;color:var(--off);-webkit-text-stroke:2px var(--black)}
+  .cta .sub{font-family:"Space Mono",monospace;font-size:14px;line-height:1.8;margin-top:18px;max-width:420px;color:#1c0c00}
+  .cta .sub b{color:var(--black)}
+
+  .form{background:var(--black);color:var(--off);padding:28px;box-shadow:14px 14px 0 #1c0c00}
+  .form .ft{font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:16px}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+  .field label{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+  .field input{
+    background:#111;border:1px solid #2a2a2a;color:var(--off);
+    font-family:"Space Mono",monospace;font-size:15px;padding:13px 14px;
+    outline:none;transition:border-color .2s,box-shadow .2s;
+  }
+  .field input:focus{border-color:var(--orange);box-shadow:3px 3px 0 var(--orange)}
+  .submit{
+    width:100%;border:none;cursor:pointer;
+    background:var(--yellow);color:var(--black);
+    font-family:"Archivo",sans-serif;font-weight:900;text-transform:uppercase;
+    font-size:22px;letter-spacing:.04em;padding:16px;
+    transition:transform .12s ease,box-shadow .12s ease;
+    box-shadow:6px 6px 0 var(--orange);
+  }
+  .submit:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--orange)}
+  .submit:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--orange)}
+  .form .fine{font-family:"Space Mono",monospace;font-size:10px;color:var(--grey);margin-top:14px;line-height:1.7;letter-spacing:.06em}
+  .cta-stamp{position:absolute;z-index:2;top:8%;right:4%;font-family:"Archivo",sans-serif;font-weight:900;color:var(--black);border:5px solid var(--black);padding:8px 14px;text-transform:uppercase;font-size:clamp(16px,2.2vw,28px);transform:rotate(-9deg);background:var(--yellow)}
+
+  /* footer */
+  footer{background:var(--black);color:var(--grey);padding:36px clamp(16px,4vw,52px) 60px;font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.12em}
+  .foot-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;border-top:1px solid #1a1a1a;padding-top:26px}
+  .foot-top .wm{font-family:"Anton",sans-serif;font-size:clamp(30px,5vw,64px);color:#1a1a1a;text-transform:uppercase;line-height:.85}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap}
+  .foot-links a{color:var(--grey);text-decoration:none;text-transform:uppercase}
+  .foot-links a:hover{color:var(--orange)}
+  .foot-bottom{margin-top:26px;color:#3a3a3a;text-transform:uppercase}
+
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,91,0,.7)}70%{box-shadow:0 0 0 9px rgba(255,91,0,0)}100%{box-shadow:0 0 0 0 rgba(255,91,0,0)}}
+  @keyframes march{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:900px){
+    .cta-grid{grid-template-columns:1fr}
+    .hero-shoe{display:none}
+    .item.a{grid-column:span 12;min-height:340px}
+    .item.b,.item.c{grid-column:span 12}
+    .item.d{grid-column:span 6}
+    .item.e{grid-column:span 12}
+  }
+  @media(max-width:560px){
+    .topbar{font-size:10px;letter-spacing:.1em;gap:8px}
+    .topbar .mid{display:none}
+    .hs-1{width:88px;height:88px;font-size:11px;top:2%;right:0}
+    .hs-2{display:none}
+    .wm-sub{gap:12px}
+    .item.d{grid-column:span 12}
+    .item.e{flex-direction:column;align-items:flex-start;gap:18px}
+    .timer{gap:6px}
+    .sep{font-size:clamp(34px,11vw,60px)}
+    .seg .num{font-size:clamp(50px,17vw,90px)}
+    .stamp.s300{right:2%;top:-10px}
+    .form{box-shadow:8px 8px 0 #1c0c00}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important}
+    .reveal{opacity:1!important;transform:none!important;transition:none!important}
+    .tape-text{animation:none!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="topbar">
+    <span><span class="dot">●</span> OUT&nbsp;OF&nbsp;BOUNDS®</span>
+    <span class="mid mono">EST. 越界制造 / SS26</span>
+    <span class="live-pill"><i></i> LIVE 发售倒计时</span>
+  </div>
+
+  <div class="hero-stage">
+    <!-- product silhouette block -->
+    <svg class="hero-shoe" viewBox="0 0 600 320" aria-hidden="true">
+      <g fill="#ff5b00">
+        <path d="M30 240 C40 150 120 120 200 130 C250 136 280 110 330 96 C380 82 420 96 440 130 C470 130 540 140 565 178 C585 208 580 244 540 254 L70 254 C44 254 28 250 30 240 Z"/>
+      </g>
+      <path d="M30 240 C40 150 120 120 200 130 C250 136 280 110 330 96 C380 82 420 96 440 130 C470 130 540 140 565 178 C585 208 580 244 540 254 L70 254 C44 254 28 250 30 240 Z" fill="none" stroke="#0a0a0a" stroke-width="6"/>
+      <path d="M210 132 L260 220 M300 110 L320 224 M380 100 L388 230" stroke="#0a0a0a" stroke-width="5"/>
+      <rect x="64" y="254" width="496" height="20" fill="#ffe600" stroke="#0a0a0a" stroke-width="5"/>
+    </svg>
+
+    <div class="wordmark">
+      <span class="wm-kicker reveal">// 越界第三弹 · 街头不设限</span>
+      <div class="wm-line huge reveal">越界</div>
+      <div class="wm-line bounds reveal">OUT<em>·</em>BOUNDS</div>
+      <div class="wm-sub reveal">
+        <span class="drop03 archivo">DROP&nbsp;03</span>
+        <span class="wm-meta mono">一双不踩线就没意思的鞋。<br><b>限量 300 双</b>，配额发完即止。手慢，就只能看别人上脚。</span>
+      </div>
+    </div>
+
+    <div class="sticker hero-sticker hs-1 mono">限量<br>300<br>双</div>
+    <div class="sticker hero-sticker hs-2 mono">手慢无</div>
+  </div>
+
+  <div class="hero-bottom reveal">
+    <div class="cd-mini" id="cdMini" role="timer" aria-label="发售倒计时">
+      <span class="lbl">距发售还有</span>
+      <span class="val"><span id="mD">00</span><span class="u">天</span></span>
+      <span class="val"><span id="mH">00</span><span class="u">时</span></span>
+      <span class="val"><span id="mM">00</span><span class="u">分</span></span>
+      <span class="val"><span id="mS">00</span><span class="u">秒</span></span>
+    </div>
+    <div class="tape-row" aria-hidden="true" style="margin-top:18px">
+      <span class="tape-text">越界 OUT OF BOUNDS · DROP 03 · 限量 300 · 不踩线没意思 · 手慢无 · 越界 OUT OF BOUNDS · DROP 03 · 限量 300 · 不踩线没意思 · 手慢无 · </span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== BREATH ===== -->
+<section class="breath">
+  <p class="reveal">规则是用来踩的。<br>这一弹我们把鞋头做到<span>越线半码</span>，<br>谁穿谁出界。</p>
+  <div class="meta reveal">FILE — 03 / 设计周期 11 个月 / 量产仅此一批 / 不补货</div>
+</section>
+
+<!-- ===== BUILD / 本期单品 ===== -->
+<section class="build">
+  <div class="sec-head">
+    <h2 class="sec-title reveal">本期<em>单品</em></h2>
+    <div class="sec-no reveal">04 件配套 / 全系列共享 03 配色 / 编号入手</div>
+  </div>
+
+  <div class="drops">
+    <!-- A: hero of section -->
+    <article class="item a reveal">
+      <svg class="shoe-block" viewBox="0 0 600 320" aria-hidden="true">
+        <path d="M30 240 C40 150 120 120 200 130 C250 136 280 110 330 96 C380 82 420 96 440 130 C470 130 540 140 565 178 C585 208 580 244 540 254 L70 254 C44 254 28 250 30 240 Z" fill="#0a0a0a"/>
+      </svg>
+      <span class="sticker flag mono">主力款 / MAIN</span>
+      <span class="price-tag mono">¥1,280</span>
+      <span class="pcode">OOB-03-A · 越界跑鞋</span>
+      <h3 class="pname anton">越线者<br>RUNNER</h3>
+      <p class="pdesc mono">超长鞋头 + 安全橙鞋面，反光夜行条。300 双里编号 001–150 是这双。</p>
+    </article>
+
+    <!-- B -->
+    <article class="item b reveal">
+      <span class="price-tag mono">¥460</span>
+      <span class="pcode">OOB-03-B · 罩衫</span>
+      <h3 class="pname anton">封锁线<br>HOODIE</h3>
+      <p class="pdesc mono">背后整条警示胶带印花，盖住就出局。</p>
+    </article>
+
+    <!-- C -->
+    <article class="item c reveal">
+      <span class="price-tag mono">¥220</span>
+      <span class="pcode">OOB-03-C · 帽款</span>
+      <h3 class="pname anton">边界帽<br>CAP</h3>
+      <p class="pdesc mono">off-white 帽身，橙色越界刺绣，可调节。</p>
+    </article>
+
+    <!-- D -->
+    <article class="item d reveal">
+      <span class="pcode">OOB-03-D · 配件</span>
+      <h3 class="pname anton">越界<br>袜组</h3>
+      <span class="price-tag mono">¥120</span>
+      <div class="barcode" aria-hidden="true"></div>
+    </article>
+
+    <!-- E: full-width strip with barcode -->
+    <article class="item e reveal">
+      <div class="et anton">全系列附 <span>编号身份卡</span> · 越界即正品</div>
+      <div class="barcode" aria-hidden="true"></div>
+    </article>
+  </div>
+</section>
+
+<!-- ===== CLIMAX / SIGNATURE MOMENT ===== -->
+<section class="climax">
+  <div class="tape tape-strip ts-1" aria-hidden="true" style="height:46px"></div>
+  <div class="tape tape-strip ts-2" aria-hidden="true" style="height:46px"></div>
+
+  <div class="climax-inner">
+    <div class="climax-kicker reveal">// 配额开放仅一次</div>
+    <h1 class="climax-title reveal">发售<em>倒计时</em></h1>
+
+    <div class="timer reveal" role="timer" aria-label="发售倒计时大屏">
+      <div class="seg"><span class="num" id="bD">00</span><span class="cap">DAYS 天</span></div>
+      <span class="sep">:</span>
+      <div class="seg"><span class="num" id="bH">00</span><span class="cap">HRS 时</span></div>
+      <span class="sep">:</span>
+      <div class="seg"><span class="num" id="bM">00</span><span class="cap">MIN 分</span></div>
+      <span class="sep">:</span>
+      <div class="seg alive"><span class="num" id="bS">00</span><span class="cap">SEC 秒</span></div>
+
+      <div class="sticker stamp s300">限量<br>300</div>
+      <div class="sticker stamp sold">SOLD<br>OUT?</div>
+    </div>
+
+    <div class="climax-foot reveal">
+      <span>发售时间 <b id="dropTime">--</b></span>
+      <span>·</span>
+      <span>剩余配额 <b>300 / 300</b></span>
+      <span>·</span>
+      <span>到点准时开抢，<b>不设候补</b></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA / 登记抢购 ===== -->
+<section class="cta" id="signup">
+  <div class="cta-stamp">先到先得</div>
+  <div class="cta-grid">
+    <div>
+      <h2 class="reveal">登记<br><em>抢购</em></h2>
+      <p class="sub reveal mono">留下信息，开抢前 <b>30 分钟</b>给你单独提醒。<br>不打广告，不卖名单，开完就删。<b>300 双，发完即止。</b></p>
+    </div>
+
+    <form class="form reveal" id="dropForm" novalidate>
+      <div class="ft">DROP 03 · 抢购登记表</div>
+      <div class="field">
+        <label for="nm">你的名字 / NAME</label>
+        <input id="nm" name="nm" type="text" placeholder="街上叫你什么" autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="ph">手机号 / PHONE</label>
+        <input id="ph" name="ph" type="tel" placeholder="13x xxxx xxxx" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="sz">想要尺码 / SIZE</label>
+        <input id="sz" name="sz" type="text" placeholder="EU 40 — 45" autocomplete="off">
+      </div>
+      <button class="submit" type="submit" id="submitBtn">锁定我的配额 →</button>
+      <p class="fine">提交即表示你接受先到先得规则。配额不可转让，编号随机发放。</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-top">
+    <div class="wm">越界 OOB®</div>
+    <div class="foot-links">
+      <a href="#signup">登记抢购</a>
+      <a href="#signup">发售规则</a>
+      <a href="#signup">门店自提</a>
+      <a href="#signup">联系我们</a>
+    </div>
+  </div>
+  <div class="foot-bottom">© 2026 OUT OF BOUNDS 越界制造 · DROP 03 · 限量 300 · 不踩线没意思</div>
+</footer>
+
+<script>
+(function(){
+  // ---- countdown target: a sensible near-future date so it never shows 00:00:00 ----
+  var now = new Date();
+  var target = new Date(now.getTime());
+  target.setDate(target.getDate() + 4);   // 4 days out
+  target.setHours(20, 3, 0, 0);           // 20:03 drop time
+  // if computed target somehow already passed (edge), push a week
+  if (target.getTime() - now.getTime() < 60000) {
+    target = new Date(now.getTime() + 4 * 86400000);
+  }
+
+  function pad(n){ n = Math.floor(n); return (n < 10 ? '0' : '') + n; }
+
+  var els = {
+    bD:document.getElementById('bD'), bH:document.getElementById('bH'),
+    bM:document.getElementById('bM'), bS:document.getElementById('bS'),
+    mD:document.getElementById('mD'), mH:document.getElementById('mH'),
+    mM:document.getElementById('mM'), mS:document.getElementById('mS')
+  };
+
+  function tick(){
+    var diff = target.getTime() - Date.now();
+    if (diff < 0) diff = 0;
+    var d = diff / 86400000;
+    var h = (diff % 86400000) / 3600000;
+    var m = (diff % 3600000) / 60000;
+    var s = (diff % 60000) / 1000;
+    els.bD.textContent = pad(d); els.mD.textContent = pad(d);
+    els.bH.textContent = pad(h); els.mH.textContent = pad(h);
+    els.bM.textContent = pad(m); els.mM.textContent = pad(m);
+    els.bS.textContent = pad(s); els.mS.textContent = pad(s);
+  }
+  tick(); // immediate sensible value
+  setInterval(tick, 1000);
+
+  // drop time display
+  var dt = document.getElementById('dropTime');
+  if (dt){
+    var mo = target.getMonth() + 1, da = target.getDate();
+    dt.textContent = mo + '月' + da + '日 ' + pad(target.getHours()) + ':' + pad(target.getMinutes());
+  }
+
+  // ---- scroll reveal with graceful fallback ----
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    reveals.forEach(function(el){ io.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add('in'); });
+  }
+  // hard fallback: everything visible after 1.5s no matter what
+  setTimeout(function(){ reveals.forEach(function(el){ el.classList.add('in'); }); }, 1500);
+
+  // ---- form: hype confirmation, no real submit ----
+  var form = document.getElementById('dropForm');
+  if (form){
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var btn = document.getElementById('submitBtn');
+      var nm = document.getElementById('nm').value.trim();
+      btn.textContent = nm ? ('已锁定 · ' + nm + ' ✓') : '配额已锁定 ✓';
+      btn.style.background = '#0a0a0a';
+      btn.style.color = '#ffe600';
+      btn.style.boxShadow = '6px 6px 0 #0a0a0a';
+    });
+  }
+})();
+</script>
+</body>
+</html>
