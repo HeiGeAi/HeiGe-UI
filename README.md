@@ -22,20 +22,20 @@
 
 ## 这是什么 What is this
 
-一个让 AI 做出**有气场、有记忆点、一眼不像 AI 做的**产品级前端界面的 skill。
+让 AI 做出**有气场、有记忆点、一眼不像 AI 做的**前端界面。
 
-大多数 AI 做出来的界面，是把组件从货架上扯下来平铺在画布上：居中卡片、紫蓝渐变、圆角阴影、四平八稳。能用，但没人记得住。
+你肯定见过那种界面：居中卡片、紫蓝渐变、圆角阴影，工工整整，挑不出错，但你**三秒就忘**。因为 AI 只是把组件从货架上扯下来，平铺在画布上，能用，仅此而已。
 
-heige-ui 换一种做法：**把界面当成一段有节奏的叙事来导演。** 它有开场、有张弛、有主角、有一个让人记住的瞬间。
+heige-ui 不这么干。它把一个界面当成一段**有节奏的叙事**来导演：有开场，有张弛，有主角，有一个让你记住的瞬间。做完一眼能认出，这是**人锻造的**，不是机器生成的。
 
-**不是**又一个组件模板库，而是一套从真实商业项目里打磨出来的设计方法论：
+它不是又一个组件模板库，而是一套从真实商业项目里磨出来的方法论：
 
-- ✅ 五道锻造工序，每件作品都要过一遍
-- ✅ 七种极端气质方向，每种给到可直接落地的打法
-- ✅ 反 AI 体检清单，把 AI slop 扼杀在交付前
+- ✅ **五道锻造工序**，每件作品都要过一遍
+- ✅ **七种极端气质**，每种都给到能直接上手的打法
+- ✅ **反 AI 体检清单**，把那股 AI 味摁死在交付前
 - ✅ 动手前先定调，出货前过体检
-- ✅ 十个跨气质样例，同一套方法论产出完全不同的作品
-- ✅ 零依赖单文件，跨平台通用
+- ✅ **十个跨气质样例**，同一套方法论，做出完全不同的东西
+- ✅ 零依赖单文件，到处都能用
 
 **适用场景**：产品官网、落地页、Dashboard、组件库、营销页、App 界面、Web 应用、作品集、活动页。
 
@@ -47,13 +47,13 @@ heige-ui 换一种做法：**把界面当成一段有节奏的叙事来导演。
 
 ## 为什么需要它 Why this matters
 
-| 普通 AI 生成的界面 | heige-ui 锻造的界面 |
+| 普通 AI 给你的界面 | heige-ui 锻造的界面 |
 |---|---|
-| 居中卡片 + 紫蓝渐变 + 圆角阴影，能用但没人记得住 | 有气场、有记忆点，一眼认出是人锻造的 |
-| 组件平铺，一个调子从头到尾 | 有节奏的叙事：开场、张弛、高潮、收束 |
-| 什么都想突出，结果什么都不突出 | 一屏一主角，靠对比放大主角 |
-| 千篇一律，可被任何模板替换 | 每个作品都有别人不会做的签名时刻 |
-| AI slop 味重，紫蓝渐变满天飞 | 出货前强制过反 AI 体检，命中即重做 |
+| 紫蓝渐变 + 居中卡片 + 圆角阴影，老三样，能用，但你三秒就忘 | 首屏 3 秒立住气质，看一眼就记住 |
+| 组件一字排开，一个调子干到底 | 像电影一样有起伏：开场、铺垫、高潮、收尾 |
+| 什么都想突出，结果一个都没突出 | 一屏只捧一个主角，其余全往后退 |
+| 换个模板就能把你平替，毫无辨识度 | 每页都有一个别人做不出来的签名瞬间 |
+| 一眼被看穿是 AI 糊弄的 | 出货前过一遍反 AI 体检，糊弄不过关 |
 
 ---
 
@@ -92,41 +92,27 @@ heige-ui 换一种做法：**把界面当成一段有节奏的叙事来导演。
 
 ## 样例画廊 Gallery
 
-一套方法论，跨气质能产出完全不同的作品。每个样例都是用本方法论现场锻造的零依赖单文件。**点开任意预览图即可查看在线 Demo。**
+同一套方法论，十种气质，做出十个完全不同的东西。每个都是现场锻造的零依赖单文件。**点开任意预览图即可看在线 Demo。**
 
 ### 基础气质
 
-<table>
-<tr>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/forge-landing.html"><img src="assets/previews/forge-landing.webp" alt="forge-landing" /></a><p align="center"><b>凶悍 / 工业</b><br>heige-ui 自己的落地页</p></td>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/editorial-journal.html"><img src="assets/previews/editorial-journal.webp" alt="editorial-journal" /></a><p align="center"><b>高定 / 杂志</b><br>独立文化季刊《潮间带》</p></td>
-</tr>
-<tr>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/neon-nightshift.html"><img src="assets/previews/neon-nightshift.webp" alt="neon-nightshift" /></a><p align="center"><b>赛博霓虹</b><br>AI 编程夜班工具</p></td>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/playful-boing.html"><img src="assets/previews/playful-boing.webp" alt="playful-boing" /></a><p align="center"><b>玩具</b><br>习惯养成 App</p></td>
-</tr>
-<tr>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/swiss-ledger.html"><img src="assets/previews/swiss-ledger.webp" alt="swiss-ledger" /></a><p align="center"><b>瑞士极简</b><br>现金流分析产品</p></td>
-<td width="50%"></td>
-</tr>
-</table>
+| 预览 | 气质 | 主题 |
+|:--:|:--|:--|
+| <a href="https://heigeai.github.io/heige-ui/examples/forge-landing.html"><img src="assets/previews/forge-landing.webp" width="400" alt="forge-landing" /></a> | **凶悍 / 工业** | heige-ui 自己的落地页 |
+| <a href="https://heigeai.github.io/heige-ui/examples/editorial-journal.html"><img src="assets/previews/editorial-journal.webp" width="400" alt="editorial-journal" /></a> | **高定 / 杂志** | 独立文化季刊《潮间带》 |
+| <a href="https://heigeai.github.io/heige-ui/examples/neon-nightshift.html"><img src="assets/previews/neon-nightshift.webp" width="400" alt="neon-nightshift" /></a> | **赛博霓虹** | AI 编程夜班工具 |
+| <a href="https://heigeai.github.io/heige-ui/examples/playful-boing.html"><img src="assets/previews/playful-boing.webp" width="400" alt="playful-boing" /></a> | **玩具** | 习惯养成 App |
+| <a href="https://heigeai.github.io/heige-ui/examples/swiss-ledger.html"><img src="assets/previews/swiss-ledger.webp" width="400" alt="swiss-ledger" /></a> | **瑞士极简** | 现金流分析产品 |
 
 ### 年轻 / 潮流向
 
-<table>
-<tr>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/y2k-gaga.html"><img src="assets/previews/y2k-gaga.webp" alt="y2k-gaga" /></a><p align="center"><b>Y2K 千禧辣妹</b><br>Gen-Z 拍照社交 App</p></td>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/brat-noisepark.html"><img src="assets/previews/brat-noisepark.webp" alt="brat-noisepark" /></a><p align="center"><b>brat 酸性极简</b><br>独立音乐节</p></td>
-</tr>
-<tr>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/streetwear-drop.html"><img src="assets/previews/streetwear-drop.webp" alt="streetwear-drop" /></a><p align="center"><b>街头潮牌</b><br>潮牌限量发售</p></td>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/acg-stellar.html"><img src="assets/previews/acg-stellar.webp" alt="acg-stellar" /></a><p align="center"><b>二次元 ACG</b><br>音游手游</p></td>
-</tr>
-<tr>
-<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/wrapped-soundwave.html"><img src="assets/previews/wrapped-soundwave.webp" alt="wrapped-soundwave" /></a><p align="center"><b>Wrapped 撞色</b><br>音乐年度报告</p></td>
-<td width="50%"></td>
-</tr>
-</table>
+| 预览 | 气质 | 主题 |
+|:--:|:--|:--|
+| <a href="https://heigeai.github.io/heige-ui/examples/y2k-gaga.html"><img src="assets/previews/y2k-gaga.webp" width="400" alt="y2k-gaga" /></a> | **Y2K 千禧辣妹** | Gen-Z 拍照社交 App |
+| <a href="https://heigeai.github.io/heige-ui/examples/brat-noisepark.html"><img src="assets/previews/brat-noisepark.webp" width="400" alt="brat-noisepark" /></a> | **brat 酸性极简** | 独立音乐节 |
+| <a href="https://heigeai.github.io/heige-ui/examples/streetwear-drop.html"><img src="assets/previews/streetwear-drop.webp" width="400" alt="streetwear-drop" /></a> | **街头潮牌** | 潮牌限量发售 |
+| <a href="https://heigeai.github.io/heige-ui/examples/acg-stellar.html"><img src="assets/previews/acg-stellar.webp" width="400" alt="acg-stellar" /></a> | **二次元 ACG** | 音游手游 |
+| <a href="https://heigeai.github.io/heige-ui/examples/wrapped-soundwave.html"><img src="assets/previews/wrapped-soundwave.webp" width="400" alt="wrapped-soundwave" /></a> | **Wrapped 撞色** | 音乐年度报告 |
 
 也可以本地预览：
 ```bash
