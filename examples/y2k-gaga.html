@@ -25,7 +25,7 @@
   html{scroll-behavior:smooth}
 
   body{
-    font-family:"Outfit","Noto Sans SC",sans-serif;
+    font-family:"Outfit", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     background:var(--lilac);
     color:var(--ink);
     overflow-x:hidden;
@@ -96,13 +96,12 @@
   ========================================================= */
   nav{
     position:sticky;top:0;z-index:50;
-    backdrop-filter:blur(10px);
-    background:rgba(244,236,255,.55);
+    background:rgba(244,236,255,.92);
     border-bottom:1px solid rgba(36,20,48,.08);
   }
   nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
   .logo{
-    font-family:"Bagel Fat One",cursive;
+    font-family:"Bagel Fat One", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", cursive;
     font-size:1.5rem;letter-spacing:.02em;
   }
   .nav-pill{
@@ -136,11 +135,10 @@
     box-shadow:3px 3px 0 var(--ink);
     transform:rotate(-2deg);
   }
-  .hero-kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime);animation:blink 1.4s steps(1) infinite}
-  @keyframes blink{50%{opacity:.25}}
+  .hero-kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px var(--lime)}
 
   .hero h1{
-    font-family:"Bagel Fat One",cursive;
+    font-family:"Bagel Fat One", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", cursive;
     font-size:clamp(4.8rem, 15vw, 12rem);
     line-height:.84;
     margin:22px 0 6px;
@@ -149,7 +147,7 @@
   .hero h1 .row2{display:block;margin-left:.04em}
 
   .tagline{
-    font-family:"Noto Sans SC",sans-serif;font-weight:900;
+    font-family:"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:900;
     font-size:clamp(1.4rem,3.6vw,2.4rem);
     line-height:1.15;margin-top:18px;
     max-width:14ch;
@@ -165,7 +163,7 @@
   /* glossy 3D bubble button */
   .bubble-btn{
     position:relative;
-    font-family:"Noto Sans SC",sans-serif;font-weight:700;font-size:1.05rem;
+    font-family:"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:700;font-size:1.05rem;
     color:#fff;border:none;cursor:pointer;text-decoration:none;
     padding:17px 34px;border-radius:999px;
     background:
@@ -204,11 +202,10 @@
     background:conic-gradient(from 0deg,
       var(--pink), var(--lime), var(--blue), #e6c2ff, #fff, var(--pink));
     box-shadow:0 24px 60px rgba(127,80,180,.4), inset 0 0 50px rgba(255,255,255,.6);
-    animation:spinSlow 14s linear infinite, hueRoll 8s ease-in-out infinite;
+    animation:spinSlow 18s linear 1 both;
     display:flex;align-items:center;justify-content:center;
   }
-  @keyframes spinSlow{to{transform:rotate(360deg)}}
-  @keyframes hueRoll{50%{filter:hue-rotate(40deg) saturate(1.25)}}
+  @keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
   .holo-disc::before{
     content:"";position:absolute;inset:34px;border-radius:50%;
     background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.95), rgba(255,255,255,.1) 55%, rgba(255,255,255,0) 75%),
@@ -221,10 +218,10 @@
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     box-shadow:inset 0 6px 14px rgba(36,20,48,.12), 0 6px 14px rgba(36,20,48,.18);
     transform:rotate(0deg);
-    animation:spinReverse 14s linear infinite;
+    animation:spinReverse 18s linear 1 both;
   }
-  @keyframes spinReverse{to{transform:rotate(-360deg)}}
-  .disc-core .smile{font-family:"Bagel Fat One";font-size:2.6rem;line-height:1;color:var(--pink)}
+  @keyframes spinReverse{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+  .disc-core .smile{font-family:"Bagel Fat One", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", cursive;font-size:2.6rem;line-height:1;color:var(--pink)}
   .disc-core small{font-family:"Space Mono";font-size:.5rem;letter-spacing:.2em;margin-top:4px;color:#8f95ab}
 
   /* floating tilted photo stickers */
@@ -238,18 +235,18 @@
     text-shadow:0 1px 3px rgba(0,0,0,.5);
   }
   .pic.p1{width:128px;height:158px;top:8px;left:-14px;transform:rotate(-9deg);
-    background:linear-gradient(150deg,var(--blue),#5aa9e0);animation:bob1 5s ease-in-out infinite}
+    background:linear-gradient(150deg,var(--blue),#5aa9e0);animation:bob1 5s ease-in-out 1 both}
   .pic.p2{width:120px;height:120px;bottom:-6px;right:-18px;transform:rotate(8deg);
-    background:linear-gradient(150deg,var(--lime),#a6d600);color:var(--ink);text-shadow:none;animation:bob2 6s ease-in-out infinite}
+    background:linear-gradient(150deg,var(--lime),#a6d600);color:var(--ink);text-shadow:none;animation:bob2 6s ease-in-out 1 both}
   .pic.p3{width:104px;height:138px;bottom:30px;left:6px;transform:rotate(6deg);
-    background:linear-gradient(150deg,#ff9be9,var(--pink));animation:bob1 5.5s ease-in-out infinite}
-  @keyframes bob1{50%{transform:translateY(-12px) rotate(-9deg)}}
-  @keyframes bob2{50%{transform:translateY(-14px) rotate(8deg)}}
+    background:linear-gradient(150deg,#ff9be9,var(--pink));animation:bob1 5.5s ease-in-out 1 both}
+  @keyframes bob1{0%{transform:translateY(0) rotate(-9deg)}50%{transform:translateY(-12px) rotate(-9deg)}100%{transform:translateY(0) rotate(-9deg)}}
+  @keyframes bob2{0%{transform:translateY(0) rotate(8deg)}50%{transform:translateY(-14px) rotate(8deg)}100%{transform:translateY(0) rotate(8deg)}}
 
   /* sparkles */
   .spark{position:absolute;color:#fff;pointer-events:none;filter:drop-shadow(0 0 6px var(--pink))}
-  @keyframes twinkle{0%,100%{opacity:.2;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1) rotate(20deg)}}
-  .spark svg{display:block;animation:twinkle 2.6s ease-in-out infinite}
+  @keyframes twinkle{0%{opacity:.2;transform:scale(.6) rotate(0)}60%{opacity:1;transform:scale(1) rotate(20deg)}100%{opacity:1;transform:scale(1) rotate(20deg)}}
+  .spark svg{display:block;animation:twinkle 1.4s ease-in-out 1 both}
 
   /* =========================================================
      02 BREATH — quiet ticker line
@@ -261,7 +258,7 @@
   }
   .ticker{display:flex;gap:42px;white-space:nowrap;width:max-content;animation:slide 22s linear infinite}
   @keyframes slide{to{transform:translateX(-50%)}}
-  .ticker span{font-family:"Space Mono";font-size:.92rem;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:42px}
+  .ticker span{font-family:"Space Mono", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", monospace;font-size:.92rem;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:42px}
   .ticker b{color:var(--lime)}
   .ticker .pin{color:var(--blue)}
 
@@ -272,7 +269,7 @@
   .sec-head{margin-bottom:46px}
   .sec-head .label{font-family:"Space Mono";font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--pink)}
   .sec-head h2{
-    font-family:"Bagel Fat One",cursive;
+    font-family:"Bagel Fat One", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", cursive;
     font-size:clamp(2.6rem,7vw,5rem);line-height:.9;margin-top:10px;
   }
 
@@ -283,10 +280,10 @@
     box-shadow:6px 6px 0 var(--ink);
   }
   .step .num{
-    font-family:"Bagel Fat One";font-size:3.4rem;line-height:1;
+    font-family:"Bagel Fat One", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", cursive;font-size:3.4rem;line-height:1;
     -webkit-text-stroke:2px var(--ink);
   }
-  .step h3{font-family:"Noto Sans SC";font-weight:900;font-size:1.55rem;margin:6px 0 8px}
+  .step h3{font-family:"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:900;font-size:1.55rem;margin:6px 0 8px}
   .step p{color:#5a4868;font-weight:300;font-size:1rem;max-width:40ch}
 
   /* step 1 = the big hero card of this section */
@@ -307,7 +304,7 @@
     display:flex;align-items:center;justify-content:center;
   }
   .step.big .big-art .countdown{
-    font-family:"Bagel Fat One";font-size:4.4rem;color:#fff;text-shadow:0 3px 0 rgba(36,20,48,.35)}
+    font-family:"Bagel Fat One", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", cursive;font-size:4.4rem;color:#fff;text-shadow:0 3px 0 rgba(36,20,48,.35)}
 
   .step.lime{background:linear-gradient(160deg,#fff,#f7ffd6)}
   .step.lime .num{color:#8fb300;-webkit-text-stroke:2px #8fb300}
@@ -334,7 +331,7 @@
   .climax .label{font-family:"Space Mono";font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:var(--lime)}
   .wordmark-wrap{position:relative;display:inline-block;margin:18px auto 0}
   .wordmark{
-    font-family:"Bagel Fat One",cursive;
+    font-family:"Bagel Fat One", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", cursive;
     font-size:clamp(6rem,26vw,22rem);line-height:.8;
     letter-spacing:-.02em;
     position:relative;z-index:2;
@@ -346,19 +343,19 @@
     width:140px;height:140px;border-radius:50%;
     background:conic-gradient(from 60deg, var(--lime), var(--blue), #e6c2ff, var(--pink), var(--lime));
     background-size:200% 200%;
-    animation:hueRoll 5s ease-in-out infinite, floatSticker 4s ease-in-out infinite;
+    animation:floatSticker 4s ease-in-out 1 both;
     box-shadow:0 14px 34px rgba(0,0,0,.45), inset 0 0 26px rgba(255,255,255,.6);
     display:flex;align-items:center;justify-content:center;
     transform:rotate(-12deg);
     border:5px solid #fff;
   }
-  @keyframes floatSticker{50%{transform:translateY(-14px) rotate(-12deg)}}
+  @keyframes floatSticker{0%{transform:translateY(0) rotate(-12deg)}50%{transform:translateY(-14px) rotate(-12deg)}100%{transform:translateY(0) rotate(-12deg)}}
   .holo-sticker span{
-    font-family:"Noto Sans SC";font-weight:900;font-size:1.5rem;color:#fff;
+    font-family:"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:900;font-size:1.5rem;color:#fff;
     text-shadow:0 2px 4px rgba(0,0,0,.4);line-height:1;text-align:center;transform:rotate(12deg)
   }
   .climax-line{
-    font-family:"Noto Sans SC";font-weight:700;font-size:clamp(1.3rem,4vw,2.2rem);
+    font-family:"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:700;font-size:clamp(1.3rem,4vw,2.2rem);
     margin-top:34px;
   }
   .climax-line .holo{font-weight:900}
@@ -372,7 +369,7 @@
   ========================================================= */
   .cta{padding:96px 0 70px;text-align:center}
   .cta h2{
-    font-family:"Bagel Fat One",cursive;
+    font-family:"Bagel Fat One", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", cursive;
     font-size:clamp(3rem,9vw,7rem);line-height:.86;
   }
   .cta p{color:#5a4868;font-weight:300;margin:20px auto 34px;max-width:32ch;font-size:1.1rem}
@@ -380,7 +377,7 @@
   .store-btn{
     display:inline-flex;align-items:center;gap:12px;text-decoration:none;
     background:var(--ink);color:#fff;border-radius:18px;padding:14px 24px;
-    font-family:"Noto Sans SC";font-weight:700;
+    font-family:"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:700;
     border:3px solid var(--ink);
     transition:transform .18s cubic-bezier(.34,1.56,.64,1);
   }

@@ -2,6 +2,21 @@
 
 本项目所有重要变更记录于此。
 
+## [1.0.1] - 2026-05-28
+
+生产可用性加固，修复全部样例的两类问题。
+
+### 字体
+- 为每个样例的中文字体栈补上系统兜底（PingFang SC / Microsoft YaHei / Hiragino Sans GB），Google Fonts 加载失败或被墙时中文也能正常显示，不再崩坏。
+- acg-stellar：把渲染中文会出错（缺字 / 异体）的日文字体（Mochiy Pop One、Zen Maru Gothic）换成简体中文显示字体 ZCOOL KuaiLe + 系统兜底。
+- 拉丁展示字体（Anton、Bagel Fat One、Archivo 等）补系统兜底。
+
+### 性能
+- 移除全部 backdrop-filter；不再对模糊元素做位移 / 缩放动画。
+- 把动画化的 text-shadow / box-shadow 发光改为静态发光，去掉逐帧重绘。
+- 每个样例的无限动画收敛到签名动画，且只动 transform / opacity（合成器友好）。
+- 移除 forge 常驻的 requestAnimationFrame 光标特效；wrapped 计数动画到目标值即停。
+
 ## [1.0.0] - 2026-05-28
 
 首个版本。

@@ -15,8 +15,8 @@
     --navy:#2d2a4a;
     --cream:#fff8ef;
     --ink-shadow:#2d2a4a;
-    --display:"Baloo 2","Noto Sans SC",system-ui,sans-serif;
-    --body:"Nunito","Noto Sans SC",system-ui,sans-serif;
+    --display:"Baloo 2","Nunito","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    --body:"Nunito","Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   }
 
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -152,8 +152,8 @@
     padding:6px 13px;box-shadow:4px 4px 0 var(--ink-shadow);
     z-index:4;
   }
-  .sticker.s1{top:6px;right:34%;transform:rotate(7deg);background:var(--yellow);animation:floaty 4.5s ease-in-out infinite;}
-  .sticker.s2{bottom:40px;left:-6px;transform:rotate(-8deg);background:var(--mint);animation:floaty 5.5s ease-in-out infinite .6s;}
+  .sticker.s1{top:6px;right:34%;transform:rotate(7deg);background:var(--yellow);animation:floatIn .7s ease-out both;}
+  .sticker.s2{bottom:40px;left:-6px;transform:rotate(-8deg);background:var(--mint);animation:floatIn .7s ease-out .25s both;}
 
   /* ---- the mascot (hero) ---- */
   .mascot-stage{position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:340px;}
@@ -201,7 +201,7 @@
   .blob .foot.l{left:38px;}
   .blob .foot.r{right:38px;}
   /* sparkle */
-  .blob .sparkle{position:absolute;top:-22px;right:14px;font-family:var(--display);font-weight:800;color:var(--yellow);font-size:30px;-webkit-text-stroke:3px var(--navy);animation:twinkle 2.2s ease-in-out infinite;}
+  .blob .sparkle{position:absolute;top:-22px;right:14px;font-family:var(--display);font-weight:800;color:var(--yellow);font-size:30px;-webkit-text-stroke:3px var(--navy);animation:twinkle 1.6s ease-in-out 1 both;}
 
   /* ============ BREATH ============ */
   .breath{
@@ -248,7 +248,7 @@
   .mini-blob{
     width:64px;height:60px;background:var(--coral);border:3px solid var(--navy);
     border-radius:54% 46% 58% 42% / 60% 58% 42% 40%;
-    margin-top:22px;position:relative;animation:bounce 1.5s cubic-bezier(.5,0,.5,1) infinite;
+    margin-top:22px;position:relative;animation:bounce 1.5s cubic-bezier(.5,0,.5,1) 1 both;
   }
   .mini-blob::before,.mini-blob::after{content:"";position:absolute;top:20px;width:8px;height:11px;border-radius:50%;background:var(--navy);}
   .mini-blob::before{left:16px;}
@@ -354,7 +354,7 @@
     100%{transform:translate(0,0);}
   }
   @keyframes twinkle{0%,100%{transform:scale(1) rotate(0);opacity:1;}50%{transform:scale(1.3) rotate(20deg);opacity:.7;}}
-  @keyframes floaty{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-12px) rotate(var(--r,0deg));}}
+  @keyframes floatIn{0%{transform:translateY(14px) rotate(var(--r,0deg)) scale(.9);opacity:0;}60%{transform:translateY(-6px) rotate(var(--r,0deg)) scale(1.02);opacity:1;}100%{transform:translateY(0) rotate(var(--r,0deg)) scale(1);opacity:1;}}
   .sticker.s1{--r:7deg;}
   .sticker.s2{--r:-8deg;}
   @keyframes wiggle{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}

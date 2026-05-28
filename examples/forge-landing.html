@@ -13,8 +13,8 @@
     --paper:#f4efe6; --paper-dim:#9a948a; --steel:#52525c;
     --ember:#ff4d12; --ember-2:#ff8a00; --spark:#ffd23f;
     --line:#26262c;
-    --display:"Archivo","Noto Sans SC",sans-serif;
-    --body:"Space Grotesk","Noto Sans SC",sans-serif;
+    --display:"Archivo","Noto Sans SC","PingFang SC","Microsoft YaHei","Hiragino Sans GB",Helvetica,Arial,sans-serif;
+    --body:"Space Grotesk","Noto Sans SC","PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
     --mono:"Space Mono",ui-monospace,monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -41,7 +41,7 @@
 
   /* ---------- top bar ---------- */
   header{position:fixed;top:0;left:0;right:0;z-index:50;
-    backdrop-filter:blur(8px);background:rgba(11,11,13,.55);border-bottom:1px solid transparent;transition:border-color .3s}
+    background:rgba(11,11,13,.92);border-bottom:1px solid transparent;transition:border-color .3s}
   header.scrolled{border-color:var(--line)}
   .bar{display:flex;align-items:center;justify-content:space-between;height:64px}
   .logo{font-family:var(--mono);font-weight:700;letter-spacing:.05em;font-size:15px;display:flex;align-items:center;gap:9px}
@@ -52,8 +52,7 @@
   .hero{position:relative;padding:168px 0 96px;overflow:hidden}
   .hero .glow{position:absolute;top:6%;right:-12%;width:62vw;height:62vw;max-width:780px;max-height:780px;
     background:radial-gradient(circle,rgba(255,77,18,.30),rgba(255,138,0,.07) 42%,transparent 66%);
-    filter:blur(8px);z-index:0;animation:breathe 7s ease-in-out infinite}
-  @keyframes breathe{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.12);opacity:1}}
+    filter:blur(8px);z-index:0;opacity:.92}
   .hero .inner{position:relative;z-index:1}
   .kicker{display:flex;align-items:center;gap:14px;color:var(--ember);margin-bottom:30px}
   .kicker span:last-child{color:var(--paper-dim)}
@@ -66,8 +65,7 @@
   .lede b{color:var(--paper);font-weight:700}
   .scroll-cue{margin-top:64px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--steel);
     display:flex;align-items:center;gap:12px;text-transform:uppercase}
-  .scroll-cue .dash{width:40px;height:1px;background:var(--steel);transform-origin:left;animation:slide 2.2s ease-in-out infinite}
-  @keyframes slide{0%,100%{transform:scaleX(.4);opacity:.4}50%{transform:scaleX(1);opacity:1}}
+  .scroll-cue .dash{width:40px;height:1px;background:var(--steel);transform-origin:left}
 
   /* ---------- breath / manifesto ---------- */
   .breath{padding:120px 0;border-top:1px solid var(--line)}
@@ -142,10 +140,6 @@
   .fbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
     font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--steel);text-transform:uppercase}
   .fbar b{color:var(--paper)}
-
-  /* spark cursor */
-  .spark{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--spark);
-    box-shadow:0 0 10px var(--ember-2);pointer-events:none;z-index:9998;opacity:0;transition:opacity .4s}
 
   @media(max-width:760px){
     .vgrid{grid-template-columns:1fr}
@@ -276,8 +270,6 @@
   </div>
 </footer>
 
-<div class="spark" id="spark"></div>
-
 <script>
   // header border on scroll
   const hdr=document.getElementById('hdr');
@@ -291,15 +283,6 @@
     forges.forEach(f=>io.observe(f));
     // safety net: never leave a forge stuck hidden (e.g. no scroll / static capture)
     setTimeout(()=>forges.forEach(f=>f.classList.add('in')),1600);
-  }
-
-  // signature: ember spark trailing cursor (desktop, motion-ok only)
-  const spark=document.getElementById('spark');
-  const okMotion=!matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if(okMotion && matchMedia('(pointer:fine)').matches){
-    let x=0,y=0,tx=0,ty=0;
-    addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;spark.style.opacity=.9},{passive:true});
-    (function loop(){x+=(tx-x)*.18;y+=(ty-y)*.18;spark.style.transform=`translate(${x-3}px,${y-3}px)`;requestAnimationFrame(loop)})();
   }
 </script>
 </body>

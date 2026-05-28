@@ -18,7 +18,7 @@
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
-    font-family:'Noto Sans SC',sans-serif;
+    font-family:'Noto Sans SC', "PingFang SC", "Microsoft YaHei", sans-serif;
     background:var(--teal);
     color:var(--white);
     overflow-x:hidden;
@@ -37,8 +37,8 @@
     scroll-snap-align:start;
   }
   .mono{font-family:'Space Mono',monospace;letter-spacing:.04em;}
-  .display{font-family:'Anton','Archivo',sans-serif;line-height:.84;letter-spacing:-.01em;}
-  .archivo{font-family:'Archivo',sans-serif;}
+  .display{font-family:'Anton', 'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;line-height:.84;letter-spacing:-.01em;}
+  .archivo{font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;}
 
   /* ---------- kicker label ---------- */
   .kicker{
@@ -63,12 +63,12 @@
 
   /* giant stat */
   .stat{
-    font-family:'Anton',sans-serif;
+    font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     font-size:clamp(82px,21vw,200px);
     line-height:.8;letter-spacing:-.02em;
     display:block;
   }
-  .unit{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(20px,5vw,46px);letter-spacing:-.01em;}
+  .unit{font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:900;font-size:clamp(20px,5vw,46px);letter-spacing:-.01em;}
 
   /* ===== reveal ===== */
   .reveal{opacity:0;transform:translateY(34px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
@@ -84,7 +84,7 @@
   .cover-top{display:flex;justify-content:space-between;align-items:flex-start;}
   .cover-mid{margin-top:auto;margin-bottom:auto;}
   .cover-title{
-    font-family:'Anton',sans-serif;
+    font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     font-size:clamp(64px,17vw,250px);
     line-height:.82;letter-spacing:-.02em;
     text-transform:uppercase;
@@ -92,7 +92,7 @@
   .cover-title em{font-style:normal;display:inline-block;transform:rotate(-4deg);}
   .cover-sub{
     margin-top:clamp(22px,4vw,42px);
-    font-weight:900;font-family:'Archivo',sans-serif;
+    font-weight:900;font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     font-size:clamp(18px,3.4vw,34px);max-width:18ch;color:var(--white);
   }
   .cover-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;}
@@ -100,14 +100,14 @@
     font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.24em;text-transform:uppercase;
     display:flex;align-items:center;gap:10px;color:var(--lime);
   }
-  .arrowdot{width:9px;height:9px;border-radius:50%;background:var(--lime);animation:bob 1.4s ease-in-out infinite;}
+  .arrowdot{width:9px;height:9px;border-radius:50%;background:var(--lime);animation:bob 1.4s ease-in-out 3;}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 
   /* ============ 01 MINUTES (SHOWPIECE) ============ */
   #minutes{background:var(--coral);color:var(--cream);}
   .big-wrap{margin-top:auto;}
   #minutes .stat{font-size:clamp(74px,26vw,260px);color:var(--cream);}
-  #minutes .lede{font-weight:900;font-family:'Archivo',sans-serif;font-size:clamp(22px,5vw,52px);line-height:1.04;max-width:14ch;}
+  #minutes .lede{font-weight:900;font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(22px,5vw,52px);line-height:1.04;max-width:14ch;}
   .marquee{
     margin-top:auto;
     margin-left:calc(-1*clamp(28px,6vw,90px));
@@ -117,7 +117,7 @@
   }
   .marquee .track{display:inline-block;animation:scrollx 22s linear infinite;}
   .marquee .track span{
-    font-family:'Anton',sans-serif;font-size:clamp(26px,5vw,52px);
+    font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(26px,5vw,52px);
     text-transform:uppercase;padding:0 .35em;color:var(--cream);
   }
   .marquee .track span b{color:var(--coral);-webkit-text-stroke:2px var(--cream);}
@@ -126,7 +126,7 @@
   /* ============ 02 ARTIST (breath) ============ */
   #artist{background:var(--cobalt);color:var(--lemon);}
   #artist .name{
-    font-family:'Anton',sans-serif;font-size:clamp(56px,15vw,190px);line-height:.82;
+    font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(56px,15vw,190px);line-height:.82;
     text-transform:uppercase;color:var(--lemon);letter-spacing:-.01em;
   }
   .plays-row{display:flex;gap:clamp(26px,6vw,80px);flex-wrap:wrap;margin-top:clamp(26px,5vw,52px);}
@@ -134,7 +134,7 @@
     border:2px solid var(--lemon);border-radius:999px;padding:7px 18px;
     font-family:'Space Mono',monospace;font-size:clamp(12px,1.6vw,16px);letter-spacing:.1em;
   }
-  .ministat .n{font-family:'Anton',sans-serif;font-size:clamp(40px,8vw,90px);color:var(--white);line-height:.8;}
+  .ministat .n{font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(40px,8vw,90px);color:var(--white);line-height:.8;}
   .ministat .l{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.18em;opacity:.85;margin-top:8px;text-transform:uppercase;}
 
   /* ============ 03 NIGHT LOOP (build) ============ */
@@ -142,7 +142,7 @@
   #night .stat{color:var(--acid);}
   .night-song{
     display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;
-    font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(28px,7vw,70px);
+    font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:900;font-size:clamp(28px,7vw,70px);
     color:var(--white);line-height:1;
   }
   .night-song .by{color:var(--acid);font-size:clamp(15px,2.6vw,26px);font-weight:700;}
@@ -151,15 +151,15 @@
     border:2px solid var(--acid);border-radius:999px;padding:8px 20px;margin-top:6px;
     font-family:'Space Mono',monospace;font-size:clamp(13px,1.8vw,17px);letter-spacing:.08em;
   }
-  .clock .pulse{width:10px;height:10px;border-radius:50%;background:var(--acid);animation:pulse 1.3s ease-in-out infinite;}
-  .loop-n{font-family:'Anton',sans-serif;color:var(--acid);font-size:clamp(40px,9vw,80px);line-height:.8;}
-  .loop-u{font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(16px,3vw,28px);}
+  .clock .pulse{width:10px;height:10px;border-radius:50%;background:var(--acid);animation:pulse 1.3s ease-in-out 3;}
+  .loop-n{font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;color:var(--acid);font-size:clamp(40px,9vw,80px);line-height:.8;}
+  .loop-u{font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:900;font-size:clamp(16px,3vw,28px);}
   @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
 
   /* ============ 04 KEYWORDS (build) ============ */
   #keywords{background:var(--lemon);color:var(--ink);}
   .kw-cloud{display:flex;flex-wrap:wrap;align-items:baseline;gap:clamp(8px,2vw,26px);margin-top:auto;}
-  .kw{font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.86;letter-spacing:-.01em;}
+  .kw{font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;text-transform:uppercase;line-height:.86;letter-spacing:-.01em;}
   .kw.xl{font-size:clamp(64px,18vw,210px);}
   .kw.lg{font-size:clamp(40px,11vw,130px);}
   .kw.md{font-size:clamp(28px,7vw,84px);color:var(--cobalt);}
@@ -168,34 +168,34 @@
 
   /* ============ 05 PERSONA (climax) ============ */
   #persona{background:var(--magenta);color:var(--white);}
-  #persona .lead-in{font-weight:900;font-family:'Archivo',sans-serif;font-size:clamp(16px,3vw,28px);opacity:.92;}
+  #persona .lead-in{font-weight:900;font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(16px,3vw,28px);opacity:.92;}
   .persona-name{
-    font-family:'Anton',sans-serif;font-size:clamp(58px,18vw,230px);line-height:.8;
+    font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(58px,18vw,230px);line-height:.8;
     text-transform:uppercase;letter-spacing:-.02em;
     margin:clamp(14px,3vw,30px) 0;
   }
   .persona-name span{display:block;}
   .persona-name .hl{color:var(--lemon);}
-  .persona-desc{font-weight:700;font-family:'Archivo',sans-serif;font-size:clamp(16px,3vw,30px);max-width:24ch;line-height:1.25;}
+  .persona-desc{font-weight:700;font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(16px,3vw,30px);max-width:24ch;line-height:1.25;}
   .top1{display:flex;align-items:center;gap:14px;margin-top:clamp(24px,4vw,48px);flex-wrap:wrap;}
   .badge{
-    background:var(--white);color:var(--magenta);font-family:'Anton',sans-serif;
+    background:var(--white);color:var(--magenta);font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     font-size:clamp(20px,4vw,40px);padding:4px 20px;border-radius:6px;transform:rotate(-2deg);text-transform:uppercase;
   }
 
   /* ============ 06 SHARE (close) ============ */
   #share{background:var(--acid);color:var(--ink);text-align:left;}
-  .share-head{font-family:'Anton',sans-serif;font-size:clamp(46px,12vw,150px);line-height:.84;text-transform:uppercase;}
+  .share-head{font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(46px,12vw,150px);line-height:.84;text-transform:uppercase;}
   .recap-strip{
     display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:clamp(28px,5vw,52px) 0;
     background:var(--ink);border:3px solid var(--ink);
   }
   .recap-strip .cell{background:var(--acid);padding:clamp(16px,3vw,26px);}
-  .recap-strip .cell .n{font-family:'Anton',sans-serif;font-size:clamp(30px,7vw,64px);line-height:.82;}
+  .recap-strip .cell .n{font-family:'Anton', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-size:clamp(30px,7vw,64px);line-height:.82;}
   .recap-strip .cell .l{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:8px;opacity:.75;}
   .share-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
   .btn{
-    font-family:'Archivo',sans-serif;font-weight:900;font-size:clamp(16px,2.6vw,22px);
+    font-family:'Archivo', "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;font-weight:900;font-size:clamp(16px,2.6vw,22px);
     background:var(--ink);color:var(--acid);border:none;border-radius:999px;
     padding:18px 38px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:12px;
     transition:transform .18s ease, background .18s ease;
@@ -294,7 +294,7 @@
     <div style="margin-top:auto;">
       <div class="clock reveal d1"><span class="pulse"></span>凌晨 1:00 — 3:00 出没</div>
       <div class="night-song reveal d2" style="margin-top:18px;">达拉崩吧<span class="by">/ 周深</span></div>
-      <p class="reveal d3" style="margin-top:24px;font-family:'Archivo';font-weight:900;font-size:clamp(15px,2.6vw,26px);max-width:22ch;line-height:1.2;color:#fff;">
+      <p class="reveal d3" style="margin-top:24px;font-family:'Archivo', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;font-weight:900;font-size:clamp(15px,2.6vw,26px);max-width:22ch;line-height:1.2;color:#fff;">
         你把它在深夜单曲循环了 <span class="loop-n">203</span> <span class="loop-u">遍。</span>
       </p>
       <p class="reveal d4 mono" style="margin-top:22px;font-size:13px;letter-spacing:.1em;opacity:.7;">没人知道你为什么循环它，但声波记得每一次。</p>

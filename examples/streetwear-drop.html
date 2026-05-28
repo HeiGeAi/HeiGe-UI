@@ -20,7 +20,7 @@
   body{
     background:var(--black);
     color:var(--off);
-    font-family:"Noto Sans SC",sans-serif;
+    font-family:"Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
     position:relative;
@@ -39,8 +39,8 @@
   ::selection{background:var(--orange);color:var(--black)}
 
   .mono{font-family:"Space Mono",monospace}
-  .anton{font-family:"Anton",sans-serif}
-  .archivo{font-family:"Archivo",sans-serif;font-weight:900}
+  .anton{font-family:"Anton", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Arial Narrow", sans-serif}
+  .archivo{font-family:"Archivo", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Helvetica, sans-serif;font-weight:900}
 
   /* caution tape */
   .tape{
@@ -111,7 +111,7 @@
   }
   .topbar .dot{color:var(--orange)}
   .live-pill{display:inline-flex;align-items:center;gap:7px;color:var(--yellow)}
-  .live-pill i{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 0 var(--orange);animation:pulse 1.6s infinite}
+  .live-pill i{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 3px rgba(255,91,0,.25);opacity:1;animation:pulse 1.6s infinite}
 
   .hero-stage{flex:1;position:relative;display:flex;align-items:center}
   /* giant bleeding wordmark */
@@ -388,7 +388,7 @@
   .foot-links a:hover{color:var(--orange)}
   .foot-bottom{margin-top:26px;color:#3a3a3a;text-transform:uppercase}
 
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,91,0,.7)}70%{box-shadow:0 0 0 9px rgba(255,91,0,0)}100%{box-shadow:0 0 0 0 rgba(255,91,0,0)}}
+  @keyframes pulse{0%{opacity:1}70%{opacity:.35}100%{opacity:1}}
   @keyframes march{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
   /* ===== RESPONSIVE ===== */
