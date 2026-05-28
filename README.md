@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.1-ff4d12.svg)
+![Version](https://img.shields.io/badge/version-1.0.2-ff4d12.svg)
 ![Claude](https://img.shields.io/badge/Claude-Skill-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -205,6 +205,7 @@ heige-ui/
 ├── references/                   # 设计资产
 │   ├── aesthetic-directions.md   # 七种气质方向库（每种给到具体打法）
 │   ├── anti-slop-checklist.md    # 反 AI 体检清单（交付门槛）
+│   ├── production-checklist.md   # 生产铁律（字体兜底 / 零孤字 / 性能）
 │   └── pacing-templates.md       # 节奏曲线模板（各类页面的张弛排布）
 ├── examples/                     # 同一套方法论 × 十种气质的样例画廊
 │   ├── forge-landing.html
