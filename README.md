@@ -12,6 +12,10 @@
 
 [这是什么](#这是什么-what-is-this) • [方法论](#核心方法论-五道锻造工序) • [样例画廊](#样例画廊-gallery) • [快速开始](#快速开始-quick-start) • [使用指南](#使用指南-usage-guide)
 
+<br>
+
+<a href="https://heigeai.github.io/heige-ui/examples/forge-landing.html"><img src="assets/previews/forge-landing.webp" width="92%" alt="heige-ui · 界面锻造系统" /></a>
+
 </div>
 
 ---
@@ -88,29 +92,43 @@ heige-ui 换一种做法：**把界面当成一段有节奏的叙事来导演。
 
 ## 样例画廊 Gallery
 
-一套方法论，跨气质能产出完全不同的作品。每个样例都是用本方法论现场锻造的零依赖单文件，打开即看效果。
+一套方法论，跨气质能产出完全不同的作品。每个样例都是用本方法论现场锻造的零依赖单文件。**点开任意预览图即可查看在线 Demo。**
 
-**基础气质**
+### 基础气质
 
-| 样例 | 气质 | 主题 |
-|---|---|---|
-| [`forge-landing.html`](examples/forge-landing.html) | 凶悍/工业 | heige-ui 自己的落地页 |
-| [`editorial-journal.html`](examples/editorial-journal.html) | 高定/杂志 | 独立文化季刊《潮间带》 |
-| [`neon-nightshift.html`](examples/neon-nightshift.html) | 赛博霓虹 | AI 编程夜班工具 |
-| [`playful-boing.html`](examples/playful-boing.html) | 玩具 | 习惯养成 App |
-| [`swiss-ledger.html`](examples/swiss-ledger.html) | 瑞士极简 | 现金流分析产品 |
+<table>
+<tr>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/forge-landing.html"><img src="assets/previews/forge-landing.webp" alt="forge-landing" /></a><p align="center"><b>凶悍 / 工业</b><br>heige-ui 自己的落地页</p></td>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/editorial-journal.html"><img src="assets/previews/editorial-journal.webp" alt="editorial-journal" /></a><p align="center"><b>高定 / 杂志</b><br>独立文化季刊《潮间带》</p></td>
+</tr>
+<tr>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/neon-nightshift.html"><img src="assets/previews/neon-nightshift.webp" alt="neon-nightshift" /></a><p align="center"><b>赛博霓虹</b><br>AI 编程夜班工具</p></td>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/playful-boing.html"><img src="assets/previews/playful-boing.webp" alt="playful-boing" /></a><p align="center"><b>玩具</b><br>习惯养成 App</p></td>
+</tr>
+<tr>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/swiss-ledger.html"><img src="assets/previews/swiss-ledger.webp" alt="swiss-ledger" /></a><p align="center"><b>瑞士极简</b><br>现金流分析产品</p></td>
+<td width="50%"></td>
+</tr>
+</table>
 
-**年轻/潮流向**
+### 年轻 / 潮流向
 
-| 样例 | 气质 | 主题 |
-|---|---|---|
-| [`y2k-gaga.html`](examples/y2k-gaga.html) | Y2K 千禧辣妹 | Gen-Z 拍照社交 App |
-| [`brat-noisepark.html`](examples/brat-noisepark.html) | brat 酸性极简 | 独立音乐节 |
-| [`streetwear-drop.html`](examples/streetwear-drop.html) | 街头潮牌 | 潮牌限量发售 |
-| [`acg-stellar.html`](examples/acg-stellar.html) | 二次元 ACG | 音游手游 |
-| [`wrapped-soundwave.html`](examples/wrapped-soundwave.html) | Wrapped 撞色 | 音乐年度报告 |
+<table>
+<tr>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/y2k-gaga.html"><img src="assets/previews/y2k-gaga.webp" alt="y2k-gaga" /></a><p align="center"><b>Y2K 千禧辣妹</b><br>Gen-Z 拍照社交 App</p></td>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/brat-noisepark.html"><img src="assets/previews/brat-noisepark.webp" alt="brat-noisepark" /></a><p align="center"><b>brat 酸性极简</b><br>独立音乐节</p></td>
+</tr>
+<tr>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/streetwear-drop.html"><img src="assets/previews/streetwear-drop.webp" alt="streetwear-drop" /></a><p align="center"><b>街头潮牌</b><br>潮牌限量发售</p></td>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/acg-stellar.html"><img src="assets/previews/acg-stellar.webp" alt="acg-stellar" /></a><p align="center"><b>二次元 ACG</b><br>音游手游</p></td>
+</tr>
+<tr>
+<td width="50%"><a href="https://heigeai.github.io/heige-ui/examples/wrapped-soundwave.html"><img src="assets/previews/wrapped-soundwave.webp" alt="wrapped-soundwave" /></a><p align="center"><b>Wrapped 撞色</b><br>音乐年度报告</p></td>
+<td width="50%"></td>
+</tr>
+</table>
 
-本地预览：
+也可以本地预览：
 ```bash
 git clone https://github.com/HeiGeAi/heige-ui.git
 cd heige-ui && python3 -m http.server 8753
@@ -212,6 +230,8 @@ heige-ui/
 │   ├── streetwear-drop.html
 │   ├── acg-stellar.html
 │   └── wrapped-soundwave.html
+├── assets/
+│   └── previews/                 # README 用的样例预览图（WebP）
 ├── LICENSE
 ├── CHANGELOG.md
 └── README.md
