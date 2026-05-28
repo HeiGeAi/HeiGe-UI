@@ -183,16 +183,17 @@ heige-ui 会带你走完整个锻造流程：
 
 ## 平台兼容性 Platform Compatibility
 
-| 平台 | 文件读写 | 用户交互 | 安装方式 |
-|------|---------|---------|---------|
-| **Claude Code** | ✅ | ✅ | skill 目录 |
-| **Cursor** | ✅ | ✅ | skill 目录 |
-| **Windsurf** | ✅ | ✅ | skill 目录 |
-| **Cline** | ✅ | ✅ | skill 目录 |
-| **Aider / OpenClaw / Hermes** | ✅ | ⚠️ | System prompt |
-| **ChatGPT / Claude.ai** | ❌ | ✅ | 自定义指令 |
+heige-ui 本质是一套让 AI 写好前端代码的方法论，不绑定任何工具的文件系统或插件能力。**只要这个 AI 能写代码，它就能用 heige-ui。** 平台之间的差别只有两点：怎么装，以及输出怎么拿到。
 
-输出为标准 HTML / React 代码，不依赖特定运行时，理论上任何能写代码的 AI 助手都能用。
+| 平台 | 能不能用 | 安装方式 | 输出怎么拿 |
+|------|:---:|---------|-----------|
+| **Claude Code / Cursor / Windsurf / Cline** | ✅ | 放进 skill 目录 | 自动写成文件 |
+| **Aider / OpenClaw / Hermes** | ✅ | 贴进 system prompt | 自动写成文件 |
+| **ChatGPT / Claude.ai / 其他 AI** | ✅ | 把 SKILL.md 贴成自定义指令 | 复制代码块，自己存成 .html |
+
+没有**不兼容**的平台，只有**装法不同**的平台。输出统一是标准 HTML / CSS / JS（或 React），不依赖任何运行时。
+
+> 提示：深度打法都在 `references/` 里。支持 skill 的平台会按需自动读取；纯贴 prompt 的平台，把 `SKILL.md` 和 `references/` 一起贴上，方法论最完整。
 
 ---
 
