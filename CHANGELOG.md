@@ -2,6 +2,15 @@
 
 本项目所有重要变更记录于此。
 
+## [1.1.0] - 2026-06-24
+
+新增第 8 种气质方向，把当代 AI 产品质感沉淀进方法论。
+
+- 新增气质方向 8「AI 原生 / 暗色科技（Dark Tech）」写进 `references/aesthetic-directions.md`：近黑基底 + 克制单色高级霓虹强调色 + 网格辉光，对标 Linear / Vercel / Runway / Anthropic。给四套可直接抄的配方（深空电青 / Aurora 极光 / 碳黑电绿 / 午夜蓝），并讲清和方向 5（复古赛博）的区别：当代克制 vs 怀旧霓虹。
+- 新增旗舰样例 `examples/darktech-console.html`：虚构 Agent 编排控制台 HELM，碳黑×电绿，签名时刻是「8 个 Agent 同时干活的实时编排面板」，节奏走 Hero 冲击 → 信任条呼吸 → 三能力 → 控制台高潮 → 数据 → CTA 收束。
+- 守生产铁律：辉光只用 box-shadow / radial-gradient，不碰 backdrop-filter；中文字体系统兜底；大标题零孤字；动画只动 transform / opacity。
+- README / SKILL 同步：气质方向 7 → 8，样例画廊 10 → 11。
+
 ## [1.0.2] - 2026-05-29
 
 把上一轮踩的生产坑沉淀进方法论本体。
