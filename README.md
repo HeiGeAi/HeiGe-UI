@@ -14,7 +14,7 @@
 
 <br>
 
-<a href="https://heigeai.github.io/HeiGe-UI/examples/forge-landing.html"><img src="assets/previews/forge-landing.webp" width="92%" alt="HeiGe-UI · 界面锻造系统" /></a>
+<a href="https://heigeai.github.io/HeiGe-UI/examples/darktech-console.html"><img src="assets/previews/darktech-console.webp" width="92%" alt="HeiGe-UI · 界面锻造系统" /></a>
 
 </div>
 
