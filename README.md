@@ -224,6 +224,12 @@ HeiGe-UI/
 │   └── wrapped-soundwave.html
 ├── assets/
 │   └── previews/                 # README 用的样例预览图（WebP）
+├── tests/
+│   └── examples.test.mjs         # 样例与文档一致性回归测试
+├── .github/
+│   └── workflows/ci.yml          # GitHub Actions CI
+├── package.json                  # 测试脚本与 Node 版本声明
+├── SECURITY.md                   # 私密安全报告入口
 ├── LICENSE
 ├── CHANGELOG.md
 └── README.md
