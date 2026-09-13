@@ -2,6 +2,25 @@
 
 本项目所有重要变更记录于此。
 
+## [1.2.2] - 2026-09-13
+
+### Fixed
+
+- 补回 `references/aesthetic-directions.md` 丢失的「方向 3 克制 / 极简（Swiss）」章节标题，方向 3 内容此前沦为方向 2 下的孤儿段落；新增「必须含且仅含 8 个方向标题」回归测试。
+- 内联脚本语法校验按 `<script>` 的 type 分流：classic 脚本改用 `node:vm` 的 Script 按脚本目标编译（顶层 return 会被正确拒绝），module 脚本做括号配对粗检，消除 new Function 的双向误判。
+- README 使用指南断言从逐字匹配改为事实断言（方向数 = 8 且 README 提及八种），措辞微调不再误伤测试。
+- `streetwear-drop.html` 倒计时：删除永不可达的兜底分支（注释与实现自相矛盾），到点后 clearInterval 停止空转并切换「已发售 · 下次 DROP 待定」终态文案，落实「不常驻定时器」铁律。
+- `neon-nightshift.html` HUD 时钟在页面隐藏时暂停（visibilitychange），回前台立即刷新并恢复。
+- `npm test` 改为显式列出测试文件，不再依赖 shell 展开 glob，Windows 下可直接运行。
+- README 项目结构补齐 tests/、package.json、.github/workflows/ci.yml、SECURITY.md 四个条目。
+- README 使用指南补充字体 CDN 说明：样例字体走 Google Fonts 且均有系统兜底，内网或严格 CSP 环境需自托管。
+
+### Added
+
+- 结构回归测试：SKILL.md 与 package.json 版本一致性、README 项目结构列出全部样例文件。
+- package.json 补 `license: MIT` 字段。
+- CI 增加 Node 18 / 20 / 22 版本矩阵（fail-fast 关闭）与 concurrency cancel-in-progress。
+
 ## [1.2.1] - 2026-07-31
 
 - 修正使用指南仍写七种气质方向的问题，与当前八种方向保持一致。
