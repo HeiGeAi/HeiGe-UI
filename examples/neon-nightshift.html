@@ -545,7 +545,16 @@ footer .brand2{font-family:var(--disp);font-weight:700;color:var(--ink);letter-s
     var hh = h % 12; if(hh===0) hh=12;
     clock.textContent = (hh<10?'0'+hh:hh)+':'+(m<10?'0'+m:m)+' '+ap;
   }
-  tick(); setInterval(tick, 30000);
+  tick();
+  var clockTimer = setInterval(tick, 30000);
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden){
+      if (clockTimer){ clearInterval(clockTimer); clockTimer = null; }
+    } else if (!clockTimer){
+      tick();
+      clockTimer = setInterval(tick, 30000);
+    }
+  });
 
   /* scroll reveal for phases, with force-reveal fallback */
   var phases = document.querySelectorAll('.phase');
