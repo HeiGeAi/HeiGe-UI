@@ -609,11 +609,7 @@
   var now = new Date();
   var target = new Date(now.getTime());
   target.setDate(target.getDate() + 4);   // 4 days out
-  target.setHours(20, 3, 0, 0);           // 20:03 drop time
-  // if computed target somehow already passed (edge), push a week
-  if (target.getTime() - now.getTime() < 60000) {
-    target = new Date(now.getTime() + 4 * 86400000);
-  }
+  target.setHours(20, 3, 0, 0);           // 20:03 drop time, always ~4 days ahead
 
   function pad(n){ n = Math.floor(n); return (n < 10 ? '0' : '') + n; }
 
