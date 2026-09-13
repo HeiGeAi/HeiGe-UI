@@ -620,9 +620,9 @@
     mM:document.getElementById('mM'), mS:document.getElementById('mS')
   };
 
-  function tick(){
-    var diff = target.getTime() - Date.now();
-    if (diff < 0) diff = 0;
+  var timer = null;
+
+  function render(diff){
     var d = diff / 86400000;
     var h = (diff % 86400000) / 3600000;
     var m = (diff % 3600000) / 60000;
@@ -632,8 +632,20 @@
     els.bM.textContent = pad(m); els.mM.textContent = pad(m);
     els.bS.textContent = pad(s); els.mS.textContent = pad(s);
   }
+
+  function tick(){
+    var diff = target.getTime() - Date.now();
+    if (diff <= 0){
+      render(0);
+      if (timer){ clearInterval(timer); timer = null; }  // stop the clock at drop time
+      var dt = document.getElementById('dropTime');
+      if (dt) dt.textContent = '已发售 · 下次 DROP 待定';
+      return;
+    }
+    render(diff);
+  }
   tick(); // immediate sensible value
-  setInterval(tick, 1000);
+  timer = setInterval(tick, 1000);
 
   // drop time display
   var dt = document.getElementById('dropTime');
