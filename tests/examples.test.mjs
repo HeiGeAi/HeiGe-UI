@@ -76,6 +76,21 @@ test('aesthetic directions reference keeps all eight numbered headings', () => {
   assert.deepEqual(headings.map((h) => h.match(/\d+/)[0]), ['1', '2', '3', '4', '5', '6', '7', '8']);
 });
 
+test('SKILL.md version stays in sync with package.json', () => {
+  const skill = fs.readFileSync(path.join(ROOT, 'SKILL.md'), 'utf8');
+  const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+  const match = skill.match(/^version:\s*(\S+)/m);
+  assert.ok(match, 'SKILL.md must declare a version');
+  assert.equal(match[1], pkg.version, 'SKILL.md version must equal package.json version');
+});
+
+test('README project structure lists every example file', () => {
+  const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8');
+  for (const name of fs.readdirSync(EXAMPLES).filter((item) => item.endsWith('.html'))) {
+    assert.ok(readme.includes(name), `README must list ${name}`);
+  }
+});
+
 test('the usage guide documents the same eight directions as the reference', () => {
   const doc = fs.readFileSync(path.join(ROOT, 'references', 'aesthetic-directions.md'), 'utf8');
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8');
