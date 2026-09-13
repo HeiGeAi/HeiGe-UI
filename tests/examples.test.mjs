@@ -31,6 +31,13 @@ test('all examples preserve the production motion and performance contract', () 
   }
 });
 
+test('aesthetic directions reference keeps all eight numbered headings', () => {
+  const doc = fs.readFileSync(path.join(ROOT, 'references', 'aesthetic-directions.md'), 'utf8');
+  const headings = doc.match(/^## \d+\. /gm) || [];
+  assert.equal(headings.length, 8, 'aesthetic-directions.md must document exactly 8 directions');
+  assert.deepEqual(headings.map((h) => h.match(/\d+/)[0]), ['1', '2', '3', '4', '5', '6', '7', '8']);
+});
+
 test('the current usage guide matches the eight documented directions', () => {
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8');
   assert.match(readme, /气质方向（八种里挑一个极端的）/);
