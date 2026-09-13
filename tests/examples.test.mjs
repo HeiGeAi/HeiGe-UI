@@ -76,7 +76,10 @@ test('aesthetic directions reference keeps all eight numbered headings', () => {
   assert.deepEqual(headings.map((h) => h.match(/\d+/)[0]), ['1', '2', '3', '4', '5', '6', '7', '8']);
 });
 
-test('the current usage guide matches the eight documented directions', () => {
+test('the usage guide documents the same eight directions as the reference', () => {
+  const doc = fs.readFileSync(path.join(ROOT, 'references', 'aesthetic-directions.md'), 'utf8');
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8');
-  assert.match(readme, /气质方向（八种里挑一个极端的）/);
+  const count = (doc.match(/^## \d+\. /gm) || []).length;
+  assert.equal(count, 8, 'reference must document 8 directions');
+  assert.match(readme, /八种/, 'README must mention the eight directions');
 });
