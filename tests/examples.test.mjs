@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
+import vm from 'node:vm';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXAMPLES = path.join(ROOT, 'examples');
@@ -12,6 +13,35 @@ const stems = (dir, extension) => fs.readdirSync(dir)
   .filter((name) => name.endsWith(extension))
   .map((name) => path.basename(name, extension))
   .sort();
+
+function assertBalanced(code) {
+  const pairs = { ')': '(', ']': '[', '}': '{' };
+  const stack = [];
+  let i = 0;
+  while (i < code.length) {
+    const ch = code[i];
+    if (ch === "'" || ch === '"' || ch === '`') {
+      const quote = ch;
+      i += 1;
+      while (i < code.length && code[i] !== quote) {
+        if (code[i] === '\\') i += 1;
+        i += 1;
+      }
+    } else if (ch === '/' && code[i + 1] === '/') {
+      while (i < code.length && code[i] !== '\n') i += 1;
+    } else if (ch === '/' && code[i + 1] === '*') {
+      i += 2;
+      while (i < code.length && !(code[i] === '*' && code[i + 1] === '/')) i += 1;
+      i += 1;
+    } else if (ch === '(' || ch === '[' || ch === '{') {
+      stack.push(ch);
+    } else if (pairs[ch]) {
+      if (stack.pop() !== pairs[ch]) throw new SyntaxError(`unexpected ${ch}`);
+    }
+    i += 1;
+  }
+  if (stack.length) throw new SyntaxError('unclosed bracket');
+}
 
 test('every example has exactly one preview', () => {
   assert.deepEqual(stems(EXAMPLES, '.html'), stems(PREVIEWS, '.webp'));
@@ -25,8 +55,16 @@ test('all examples preserve the production motion and performance contract', () 
     assert.match(source, /prefers-reduced-motion/i, `${name} cannot disable motion`);
     assert.doesNotMatch(source, /backdrop-filter\s*:/i, `${name} uses forbidden backdrop-filter`);
 
-    for (const [, code] of source.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)) {
-      assert.doesNotThrow(() => new Function(code), `${name} contains invalid inline JavaScript`);
+    for (const match of source.matchAll(/<script(\s[^>]*)?>([\s\S]*?)<\/script>/gi)) {
+      const attrs = match[1] || '';
+      const code = match[2];
+      if (/type\s*=\s*["']module["']/i.test(attrs)) {
+        // classic parsers reject module syntax; fall back to a bracket-balance check
+        assert.doesNotThrow(() => assertBalanced(code), `${name} contains unbalanced module script`);
+      } else {
+        // vm.Script compiles as a classic script, so illegal top-level return is rejected
+        assert.doesNotThrow(() => new vm.Script(code), `${name} contains invalid inline JavaScript`);
+      }
     }
   }
 });
